@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "hardeneks"
+version = "0.1.0"
+description = ""
+authors = ["Doruk Ozturk <dozturk@amazon.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.0.1"
+tag_format = "$version"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
