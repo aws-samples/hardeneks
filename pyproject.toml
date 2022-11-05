@@ -12,17 +12,19 @@ kubernetes = "^25.3.0"
 boto3 = "^1.26.2"
 pre-commit = "^2.20.0"
 
-
-
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2.0"
 pytest-cov = "^4.0.0"
 pytest-datadir = "^1.4.1"
 
+[tool.poetry.scripts]
+hardeneks = "hardeneks:app"
+
 [tool.commitizen]
 name = "cz_conventional_commits"
 version = "0.0.1"
 tag_format = "$version"
+
 [tool.black]
 line-length = 79
 include = '\.pyi?$'
@@ -39,6 +41,7 @@ exclude = '''
   | dist
 )/
 '''
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
