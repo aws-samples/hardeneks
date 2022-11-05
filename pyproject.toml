@@ -10,6 +10,7 @@ python = "^3.10"
 typer = {extras = ["all"], version = "^0.6.1"}
 kubernetes = "^25.3.0"
 boto3 = "^1.26.2"
+pre-commit = "^2.20.0"
 
 
 
@@ -22,6 +23,23 @@ pytest-datadir = "^1.4.1"
 name = "cz_conventional_commits"
 version = "0.0.1"
 tag_format = "$version"
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
