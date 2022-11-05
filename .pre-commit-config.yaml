@@ -1,4 +1,13 @@
 repos:
+-   repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+    - id: black
+      language_version: python3.10
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v1.2.3
+    hooks:
+    - id: flake8
 - hooks:
   - id: commitizen
   repo: https://github.com/commitizen-tools/commitizen
