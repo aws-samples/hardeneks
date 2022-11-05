@@ -7,8 +7,16 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+typer = {extras = ["all"], version = "^0.6.1"}
+kubernetes = "^25.3.0"
+boto3 = "^1.26.2"
 
 
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.0"
+pytest-cov = "^4.0.0"
+pytest-datadir = "^1.4.1"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
