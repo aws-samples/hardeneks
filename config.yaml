@@ -1,0 +1,36 @@
+---
+ignore-namespaces:
+  - kube-node-lease
+  - kube-public
+  - kube-system
+  - kube-apiserver
+rules:
+  - security: 
+    - iam
+    - pod_security
+    - multi_tenancy
+    - detective_controls
+    - network_security
+    - encryption_secrets
+    - runtime_security
+    - infrastructure_security
+    - regulatory_compliance
+    - incident_response
+    - image_security
+  - cluster_autoscaling:
+    - karpenter
+    - cluster_autoscaler
+  - reliability:
+    - applications
+    - control_plane
+    - data_plane
+    - network
+  - networking:
+    - vpc_subnets
+    - vpc_cni
+    - prefix_mode
+    - ipv6
+    - security_groups
+    - custom_networking
+    - load_balancing
+
