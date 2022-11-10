@@ -8,11 +8,11 @@
                 "annotations": {
                     "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"*\"],\"verbs\":[\"*\"]}]}\n"
                 },
-                "creationTimestamp": "2022-11-09T19:09:19Z",
+                "creationTimestamp": "2022-11-10T03:14:33Z",
                 "name": "bad",
                 "namespace": "test-namespace",
-                "resourceVersion": "6491235",
-                "uid": "cc9e46fe-aa81-41a8-830e-533d793cfb0f"
+                "resourceVersion": "6572715",
+                "uid": "5c96fe31-02a6-4748-8af5-fd6ff2a7d74f"
             },
             "rules": [
                 {
@@ -35,11 +35,11 @@
                 "annotations": {
                     "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"\"],\"verbs\":[\"\"]}]}\n"
                 },
-                "creationTimestamp": "2022-11-09T19:09:18Z",
+                "creationTimestamp": "2022-11-10T03:14:33Z",
                 "name": "good",
                 "namespace": "test-namespace",
-                "resourceVersion": "6491234",
-                "uid": "f570238c-5982-47db-8982-4967b503f3f4"
+                "resourceVersion": "6572714",
+                "uid": "6411771f-2588-4ec9-9aa0-15ab26521ce5"
             },
             "rules": [
                 {
