@@ -8,6 +8,7 @@ rules:
   security: 
     iam:
       - restrict_wildcard_for_roles
+      - restrict_wildcard_for_cluster_roles
   #   pod_security:
   #   multi_tenancy:
   #   detective_controls:

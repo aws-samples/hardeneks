@@ -2,7 +2,7 @@
 NAMESPACE=test-namespace
 TEST_DATA_DIRECTORY=$1
 
-mkdir -f "$TEST_DATA_DIRECTORY/cluster"
+mkdir "$TEST_DATA_DIRECTORY/cluster"
 kubectl create namespace $NAMESPACE
 kubectl apply -f "$TEST_DATA_DIRECTORY/good.yaml"
 kubectl apply -f "$TEST_DATA_DIRECTORY/bad.yaml"
