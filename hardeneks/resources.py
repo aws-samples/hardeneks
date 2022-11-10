@@ -2,9 +2,10 @@ from kubernetes import client
 
 
 class NamespacedResources:
-    def __init__(self, region, context, namespace):
+    def __init__(self, region, context, cluster, namespace):
         self.namespace = namespace
         self.region = region
+        self.cluster = cluster
         self.context = context
 
     def set_resources(self):

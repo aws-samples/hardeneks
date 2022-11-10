@@ -45,6 +45,7 @@ def run_hardeneks(
         ...,
         help="K8s context.",
     ),
+    cluster: str = typer.Option(..., help="Cluster name."),
     namespace: str = typer.Option(
         default=None,
         help="Specific namespace to harden. Default is all namespaces.",
@@ -80,6 +81,6 @@ def run_hardeneks(
     for ns in namespaces:
         console.print(f"Checking rules against namespace: {ns}", style="green")
         console.print()
-        resources = NamespacedResources(region, context, ns)
+        resources = NamespacedResources(region, context, cluster, ns)
         resources.set_resources()
         harden_namespace(resources, config["rules"])
