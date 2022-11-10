@@ -26,7 +26,7 @@ def namespaced_resources(request):
         current_directory, "data", request.param, "cluster"
     )
     resources = NamespacedResources(
-        "some_region", "some_context", "some_namespace"
+        "some_region", "some_context", "some_cluster", "some_namespace"
     )
     resources.resource_quotas = get_response(
         client.CoreV1Api,
