@@ -1,5 +1,4 @@
 from pathlib import Path
-from unittest.mock import patch, MagicMock
 
 from click import exceptions
 import pytest
@@ -40,11 +39,3 @@ def test_config_callback_bad_yaml(tmp_path):
 def test_app_no_input():
     result = runner.invoke(app, [])
     assert result.exit_code == 2
-
-
-@patch("kubernetes.config", load_kube_config=MagicMock())
-def test_app_with_required_options(config):
-    result = runner.invoke(
-        app, ["--region", "us-east-1", "--context", "some-context"]
-    )
-    assert result.exit_code == 0
