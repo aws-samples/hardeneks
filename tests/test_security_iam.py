@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+import kubernetes
 import pytest
 
 from hardeneks.resources import NamespacedResources
@@ -11,7 +12,9 @@ from hardeneks.security.iam import (
     restrict_wildcard_for_cluster_roles,
     check_endpoint_public_access,
     check_access_to_instance_profile,
+    check_aws_node_daemonset_service_account,
 )
+from .conftest import get_response
 
 
 def read_json(file_path):
@@ -83,3 +86,24 @@ def test_check_access_to_instance_profile(mocked_client):
     )
     offenders = check_access_to_instance_profile(namespaced_resources)
     assert len(offenders) == 2
+
+
+@patch("kubernetes.client.AppsV1Api.read_namespaced_daemon_set")
+def test_check_aws_node_daemonset_service_account(mocked_client):
+    test_data = (
+        Path.cwd()
+        / "tests"
+        / "data"
+        / "check_aws_node_daemonset_service_account"
+        / "daemon_sets_api_response.json"
+    )
+    mocked_client.return_value = get_response(
+        kubernetes.client.AppsV1Api,
+        test_data,
+        "V1DaemonSet",
+    )
+
+    namespaced_resources = NamespacedResources(
+        "some_region", "some_context", "some_cluster", "some_ns"
+    )
+    assert check_aws_node_daemonset_service_account(namespaced_resources)
