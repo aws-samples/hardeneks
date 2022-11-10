@@ -7,8 +7,18 @@ ignore-namespaces:
 rules:
   security: 
     iam:
+      - disable_anonymous_access_for_cluster_roles
+      - disable_anonymous_access_for_roles
+      - check_endpoint_public_access
+      - check_aws_node_daemonset_service_account
+      - check_access_to_instance_profile
       - restrict_wildcard_for_roles
       - restrict_wildcard_for_cluster_roles
+      - disable_service_account_token_mounts
+      - disable_run_as_root_user
+      - use_dedicated_service_accounts_for_each_deployment
+      - use_dedicated_service_accounts_for_each_stateful_set
+      - use_dedicated_service_accounts_for_each_daemon_set
   #   pod_security:
   #   multi_tenancy:
   #   detective_controls:
