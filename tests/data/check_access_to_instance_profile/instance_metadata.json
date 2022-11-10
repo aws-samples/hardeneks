@@ -1,0 +1,36 @@
+{
+    "Reservations": [
+      {
+        "Groups": [],
+        "Instances": [
+          {
+            "InstanceId": "foo",
+            "MetadataOptions": {
+              "State": "applied",
+              "HttpTokens": "optional",
+              "HttpPutResponseHopLimit": 2,
+              "HttpEndpoint": "enabled",
+              "HttpProtocolIpv6": "disabled",
+              "InstanceMetadataTags": "disabled"
+            }
+          }
+        ]
+      },
+      {
+        "Groups": [],
+        "Instances": [
+          {
+            "InstanceId": "baz",
+            "MetadataOptions": {
+              "State": "applied",
+              "HttpTokens": "optional",
+              "HttpPutResponseHopLimit": 2,
+              "HttpEndpoint": "enabled",
+              "HttpProtocolIpv6": "disabled",
+              "InstanceMetadataTags": "disabled"
+            }
+          }
+        ]
+      }
+    ]
+  }
