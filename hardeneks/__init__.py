@@ -2,8 +2,11 @@ from pathlib import Path
 import yaml
 
 import kubernetes
-from rich import print
+from rich.console import Console
 import typer
+
+from .resources import NamespacedResources
+from .harden import harden_namespace
 
 
 app = typer.Typer()
@@ -25,6 +28,12 @@ def _config_callback(value: str):
             raise typer.BadParameter(exc)
 
     return value
+
+
+def _get_namespaces(ignored_ns: list) -> list:
+    v1 = kubernetes.client.CoreV1Api()
+    namespaces = [i.metadata.name for i in v1.list_namespace().items]
+    return list(set(namespaces) - set(ignored_ns))
 
 
 @app.command()
@@ -49,10 +58,28 @@ def run_hardeneks(
         default=None, help="Path to the kube config file."
     ),
 ):
-    print(f"You are operating at {region}")
-    print(f"You context is {context}")
-    print(f"You are using {config} as your config file")
+
+    console = Console()
+    console.print(f"You are operating at {region}")
+    console.print(f"You context is {context}")
+    console.print(f"You are using {config} as your config file")
+    console.print()
 
     kubernetes.config.load_kube_config(
         config_file=kube_config, context=context
     )
+
+    with open(config, "r") as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+
+    if not namespace:
+        namespaces = _get_namespaces(config["ignore-namespaces"])
+    else:
+        namespaces = [namespace]
+
+    for ns in namespaces:
+        console.print(f"Checking rules against namespace: {ns}", style="green")
+        console.print()
+        resources = NamespacedResources(region, context, ns)
+        resources.set_resources()
+        harden_namespace(resources, config["rules"])
