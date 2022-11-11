@@ -14,6 +14,9 @@ from hardeneks.security.iam import (
     check_access_to_instance_profile,
     check_aws_node_daemonset_service_account,
     disable_service_account_token_mounts,
+    disable_run_as_root_user,
+    disable_anonymous_access_for_cluster_roles,
+    disable_anonymous_access_for_roles,
 )
 from .conftest import get_response
 
@@ -117,6 +120,44 @@ def test_check_aws_node_daemonset_service_account(mocked_client):
 )
 def test_disable_service_account_token_mounts(namespaced_resources):
     offenders = disable_service_account_token_mounts(namespaced_resources)
+
+    assert "good" not in [i.metadata.name for i in offenders]
+    assert "bad" in [i.metadata.name for i in offenders]
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("disable_run_as_root_user")],
+    indirect=["namespaced_resources"],
+)
+def test_disable_run_as_root_user(namespaced_resources):
+    offenders = disable_run_as_root_user(namespaced_resources)
+
+    assert "good" not in [i.metadata.name for i in offenders]
+    assert "bad" in [i.metadata.name for i in offenders]
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("disable_anonymous_access_for_cluster_roles")],
+    indirect=["namespaced_resources"],
+)
+def test_disable_anonymous_access_for_cluster_roles(namespaced_resources):
+    offenders = disable_anonymous_access_for_cluster_roles(
+        namespaced_resources
+    )
+
+    assert "good" not in [i.metadata.name for i in offenders]
+    assert "bad" in [i.metadata.name for i in offenders]
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("disable_anonymous_access_for_roles")],
+    indirect=["namespaced_resources"],
+)
+def test_disable_anonymous_access_for_roles(namespaced_resources):
+    offenders = disable_anonymous_access_for_roles(namespaced_resources)
 
     assert "good" not in [i.metadata.name for i in offenders]
     assert "bad" in [i.metadata.name for i in offenders]
