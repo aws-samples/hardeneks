@@ -57,39 +57,39 @@ def namespaced_resources(request):
         client.RbacAuthorizationV1Api,
         os.path.join(data_directory, "role_bindings_api_response.json"),
         "V1RoleBindingList",
-    )
+    ).items
     resources.cluster_role_bindings = get_response(
         client.RbacAuthorizationV1Api,
         os.path.join(
             data_directory, "cluster_role_bindings_api_response.json"
         ),
         "V1ClusterRoleBindingList",
-    )
+    ).items
     resources.daemon_sets = get_response(
         client.AppsV1Api,
         os.path.join(data_directory, "daemon_sets_api_response.json"),
         "V1DaemonSetList",
-    )
+    ).items
     resources.stateful_sets = get_response(
         client.AppsV1Api,
         os.path.join(data_directory, "stateful_sets_api_response.json"),
         "V1StatefulSetList",
-    )
+    ).items
     resources.deployments = get_response(
         client.AppsV1Api,
         os.path.join(data_directory, "deployments_api_response.json"),
         "V1DeploymentList",
-    )
+    ).items
     resources.network_policies = get_response(
         client.NetworkingV1Api,
         os.path.join(data_directory, "network_policies_api_response.json"),
         "V1NetworkPolicyList",
-    )
+    ).items
     resources.hpas = get_response(
         client.AutoscalingV1Api,
         os.path.join(
             data_directory, "horizontal_pod_autoscaler_api_response.json"
         ),
         "V1HorizontalPodAutoscalerList",
-    )
+    ).items
     return resources
