@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: test-namespace
+  name: good
+spec:
+  containers:
+  - name: nginx
+    securityContext:
+      readOnlyRootFilesystem: true
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80

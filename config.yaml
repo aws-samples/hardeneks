@@ -19,7 +19,12 @@ rules:
       - use_dedicated_service_accounts_for_each_deployment
       - use_dedicated_service_accounts_for_each_stateful_set
       - use_dedicated_service_accounts_for_each_daemon_set
-  #   pod_security:
+    pod_security:
+      - disallow_container_socket_mount
+      - disallow_host_path_or_make_it_read_only
+      - set_requests_limits_for_containers
+      - disallow_privilege_escalation
+      - check_read_only_root_file_system
   #   multi_tenancy:
   #   detective_controls:
   #   network_security:
