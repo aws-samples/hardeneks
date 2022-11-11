@@ -1,0 +1,301 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/psp": "eks.privileged"
+                },
+                "creationTimestamp": "2022-11-11T15:24:47Z",
+                "generateName": "shared-sa-1-",
+                "labels": {
+                    "app": "nginx",
+                    "controller-revision-hash": "shared-sa-1-79dc58f667",
+                    "statefulset.kubernetes.io/pod-name": "shared-sa-1-0"
+                },
+                "name": "shared-sa-1-0",
+                "namespace": "test-namespace",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "shared-sa-1",
+                        "uid": "a2f2812d-2d99-437c-85dd-c8e348a3fee0"
+                    }
+                ],
+                "resourceVersion": "6937736",
+                "uid": "a780c4da-6270-41ad-9b16-63c7b67d6d4c"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "registry.k8s.io/nginx-slim:0.8",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "nginx",
+                        "ports": [
+                            {
+                                "containerPort": 80,
+                                "name": "web",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/usr/share/nginx/html",
+                                "name": "www"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-nm78x",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "hostname": "shared-sa-1-0",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "subdomain": "nginx",
+                "terminationGracePeriodSeconds": 10,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "www",
+                        "persistentVolumeClaim": {
+                            "claimName": "www-shared-sa-1-0"
+                        }
+                    },
+                    {
+                        "name": "kube-api-access-nm78x",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-11-11T15:24:47Z",
+                        "message": "0/2 nodes are available: 2 pod has unbound immediate PersistentVolumeClaims.",
+                        "reason": "Unschedulable",
+                        "status": "False",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "phase": "Pending",
+                "qosClass": "BestEffort"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/psp": "eks.privileged"
+                },
+                "creationTimestamp": "2022-11-11T15:24:47Z",
+                "generateName": "shared-sa-2-",
+                "labels": {
+                    "app": "nginx",
+                    "controller-revision-hash": "shared-sa-2-79dc58f667",
+                    "statefulset.kubernetes.io/pod-name": "shared-sa-2-0"
+                },
+                "name": "shared-sa-2-0",
+                "namespace": "test-namespace",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "shared-sa-2",
+                        "uid": "277bf6d8-0847-4850-953b-7c233d9db32a"
+                    }
+                ],
+                "resourceVersion": "6937746",
+                "uid": "20c9d5c1-e1b2-4362-9b59-79a3f556c104"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "registry.k8s.io/nginx-slim:0.8",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "nginx",
+                        "ports": [
+                            {
+                                "containerPort": 80,
+                                "name": "web",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/usr/share/nginx/html",
+                                "name": "www"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-jp784",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "hostname": "shared-sa-2-0",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "subdomain": "nginx",
+                "terminationGracePeriodSeconds": 10,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "www",
+                        "persistentVolumeClaim": {
+                            "claimName": "www-shared-sa-2-0"
+                        }
+                    },
+                    {
+                        "name": "kube-api-access-jp784",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-11-11T15:24:47Z",
+                        "message": "0/2 nodes are available: 2 pod has unbound immediate PersistentVolumeClaims.",
+                        "reason": "Unschedulable",
+                        "status": "False",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "phase": "Pending",
+                "qosClass": "BestEffort"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
