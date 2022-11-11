@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: test-namespace
+  name: bad
+spec:
+  volumes:
+  - name: task-pv-storage
+    hostPath:
+      path: /home/
+      type: Directory
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+    volumeMounts:
+      - name: task-pv-storage
+        mountPath: /mnt/sample
