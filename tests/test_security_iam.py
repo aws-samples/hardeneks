@@ -17,6 +17,9 @@ from hardeneks.security.iam import (
     disable_run_as_root_user,
     disable_anonymous_access_for_cluster_roles,
     disable_anonymous_access_for_roles,
+    use_dedicated_service_accounts_for_each_daemon_set,
+    use_dedicated_service_accounts_for_each_deployment,
+    use_dedicated_service_accounts_for_each_stateful_set,
 )
 from .conftest import get_response
 
@@ -161,3 +164,51 @@ def test_disable_anonymous_access_for_roles(namespaced_resources):
 
     assert "good" not in [i.metadata.name for i in offenders]
     assert "bad" in [i.metadata.name for i in offenders]
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("use_dedicated_service_accounts_for_each_daemon_set")],
+    indirect=["namespaced_resources"],
+)
+def test_use_dedicated_service_accounts_for_each_daemon_set(
+    namespaced_resources,
+):
+    offenders = use_dedicated_service_accounts_for_each_daemon_set(
+        namespaced_resources
+    )
+
+    assert "shared-sa-1" in [i.metadata.name for i in offenders]
+    assert "shared-sa-2" in [i.metadata.name for i in offenders]
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("use_dedicated_service_accounts_for_each_deployment")],
+    indirect=["namespaced_resources"],
+)
+def test_use_dedicated_service_accounts_for_each_deployment(
+    namespaced_resources,
+):
+    offenders = use_dedicated_service_accounts_for_each_deployment(
+        namespaced_resources
+    )
+
+    assert "shared-sa-1" in [i.metadata.name for i in offenders]
+    assert "shared-sa-2" in [i.metadata.name for i in offenders]
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("use_dedicated_service_accounts_for_each_stateful_set")],
+    indirect=["namespaced_resources"],
+)
+def test_use_dedicated_service_accounts_for_each_stateful_set(
+    namespaced_resources,
+):
+    offenders = use_dedicated_service_accounts_for_each_stateful_set(
+        namespaced_resources
+    )
+
+    assert "shared-sa-1" in [i.metadata.name for i in offenders]
+    assert "shared-sa-2" in [i.metadata.name for i in offenders]
