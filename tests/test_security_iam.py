@@ -13,6 +13,7 @@ from hardeneks.security.iam import (
     check_endpoint_public_access,
     check_access_to_instance_profile,
     check_aws_node_daemonset_service_account,
+    disable_service_account_token_mounts,
 )
 from .conftest import get_response
 
@@ -107,3 +108,15 @@ def test_check_aws_node_daemonset_service_account(mocked_client):
         "some_region", "some_context", "some_cluster", "some_ns"
     )
     assert check_aws_node_daemonset_service_account(namespaced_resources)
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("disable_service_account_token_mounts")],
+    indirect=["namespaced_resources"],
+)
+def test_disable_service_account_token_mounts(namespaced_resources):
+    offenders = disable_service_account_token_mounts(namespaced_resources)
+
+    assert "good" not in [i.metadata.name for i in offenders]
+    assert "bad" in [i.metadata.name for i in offenders]
