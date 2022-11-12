@@ -1,0 +1,45 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "ResourceQuota",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"ResourceQuota\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"good\"},\"spec\":{\"hard\":{\"limits.cpu\":\"2\",\"limits.memory\":\"2Gi\",\"requests.cpu\":\"1\",\"requests.memory\":\"1Gi\"}}}\n"
+                },
+                "creationTimestamp": "2022-11-12T04:57:58Z",
+                "name": "good",
+                "namespace": "good",
+                "resourceVersion": "7074794",
+                "uid": "9c53f52b-bf66-4990-806a-cef540f91447"
+            },
+            "spec": {
+                "hard": {
+                    "limits.cpu": "2",
+                    "limits.memory": "2Gi",
+                    "requests.cpu": "1",
+                    "requests.memory": "1Gi"
+                }
+            },
+            "status": {
+                "hard": {
+                    "limits.cpu": "2",
+                    "limits.memory": "2Gi",
+                    "requests.cpu": "1",
+                    "requests.memory": "1Gi"
+                },
+                "used": {
+                    "limits.cpu": "0",
+                    "limits.memory": "0",
+                    "requests.cpu": "0",
+                    "requests.memory": "0"
+                }
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
