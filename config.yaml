@@ -27,7 +27,8 @@ rules:
       - check_read_only_root_file_system
     multi_tenancy:
       - ensure_namespace_quotas_exist
-  #   detective_controls:
+    detective_controls:
+      - check_logs_are_enabled
   #   network_security:
   #   encryption_secrets:
   #   infrastructure_security:
