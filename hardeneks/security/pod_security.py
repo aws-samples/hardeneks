@@ -89,10 +89,9 @@ def check_read_only_root_file_system(
     namespaced_resources: NamespacedResources,
 ):
     offenders = []
-
     for pod in namespaced_resources.pods:
         for container in pod.spec.containers:
-            if container.security_context.read_only_root_filesystem:
+            if not container.security_context.read_only_root_filesystem:
                 offenders.append(pod)
     if offenders:
         print_pod_table(
