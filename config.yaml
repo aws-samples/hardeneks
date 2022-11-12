@@ -25,7 +25,8 @@ rules:
       - set_requests_limits_for_containers
       - disallow_privilege_escalation
       - check_read_only_root_file_system
-  #   multi_tenancy:
+    multi_tenancy:
+      - ensure_namespace_quotas_exist
   #   detective_controls:
   #   network_security:
   #   encryption_secrets:

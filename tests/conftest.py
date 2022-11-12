@@ -28,6 +28,11 @@ def namespaced_resources(request):
     resources = NamespacedResources(
         "some_region", "some_context", "some_cluster", "some_namespace"
     )
+    resources.namespaces = get_response(
+        client.CoreV1Api,
+        os.path.join(data_directory, "namespaces_api_response.json"),
+        "V1NamespaceList",
+    ).items
     resources.resource_quotas = get_response(
         client.CoreV1Api,
         os.path.join(data_directory, "resource_quotas_api_response.json"),

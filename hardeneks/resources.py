@@ -9,6 +9,7 @@ class NamespacedResources:
         self.context = context
 
     def set_resources(self):
+        self.namespaces = client.CoreV1Api().list_namespace().items
         self.resource_quotas = (
             client.CoreV1Api()
             .list_namespaced_resource_quota(self.namespace)
