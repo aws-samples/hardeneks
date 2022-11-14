@@ -1,6 +1,30 @@
 from kubernetes import client
 
 
+class Resources:
+    def __init__(self, region, context, cluster, namespaces):
+        self.region = region
+        self.context = context
+        self.cluster = cluster
+        self.namespaces = namespaces
+
+    def set_resources(self):
+        self.cluster_roles = (
+            client.RbacAuthorizationV1Api().list_cluster_role().items
+        )
+        self.cluster_role_bindings = (
+            client.RbacAuthorizationV1Api().list_cluster_role_binding().items
+        )
+        self.resource_quotas = (
+            client.CoreV1Api().list_resource_quota_for_all_namespaces().items
+        )
+        self.network_policies = (
+            client.NetworkingV1Api()
+            .list_network_policy_for_all_namespaces()
+            .items
+        )
+
+
 class NamespacedResources:
     def __init__(self, region, context, cluster, namespace):
         self.namespace = namespace
@@ -9,19 +33,10 @@ class NamespacedResources:
         self.context = context
 
     def set_resources(self):
-        self.namespaces = client.CoreV1Api().list_namespace().items
-        self.resource_quotas = (
-            client.CoreV1Api()
-            .list_namespaced_resource_quota(self.namespace)
-            .items
-        )
         self.roles = (
             client.RbacAuthorizationV1Api()
             .list_namespaced_role(self.namespace)
             .items
-        )
-        self.cluster_roles = (
-            client.RbacAuthorizationV1Api().list_cluster_role().items
         )
         self.pods = (
             client.CoreV1Api().list_namespaced_pod(self.namespace).items
@@ -30,9 +45,6 @@ class NamespacedResources:
             client.RbacAuthorizationV1Api()
             .list_namespaced_role_binding(self.namespace)
             .items
-        )
-        self.cluster_role_bindings = (
-            client.RbacAuthorizationV1Api().list_cluster_role_binding().items
         )
         self.deployments = (
             client.AppsV1Api().list_namespaced_deployment(self.namespace).items
@@ -43,11 +55,6 @@ class NamespacedResources:
         self.stateful_sets = (
             client.AppsV1Api()
             .list_namespaced_stateful_set(self.namespace)
-            .items
-        )
-        self.network_policies = (
-            client.NetworkingV1Api()
-            .list_namespaced_network_policy(self.namespace)
             .items
         )
         self.services = (

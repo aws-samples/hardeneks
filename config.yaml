@@ -4,16 +4,26 @@ ignore-namespaces:
   - kube-public
   - kube-system
   - kube-apiserver
-rules:
-  security: 
+rules: 
+  cluster_wide:
     iam:
       - disable_anonymous_access_for_cluster_roles
-      - disable_anonymous_access_for_roles
       - check_endpoint_public_access
       - check_aws_node_daemonset_service_account
       - check_access_to_instance_profile
-      - restrict_wildcard_for_roles
       - restrict_wildcard_for_cluster_roles
+    multi_tenancy:
+      - ensure_namespace_quotas_exist
+    detective_controls:
+      - check_logs_are_enabled
+    network_security:
+      - check_vpc_flow_logs
+      - check_awspca_exists
+      - check_default_deny_policy_exists
+  security: 
+    iam:
+      - disable_anonymous_access_for_roles
+      - restrict_wildcard_for_roles
       - disable_service_account_token_mounts
       - disable_run_as_root_user
       - use_dedicated_service_accounts_for_each_deployment
@@ -25,14 +35,10 @@ rules:
       - set_requests_limits_for_containers
       - disallow_privilege_escalation
       - check_read_only_root_file_system
-    multi_tenancy:
-      - ensure_namespace_quotas_exist
-    detective_controls:
-      - check_logs_are_enabled
-  #   network_security:
+    network_security:
+      - use_encryption_with_aws_load_balancers
   #   encryption_secrets:
   #   infrastructure_security:
-  #   image_security:
   # cluster_autoscaling:
   #   karpenter:
   #   cluster_autoscaler:

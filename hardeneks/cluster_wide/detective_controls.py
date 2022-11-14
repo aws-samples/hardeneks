@@ -2,16 +2,14 @@ import boto3
 from rich.console import Console
 
 
-from ..resources import NamespacedResources
+from ..resources import Resources
 
 console = Console()
 
 
-def check_logs_are_enabled(namespaced_resources: NamespacedResources):
-    client = boto3.client("eks", region_name=namespaced_resources.region)
-    cluster_metadata = client.describe_cluster(
-        name=namespaced_resources.cluster
-    )
+def check_logs_are_enabled(resources: Resources):
+    client = boto3.client("eks", region_name=resources.region)
+    cluster_metadata = client.describe_cluster(name=resources.cluster)
     logs = cluster_metadata["cluster"]["logging"]["clusterLogging"][0][
         "enabled"
     ]

@@ -1,0 +1,84 @@
+{
+    "ResponseMetadata": {
+        "RequestId": "583e4c08-5ffb-4290-aa33-3119cdf23dc8",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "date": "Thu, 10 Nov 2022 17:33:49 GMT",
+            "content-type": "application/json",
+            "content-length": "3653",
+            "connection": "keep-alive",
+            "x-amzn-requestid": "583e4c08-5ffb-4290-aa33-3119cdf23dc8",
+            "access-control-allow-origin": "*",
+            "access-control-allow-headers": "*,Authorization,Date,X-Amz-Date,X-Amz-Security-Token,X-Amz-Target,content-type,x-amz-content-sha256,x-amz-user-agent,x-amzn-platform-id,x-amzn-trace-id",
+            "x-amz-apigw-id": "bZVfmHyHoAMFTjw=",
+            "access-control-allow-methods": "GET,HEAD,PUT,POST,DELETE,OPTIONS",
+            "access-control-expose-headers": "x-amzn-errortype,x-amzn-errormessage,x-amzn-trace-id,x-amzn-requestid,x-amz-apigw-id,date",
+            "x-amzn-trace-id": "Root=1-636d35fd-4439dafd69c0c10636780fa6"
+        },
+        "RetryAttempts": 0
+    },
+    "cluster": {
+        "name": "eks-bp-cli",
+        "arn": "arn:aws:eks:us-east-1::cluster/eks-bp-cli",
+        "createdAt": "2022-10-13 16:31:31.516000-04:00",
+        "version": "1.22",
+        "endpoint": "https://.gr7.us-east-1.eks.amazonaws.com",
+        "roleArn": "arn:aws:iam:::role/eksctl-eks-bp-cli-cluster-ServiceRole-1I0QS0YGGMQFC",
+        "resourcesVpcConfig": {
+            "subnetIds": [
+                "subnet-",
+                "subnet-",
+                "subnet-f",
+                "subnet-"
+            ],
+            "securityGroupIds": [
+                "sg-"
+            ],
+            "clusterSecurityGroupId": "sg-",
+            "vpcId": "vpc-",
+            "endpointPublicAccess": true,
+            "endpointPrivateAccess": false,
+            "publicAccessCidrs": [
+                "0.0.0.0/0"
+            ]
+        },
+        "kubernetesNetworkConfig": {
+            "serviceIpv4Cidr": "10.100.0.0/16",
+            "ipFamily": "ipv4"
+        },
+        "logging": {
+            "clusterLogging": [
+                {
+                    "types": [
+                        "api",
+                        "audit",
+                        "authenticator",
+                        "controllerManager",
+                        "scheduler"
+                    ],
+                    "enabled": false
+                }
+            ]
+        },
+        "identity": {
+            "oidc": {
+                "issuer": "https://oidc.eks.us-east-1.amazonaws.com/id/"
+            }
+        },
+        "status": "ACTIVE",
+        "certificateAuthority": {
+            "data": ""
+        },
+        "platformVersion": "eks.6",
+        "tags": {
+            "aws:cloudformation:stack-name": "eksctl-eks-bp-cli-cluster",
+            "alpha.eksctl.io/cluster-name": "eks-bp-cli",
+            "aws:cloudformation:stack-id": "arn:",
+            "eksctl.cluster.k8s.io/v1alpha1/cluster-name": "eks-bp-cli",
+            "alpha.eksctl.io/cluster-oidc-enabled": "false",
+            "aws:cloudformation:logical-id": "ControlPlane",
+            "alpha.eksctl.io/eksctl-version": "0.111.0-dev+9a99e9218.2022-09-09T18:34:53Z",
+            "Name": "eksctl-eks-bp-cli-cluster/ControlPlane"
+        }
+    }
+}

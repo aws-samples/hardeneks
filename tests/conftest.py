@@ -3,7 +3,7 @@ import os
 from kubernetes import client
 import pytest
 
-from hardeneks.resources import NamespacedResources
+from hardeneks.resources import Resources, NamespacedResources
 
 
 class Response:
@@ -20,6 +20,31 @@ def get_response(api, _file, _class):
 
 
 @pytest.fixture(scope="function")
+def resources(request):
+    current_directory = os.path.dirname(__file__)
+    data_directory = os.path.join(
+        current_directory, "data", request.param, "cluster"
+    )
+    resources = Resources(
+        "some_region",
+        "some_context",
+        "some_cluster",
+        ["good", "bad", "default"],
+    )
+    resources.resource_quotas = get_response(
+        client.CoreV1Api,
+        os.path.join(data_directory, "resource_quotas_api_response.json"),
+        "V1ResourceQuotaList",
+    ).items
+    resources.network_policies = get_response(
+        client.NetworkingV1Api,
+        os.path.join(data_directory, "network_policies_api_response.json"),
+        "V1NetworkPolicyList",
+    ).items
+    return resources
+
+
+@pytest.fixture(scope="function")
 def namespaced_resources(request):
     current_directory = os.path.dirname(__file__)
     data_directory = os.path.join(
@@ -32,11 +57,6 @@ def namespaced_resources(request):
         client.CoreV1Api,
         os.path.join(data_directory, "namespaces_api_response.json"),
         "V1NamespaceList",
-    ).items
-    resources.resource_quotas = get_response(
-        client.CoreV1Api,
-        os.path.join(data_directory, "resource_quotas_api_response.json"),
-        "V1ResourceQuotaList",
     ).items
     resources.pods = get_response(
         client.CoreV1Api,
@@ -85,11 +105,6 @@ def namespaced_resources(request):
         os.path.join(data_directory, "deployments_api_response.json"),
         "V1DeploymentList",
     ).items
-    resources.network_policies = get_response(
-        client.NetworkingV1Api,
-        os.path.join(data_directory, "network_policies_api_response.json"),
-        "V1NetworkPolicyList",
-    ).items
     resources.hpas = get_response(
         client.AutoscalingV1Api,
         os.path.join(
@@ -97,4 +112,10 @@ def namespaced_resources(request):
         ),
         "V1HorizontalPodAutoscalerList",
     ).items
+    resources.services = get_response(
+        client.CoreV1Api,
+        os.path.join(data_directory, "services_api_response.json"),
+        "V1ServiceList",
+    ).items
+
     return resources

@@ -3,7 +3,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from hardeneks.resources import NamespacedResources
-from hardeneks.security.detective_controls import check_logs_are_enabled
+from hardeneks.cluster_wide.detective_controls import check_logs_are_enabled
 
 
 def read_json(file_path):
