@@ -7,15 +7,17 @@ import pytest
 
 from hardeneks.resources import NamespacedResources
 
-from hardeneks.security.iam import (
-    restrict_wildcard_for_roles,
+from hardeneks.cluster_wide.iam import (
     restrict_wildcard_for_cluster_roles,
     check_endpoint_public_access,
     check_access_to_instance_profile,
     check_aws_node_daemonset_service_account,
+    disable_anonymous_access_for_cluster_roles,
+)
+from hardeneks.security.iam import (
+    restrict_wildcard_for_roles,
     disable_service_account_token_mounts,
     disable_run_as_root_user,
-    disable_anonymous_access_for_cluster_roles,
     disable_anonymous_access_for_roles,
     use_dedicated_service_accounts_for_each_daemon_set,
     use_dedicated_service_accounts_for_each_deployment,
@@ -71,7 +73,7 @@ def test_check_endpoint_public_access(mocked_client):
     mocked_client.return_value.describe_cluster.return_value = read_json(
         test_data
     )
-    assert check_endpoint_public_access(namespaced_resources)
+    assert not check_endpoint_public_access(namespaced_resources)
 
 
 @patch("boto3.client")
@@ -113,7 +115,7 @@ def test_check_aws_node_daemonset_service_account(mocked_client):
     namespaced_resources = NamespacedResources(
         "some_region", "some_context", "some_cluster", "some_ns"
     )
-    assert check_aws_node_daemonset_service_account(namespaced_resources)
+    assert not check_aws_node_daemonset_service_account(namespaced_resources)
 
 
 @pytest.mark.parametrize(

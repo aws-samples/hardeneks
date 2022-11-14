@@ -1,6 +1,6 @@
 from rich.console import Console
 
-from ..resources import NamespacedResources
+from ..resources import Resources
 
 from ..report import (
     print_namespace_table,
@@ -9,11 +9,11 @@ from ..report import (
 console = Console()
 
 
-def ensure_namespace_quotas_exist(namespaced_resources: NamespacedResources):
+def ensure_namespace_quotas_exist(resources: Resources):
 
-    offenders = [i.metadata.name for i in namespaced_resources.namespaces]
+    offenders = resources.namespaces
 
-    for quota in namespaced_resources.resource_quotas:
+    for quota in resources.resource_quotas:
         offenders.remove(quota.metadata.namespace)
 
     if offenders:

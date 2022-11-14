@@ -74,7 +74,10 @@ def disallow_privilege_escalation(namespaced_resources: NamespacedResources):
 
     for pod in namespaced_resources.pods:
         for container in pod.spec.containers:
-            if container.security_context.allow_privilege_escalation:
+            if (
+                container.security_context
+                and container.security_context.allow_privilege_escalation
+            ):
                 offenders.append(pod)
 
     if offenders:
@@ -91,7 +94,10 @@ def check_read_only_root_file_system(
     offenders = []
     for pod in namespaced_resources.pods:
         for container in pod.spec.containers:
-            if not container.security_context.read_only_root_filesystem:
+            if (
+                container.security_context
+                and not container.security_context.read_only_root_filesystem
+            ):
                 offenders.append(pod)
     if offenders:
         print_pod_table(

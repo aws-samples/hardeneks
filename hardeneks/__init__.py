@@ -5,8 +5,11 @@ import kubernetes
 from rich.console import Console
 import typer
 
-from .resources import NamespacedResources
-from .harden import harden_namespace
+from .resources import (
+    NamespacedResources,
+    Resources,
+)
+from .harden import harden_cluster, harden_namespace
 
 
 app = typer.Typer()
@@ -78,9 +81,19 @@ def run_hardeneks(
     else:
         namespaces = [namespace]
 
+    rules = config["rules"]
+    cluster_wide_rules = config["rules"].pop("cluster_wide")
+
+    console.print("Checking cluster wide rules", style="green")
+    print()
+
+    resources = Resources(region, context, cluster, namespaces)
+    resources.set_resources()
+    harden_cluster(resources, cluster_wide_rules)
+
     for ns in namespaces:
         console.print(f"Checking rules against namespace: {ns}", style="green")
         console.print()
         resources = NamespacedResources(region, context, cluster, ns)
         resources.set_resources()
-        harden_namespace(resources, config["rules"])
+        harden_namespace(resources, rules)
