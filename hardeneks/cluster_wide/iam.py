@@ -2,13 +2,13 @@ import boto3
 from kubernetes import client
 from rich.console import Console
 
-from ..resources import NamespacedResources
+from ..resources import Resources
 from ..report import print_role_table, print_instance_table
 
 console = Console()
 
 
-def restrict_wildcard_for_cluster_roles(resources: NamespacedResources):
+def restrict_wildcard_for_cluster_roles(resources: Resources):
     offenders = []
 
     for role in resources.cluster_roles:
@@ -27,7 +27,7 @@ def restrict_wildcard_for_cluster_roles(resources: NamespacedResources):
     return offenders
 
 
-def check_endpoint_public_access(resources: NamespacedResources):
+def check_endpoint_public_access(resources: Resources):
     client = boto3.client("eks", region_name=resources.region)
     cluster_metadata = client.describe_cluster(name=resources.cluster)
     endpoint_access = cluster_metadata["cluster"]["resourcesVpcConfig"][
@@ -41,7 +41,7 @@ def check_endpoint_public_access(resources: NamespacedResources):
     return True
 
 
-def check_aws_node_daemonset_service_account(resources: NamespacedResources):
+def check_aws_node_daemonset_service_account(resources: Resources):
     daemonset = client.AppsV1Api().read_namespaced_daemon_set(
         name="aws-node", namespace="kube-system"
     )
@@ -54,7 +54,7 @@ def check_aws_node_daemonset_service_account(resources: NamespacedResources):
     return True
 
 
-def check_access_to_instance_profile(resources: NamespacedResources):
+def check_access_to_instance_profile(resources: Resources):
     client = boto3.client("ec2", region_name=resources.region)
     offenders = []
 
@@ -86,7 +86,7 @@ def check_access_to_instance_profile(resources: NamespacedResources):
     return offenders
 
 
-def disable_anonymous_access_for_cluster_roles(resources: NamespacedResources):
+def disable_anonymous_access_for_cluster_roles(resources: Resources):
     offenders = []
 
     for cluster_role_binding in resources.cluster_role_bindings:

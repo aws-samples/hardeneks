@@ -20,6 +20,10 @@ rules:
       - check_vpc_flow_logs
       - check_awspca_exists
       - check_default_deny_policy_exists
+    encryption_secrets:
+      - use_encryption_with_ebs
+      - use_encryption_with_efs
+      - use_efs_access_points
   security: 
     iam:
       - disable_anonymous_access_for_roles
@@ -37,7 +41,6 @@ rules:
       - check_read_only_root_file_system
     network_security:
       - use_encryption_with_aws_load_balancers
-  #   encryption_secrets:
   #   infrastructure_security:
   # cluster_autoscaling:
   #   karpenter:

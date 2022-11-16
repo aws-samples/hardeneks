@@ -79,7 +79,6 @@ def print_workload_table(workloads, message, kind):
     )
     console.print(table)
     console.print()
-    console.print("*" * 100)
 
 
 def print_namespace_table(namespaces, message):
@@ -111,6 +110,40 @@ def print_service_table(services, message):
         table.add_row(
             "Service", workload.metadata.namespace, workload.metadata.name
         )
+
+    console.print(
+        message,
+        style="red",
+    )
+    console.print(table)
+    console.print()
+
+
+def print_storage_class_table(storage_classes, message):
+    table = Table()
+
+    table.add_column("StorageClass", style="cyan")
+    table.add_column("Encyrpted", style="magenta")
+
+    for storage_class in storage_classes:
+        table.add_row(storage_class.metadata.name, "false")
+
+    console.print(
+        message,
+        style="red",
+    )
+    console.print(table)
+    console.print()
+
+
+def print_persistent_volume_table(persistent_volumes, message):
+    table = Table()
+
+    table.add_column("PersistentVolume", style="cyan")
+    table.add_column("Encrypted", style="magenta")
+
+    for persistent_volume in persistent_volumes:
+        table.add_row(persistent_volume.metadata.name, "false")
 
     console.print(
         message,

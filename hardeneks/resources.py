@@ -23,6 +23,10 @@ class Resources:
             .list_network_policy_for_all_namespaces()
             .items
         )
+        self.storage_classes = client.StorageV1Api().list_storage_class().items
+        self.persistent_volumes = (
+            client.CoreV1Api().list_persistent_volume().items
+        )
 
 
 class NamespacedResources:
