@@ -9,11 +9,12 @@
                     "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"bad\"}}\n"
                 },
                 "creationTimestamp": "2022-11-16T16:29:46Z",
+                "deletionTimestamp": "2022-11-16T17:43:23Z",
                 "labels": {
                     "kubernetes.io/metadata.name": "bad"
                 },
                 "name": "bad",
-                "resourceVersion": "8158450",
+                "resourceVersion": "8170848",
                 "uid": "cf00eb81-8697-4fb1-85a9-7163bd8376cb"
             },
             "spec": {
@@ -22,7 +23,44 @@
                 ]
             },
             "status": {
-                "phase": "Active"
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:28Z",
+                        "message": "Discovery failed for some groups, 1 failing: unable to retrieve the complete list of server APIs: metrics.k8s.io/v1beta1: the server is currently unable to handle the request",
+                        "reason": "DiscoveryFailed",
+                        "status": "True",
+                        "type": "NamespaceDeletionDiscoveryFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:28Z",
+                        "message": "All legacy kube types successfully parsed",
+                        "reason": "ParsedGroupVersions",
+                        "status": "False",
+                        "type": "NamespaceDeletionGroupVersionParsingFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:28Z",
+                        "message": "All content successfully deleted, may be waiting on finalization",
+                        "reason": "ContentDeleted",
+                        "status": "False",
+                        "type": "NamespaceDeletionContentFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:28Z",
+                        "message": "All content successfully removed",
+                        "reason": "ContentRemoved",
+                        "status": "False",
+                        "type": "NamespaceContentRemaining"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:28Z",
+                        "message": "All content-preserving finalizers finished",
+                        "reason": "ContentHasNoFinalizers",
+                        "status": "False",
+                        "type": "NamespaceFinalizersRemaining"
+                    }
+                ],
+                "phase": "Terminating"
             }
         },
         {
@@ -54,11 +92,12 @@
                     "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"good\"}}\n"
                 },
                 "creationTimestamp": "2022-11-16T16:29:46Z",
+                "deletionTimestamp": "2022-11-16T17:43:30Z",
                 "labels": {
                     "kubernetes.io/metadata.name": "good"
                 },
                 "name": "good",
-                "resourceVersion": "8158440",
+                "resourceVersion": "8170871",
                 "uid": "4af3d971-6388-4d0c-b9e5-7721055f66ed"
             },
             "spec": {
@@ -67,7 +106,44 @@
                 ]
             },
             "status": {
-                "phase": "Active"
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:35Z",
+                        "message": "Discovery failed for some groups, 1 failing: unable to retrieve the complete list of server APIs: metrics.k8s.io/v1beta1: the server is currently unable to handle the request",
+                        "reason": "DiscoveryFailed",
+                        "status": "True",
+                        "type": "NamespaceDeletionDiscoveryFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:35Z",
+                        "message": "All legacy kube types successfully parsed",
+                        "reason": "ParsedGroupVersions",
+                        "status": "False",
+                        "type": "NamespaceDeletionGroupVersionParsingFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:35Z",
+                        "message": "All content successfully deleted, may be waiting on finalization",
+                        "reason": "ContentDeleted",
+                        "status": "False",
+                        "type": "NamespaceDeletionContentFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:35Z",
+                        "message": "All content successfully removed",
+                        "reason": "ContentRemoved",
+                        "status": "False",
+                        "type": "NamespaceContentRemaining"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-16T17:43:35Z",
+                        "message": "All content-preserving finalizers finished",
+                        "reason": "ContentHasNoFinalizers",
+                        "status": "False",
+                        "type": "NamespaceFinalizersRemaining"
+                    }
+                ],
+                "phase": "Terminating"
             }
         },
         {
@@ -137,13 +213,13 @@
             "apiVersion": "v1",
             "kind": "Namespace",
             "metadata": {
-                "creationTimestamp": "2022-11-16T16:34:28Z",
+                "creationTimestamp": "2022-11-16T21:16:03Z",
                 "labels": {
                     "kubernetes.io/metadata.name": "test-namespace"
                 },
                 "name": "test-namespace",
-                "resourceVersion": "8159246",
-                "uid": "78a8521d-6326-476b-b31e-dc83edd10378"
+                "resourceVersion": "8206534",
+                "uid": "5d7c76c7-c237-469c-ab80-b17d1cb2f732"
             },
             "spec": {
                 "finalizers": [

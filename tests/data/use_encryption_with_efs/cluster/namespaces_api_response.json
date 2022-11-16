@@ -137,13 +137,13 @@
             "apiVersion": "v1",
             "kind": "Namespace",
             "metadata": {
-                "creationTimestamp": "2022-11-16T16:34:28Z",
+                "creationTimestamp": "2022-11-16T17:32:05Z",
                 "labels": {
                     "kubernetes.io/metadata.name": "test-namespace"
                 },
                 "name": "test-namespace",
-                "resourceVersion": "8159246",
-                "uid": "78a8521d-6326-476b-b31e-dc83edd10378"
+                "resourceVersion": "8168918",
+                "uid": "87257912-2622-4774-b778-3c9528775964"
             },
             "spec": {
                 "finalizers": [

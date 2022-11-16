@@ -41,6 +41,16 @@ def resources(request):
         os.path.join(data_directory, "network_policies_api_response.json"),
         "V1NetworkPolicyList",
     ).items
+    resources.storage_classes = get_response(
+        client.StorageV1Api,
+        os.path.join(data_directory, "storage_classes_api_response.json"),
+        "V1StorageClassList",
+    ).items
+    resources.persistent_volumes = get_response(
+        client.CoreV1Api,
+        os.path.join(data_directory, "persistent_volumes_api_response.json"),
+        "V1PersistentVolumeList",
+    ).items
     return resources
 
 
