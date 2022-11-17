@@ -1,9 +1,11 @@
 import boto3
 from kubernetes import client
+from rich import print
+from rich.panel import Panel
 from rich.console import Console
 
 from ..resources import Resources
-from ..report import print_role_table, print_instance_table
+from ..report import print_role_table, print_instance_metadata_table
 
 console = Console()
 
@@ -21,7 +23,7 @@ def restrict_wildcard_for_cluster_roles(resources: Resources):
     if offenders:
         print_role_table(
             offenders,
-            "ClusterRoles should not have '*' in Verbs or Resources",
+            "[red]ClusterRoles should not have '*' in Verbs or Resources",
             "ClusterRole",
         )
     return offenders
@@ -34,7 +36,7 @@ def check_endpoint_public_access(resources: Resources):
         "endpointPublicAccess"
     ]
     if endpoint_access:
-        console.print("EKS Cluster Endpoint is not Private", style="red")
+        print(Panel("[red]EKS Cluster Endpoint is not Private"))
         console.print()
         return False
 
@@ -47,7 +49,7 @@ def check_aws_node_daemonset_service_account(resources: Resources):
     )
 
     if daemonset.spec.template.spec.service_account_name == "aws-node":
-        console.print("Update the aws-node daemonset to use IRSA", style="red")
+        print(Panel("[red]Update the aws-node daemonset to use IRSA"))
         console.print()
         return False
 
@@ -79,9 +81,9 @@ def check_access_to_instance_profile(resources: Resources):
             offenders.append(instance)
 
     if offenders:
-        print_instance_table(
+        print_instance_metadata_table(
             offenders,
-            "Restrict access to the instance profile assigned to nodes",
+            "[red]Restrict access to the instance profile assigned to nodes",
         )
     return offenders
 
@@ -101,7 +103,7 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
     if offenders:
         print_role_table(
             offenders,
-            "Don't bind clusterroles to anonymous or unauthenticated groups",
+            "[red]Don't bind clusterroles to anonymous/unauthenticated groups",
             "ClusterRoleBinding",
         )
 

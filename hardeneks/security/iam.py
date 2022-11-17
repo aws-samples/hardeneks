@@ -26,7 +26,7 @@ def restrict_wildcard_for_roles(resources: NamespacedResources):
     if offenders:
         print_role_table(
             offenders,
-            "Roles should not have '*' in Verbs or Resources",
+            "[red]Roles should not have '*' in Verbs or Resources",
             "Role",
         )
     return offenders
@@ -41,7 +41,8 @@ def disable_service_account_token_mounts(resources: NamespacedResources):
 
     if offenders:
         print_pod_table(
-            offenders, "Auto-mounting of Service Account tokens is not allowed"
+            offenders,
+            "[red]Auto-mounting of Service Account tokens is not allowed",
         )
     return offenders
 
@@ -58,7 +59,7 @@ def disable_run_as_root_user(resources: NamespacedResources):
             offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, "Running as root is not allowed")
+        print_pod_table(offenders, "[red]Running as root is not allowed")
 
     return offenders
 
@@ -78,7 +79,7 @@ def disable_anonymous_access_for_roles(resources: NamespacedResources):
     if offenders:
         print_role_table(
             offenders,
-            "Don't bind roles to anonymous or unauthenticated groups",
+            "[red]Don't bind roles to anonymous or unauthenticated groups",
             "RoleBinding",
         )
     return offenders
@@ -107,7 +108,7 @@ def use_dedicated_service_accounts_for_each_deployment(
     if offenders:
         print_workload_table(
             offenders,
-            "Don't share service accounts between Deployments",
+            "[red]Don't share service accounts between Deployments",
             "Deployment",
         )
 
@@ -137,7 +138,7 @@ def use_dedicated_service_accounts_for_each_stateful_set(
     if offenders:
         print_workload_table(
             offenders,
-            "Don't share service accounts between StatefulSets",
+            "[red]Don't share service accounts between StatefulSets",
             "StatefulSet",
         )
 
@@ -167,7 +168,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
     if offenders:
         print_workload_table(
             offenders,
-            "Don't share service accounts between DaemonSets",
+            "[red]Don't share service accounts between DaemonSets",
             "DaemonSet",
         )
 

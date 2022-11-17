@@ -19,7 +19,7 @@ def ensure_namespace_quotas_exist(resources: Resources):
     if offenders:
         print_namespace_table(
             offenders,
-            "Namespaces should have quotas assigned",
+            "[red]Namespaces should have quotas assigned",
         )
 
     return offenders

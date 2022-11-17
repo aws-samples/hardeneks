@@ -24,6 +24,8 @@ rules:
       - use_encryption_with_ebs
       - use_encryption_with_efs
       - use_efs_access_points
+    infrastructure_security:
+      - deploy_workers_onto_private_subnets
   security: 
     iam:
       - disable_anonymous_access_for_roles
@@ -41,7 +43,6 @@ rules:
       - check_read_only_root_file_system
     network_security:
       - use_encryption_with_aws_load_balancers
-  #   infrastructure_security:
   # cluster_autoscaling:
   #   karpenter:
   #   cluster_autoscaler:

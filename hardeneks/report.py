@@ -1,5 +1,7 @@
 from rich.table import Table
+from rich.panel import Panel
 from rich.console import Console
+from rich import print
 
 console = Console()
 
@@ -14,12 +16,11 @@ def print_role_table(roles, message, type):
     for role in roles:
         table.add_row(type, role.metadata.namespace, role.metadata.name)
 
-    console.print(message, style="red")
-    console.print(table)
+    print(Panel(table, title=message))
     console.print()
 
 
-def print_instance_table(instances, message):
+def print_instance_metadata_table(instances, message):
     table = Table()
 
     table.add_column("InstanceId", style="cyan")
@@ -35,11 +36,23 @@ def print_instance_table(instances, message):
             ),
         )
 
-    console.print(
-        message,
-        style="red",
-    )
-    console.print(table)
+    print(Panel(table, title=message))
+    console.print()
+
+
+def print_instance_public_table(instances, message):
+    table = Table()
+
+    table.add_column("InstanceId", style="cyan")
+    table.add_column("PublicDnsName", style="magenta")
+
+    for instance in instances:
+        table.add_row(
+            instance["Instances"][0]["InstanceId"],
+            str(instance["Instances"][0]["PublicDnsName"]),
+        )
+
+    print(Panel(table, title=message))
     console.print()
 
 
@@ -53,11 +66,7 @@ def print_pod_table(pods, message):
     for pod in pods:
         table.add_row("Pod", pod.metadata.namespace, pod.metadata.name)
 
-    console.print(
-        message,
-        style="red",
-    )
-    console.print(table)
+    print(Panel(table, title=message))
     console.print()
 
 
@@ -73,11 +82,7 @@ def print_workload_table(workloads, message, kind):
             kind, workload.metadata.namespace, workload.metadata.name
         )
 
-    console.print(
-        message,
-        style="red",
-    )
-    console.print(table)
+    print(Panel(table, title=message))
     console.print()
 
 
@@ -91,11 +96,7 @@ def print_namespace_table(namespaces, message):
             namespace,
         )
 
-    console.print(
-        message,
-        style="red",
-    )
-    console.print(table)
+    print(Panel(table, title=message))
     console.print()
 
 
@@ -111,11 +112,7 @@ def print_service_table(services, message):
             "Service", workload.metadata.namespace, workload.metadata.name
         )
 
-    console.print(
-        message,
-        style="red",
-    )
-    console.print(table)
+    print(Panel(table, title=message))
     console.print()
 
 
@@ -128,11 +125,7 @@ def print_storage_class_table(storage_classes, message):
     for storage_class in storage_classes:
         table.add_row(storage_class.metadata.name, "false")
 
-    console.print(
-        message,
-        style="red",
-    )
-    console.print(table)
+    print(Panel(table, title=message))
     console.print()
 
 
@@ -145,9 +138,5 @@ def print_persistent_volume_table(persistent_volumes, message):
     for persistent_volume in persistent_volumes:
         table.add_row(persistent_volume.metadata.name, "false")
 
-    console.print(
-        message,
-        style="red",
-    )
-    console.print(table)
+    print(Panel(table, title=message))
     console.print()
