@@ -1,7 +1,7 @@
 import boto3
 
-from ..resources import Resources
-from ..report import print_instance_public_table
+from ...resources import Resources
+from ...report import print_instance_public_table
 
 
 def deploy_workers_onto_private_subnets(resources: Resources):

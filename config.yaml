@@ -6,57 +6,59 @@ ignore-namespaces:
   - kube-apiserver
 rules: 
   cluster_wide:
-    iam:
-      - disable_anonymous_access_for_cluster_roles
-      - check_endpoint_public_access
-      - check_aws_node_daemonset_service_account
-      - check_access_to_instance_profile
-      - restrict_wildcard_for_cluster_roles
-    multi_tenancy:
-      - ensure_namespace_quotas_exist
-    detective_controls:
-      - check_logs_are_enabled
-    network_security:
-      - check_vpc_flow_logs
-      - check_awspca_exists
-      - check_default_deny_policy_exists
-    encryption_secrets:
-      - use_encryption_with_ebs
-      - use_encryption_with_efs
-      - use_efs_access_points
-    infrastructure_security:
-      - deploy_workers_onto_private_subnets
-  security: 
-    iam:
-      - disable_anonymous_access_for_roles
-      - restrict_wildcard_for_roles
-      - disable_service_account_token_mounts
-      - disable_run_as_root_user
-      - use_dedicated_service_accounts_for_each_deployment
-      - use_dedicated_service_accounts_for_each_stateful_set
-      - use_dedicated_service_accounts_for_each_daemon_set
-    pod_security:
-      - disallow_container_socket_mount
-      - disallow_host_path_or_make_it_read_only
-      - set_requests_limits_for_containers
-      - disallow_privilege_escalation
-      - check_read_only_root_file_system
-    network_security:
-      - use_encryption_with_aws_load_balancers
-  # cluster_autoscaling:
-  #   karpenter:
-  #   cluster_autoscaler:
-  # reliability:
-  #   applications:
-  #   control_plane:
-  #   data_plane:
-  #   network:
-  # networking:
-  #   vpc_subnets:
-  #   vpc_cni:
-  #   prefix_mode:
-  #   ipv6:
-  #   security_groups:
-  #   custom_networking:
-  #   load_balancing:
+    security:
+      iam:
+        - disable_anonymous_access_for_cluster_roles
+        - check_endpoint_public_access
+        - check_aws_node_daemonset_service_account
+        - check_access_to_instance_profile
+        - restrict_wildcard_for_cluster_roles
+      multi_tenancy:
+        - ensure_namespace_quotas_exist
+      detective_controls:
+        - check_logs_are_enabled
+      network_security:
+        - check_vpc_flow_logs
+        - check_awspca_exists
+        - check_default_deny_policy_exists
+      encryption_secrets:
+        - use_encryption_with_ebs
+        - use_encryption_with_efs
+        - use_efs_access_points
+      infrastructure_security:
+        - deploy_workers_onto_private_subnets
+  namespace_based:
+    security: 
+      iam:
+        - disable_anonymous_access_for_roles
+        - restrict_wildcard_for_roles
+        - disable_service_account_token_mounts
+        - disable_run_as_root_user
+        - use_dedicated_service_accounts_for_each_deployment
+        - use_dedicated_service_accounts_for_each_stateful_set
+        - use_dedicated_service_accounts_for_each_daemon_set
+      pod_security:
+        - disallow_container_socket_mount
+        - disallow_host_path_or_make_it_read_only
+        - set_requests_limits_for_containers
+        - disallow_privilege_escalation
+        - check_read_only_root_file_system
+      network_security:
+        - use_encryption_with_aws_load_balancers
+    # cluster_autoscaling:
+    #   karpenter:
+    #   cluster_autoscaler:
+    # reliability:
+    #   applications:
+    #   control_plane:
+    #   data_plane:
+    #   network:
+    # networking:
+    #   vpc_subnets:
+    #   vpc_cni:
+    #   prefix_mode:
+    #   ipv6:
+    #   security_groups:
+    #   custom_networking:
+    #   load_balancing:
 

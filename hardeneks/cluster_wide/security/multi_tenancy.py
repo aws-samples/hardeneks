@@ -1,8 +1,8 @@
 from rich.console import Console
 
-from ..resources import Resources
+from ...resources import Resources
 
-from ..report import (
+from ...report import (
     print_namespace_table,
 )
 

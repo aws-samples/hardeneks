@@ -7,14 +7,14 @@ import pytest
 
 from hardeneks.resources import NamespacedResources
 
-from hardeneks.cluster_wide.iam import (
+from hardeneks.cluster_wide.security.iam import (
     restrict_wildcard_for_cluster_roles,
     check_endpoint_public_access,
     check_access_to_instance_profile,
     check_aws_node_daemonset_service_account,
     disable_anonymous_access_for_cluster_roles,
 )
-from hardeneks.security.iam import (
+from hardeneks.namespace_based.security.iam import (
     restrict_wildcard_for_roles,
     disable_service_account_token_mounts,
     disable_run_as_root_user,

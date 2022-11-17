@@ -4,7 +4,7 @@ from rich.panel import Panel
 from rich.console import Console
 
 
-from ..resources import Resources
+from ...resources import Resources
 
 console = Console()
 

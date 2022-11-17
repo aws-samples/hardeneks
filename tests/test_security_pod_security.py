@@ -1,6 +1,6 @@
 import pytest
 
-from hardeneks.security.pod_security import (
+from hardeneks.namespace_based.security.pod_security import (
     disallow_container_socket_mount,
     disallow_host_path_or_make_it_read_only,
     set_requests_limits_for_containers,

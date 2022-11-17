@@ -1,5 +1,5 @@
-from ..resources import Resources
-from ..report import print_storage_class_table, print_persistent_volume_table
+from ...resources import Resources
+from ...report import print_storage_class_table, print_persistent_volume_table
 
 
 def use_encryption_with_ebs(resources: Resources):

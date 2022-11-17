@@ -1,9 +1,9 @@
 from rich.console import Console
 
-from ..report import (
+from ...report import (
     print_pod_table,
 )
-from ..resources import NamespacedResources
+from ...resources import NamespacedResources
 
 
 console = Console()

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
-from hardeneks.cluster_wide.infrastructure_security import (
+from hardeneks.cluster_wide.security.infrastructure_security import (
     deploy_workers_onto_private_subnets,
 )
 from hardeneks.resources import Resources
