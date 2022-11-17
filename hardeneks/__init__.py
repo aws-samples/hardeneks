@@ -9,7 +9,7 @@ from .resources import (
     NamespacedResources,
     Resources,
 )
-from .harden import harden_cluster, harden_namespace
+from .harden import harden
 
 
 app = typer.Typer()
@@ -83,14 +83,13 @@ def run_hardeneks(
         namespaces = [namespace]
 
     rules = config["rules"]
-    cluster_wide_rules = config["rules"].pop("cluster_wide")
 
     console.rule("[b]Checking cluster wide rules", characters="- ")
     print()
 
     resources = Resources(region, context, cluster, namespaces)
     resources.set_resources()
-    harden_cluster(resources, cluster_wide_rules)
+    harden(resources, rules, "cluster_wide")
 
     for ns in namespaces:
         console.rule(
@@ -99,5 +98,5 @@ def run_hardeneks(
         console.print()
         resources = NamespacedResources(region, context, cluster, ns)
         resources.set_resources()
-        harden_namespace(resources, rules)
+        harden(resources, rules, "namespace_based")
         console.print()

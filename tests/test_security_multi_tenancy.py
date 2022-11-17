@@ -1,6 +1,8 @@
 import pytest
 
-from hardeneks.cluster_wide.multi_tenancy import ensure_namespace_quotas_exist
+from hardeneks.cluster_wide.security.multi_tenancy import (
+    ensure_namespace_quotas_exist,
+)
 
 
 @pytest.mark.parametrize(

@@ -5,10 +5,10 @@ from unittest.mock import patch
 
 import pytest
 
-from hardeneks.security.network_security import (
+from hardeneks.namespace_based.security.network_security import (
     use_encryption_with_aws_load_balancers,
 )
-from hardeneks.cluster_wide.network_security import (
+from hardeneks.cluster_wide.security.network_security import (
     check_vpc_flow_logs,
     check_awspca_exists,
     check_default_deny_policy_exists,

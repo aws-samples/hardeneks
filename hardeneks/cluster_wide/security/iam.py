@@ -4,8 +4,8 @@ from rich import print
 from rich.panel import Panel
 from rich.console import Console
 
-from ..resources import Resources
-from ..report import print_role_table, print_instance_metadata_table
+from ...resources import Resources
+from ...report import print_role_table, print_instance_metadata_table
 
 console = Console()
 

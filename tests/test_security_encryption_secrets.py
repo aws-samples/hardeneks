@@ -1,6 +1,6 @@
 import pytest
 
-from hardeneks.cluster_wide.encryption_secrets import (
+from hardeneks.cluster_wide.security.encryption_secrets import (
     use_encryption_with_ebs,
     use_encryption_with_efs,
     use_efs_access_points,

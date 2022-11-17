@@ -5,8 +5,8 @@ from rich.panel import Panel
 from rich import print
 
 
-from ..resources import Resources
-from ..report import print_namespace_table
+from ...resources import Resources
+from ...report import print_namespace_table
 
 
 console = Console()

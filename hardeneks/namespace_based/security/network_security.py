@@ -1,6 +1,6 @@
 from rich.console import Console
 
-from ..report import (
+from ...report import (
     print_service_table,
 )
 from hardeneks.resources import NamespacedResources
