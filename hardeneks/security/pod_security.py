@@ -24,7 +24,9 @@ def disallow_container_socket_mount(namespaced_resources: NamespacedResources):
                 offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, "Container socket mounts are not allowed")
+        print_pod_table(
+            offenders, "[red]Container socket mounts are not allowed"
+        )
 
     return offenders
 
@@ -42,7 +44,7 @@ def disallow_host_path_or_make_it_read_only(
     if offenders:
         print_pod_table(
             offenders,
-            "Restrict the use of hostpath.",
+            "[red]Restrict the use of hostpath.",
         )
 
     return offenders
@@ -63,7 +65,7 @@ def set_requests_limits_for_containers(
     if offenders:
         print_pod_table(
             offenders,
-            "Set requests and limits for each container.",
+            "[red]Set requests and limits for each container.",
         )
 
     return offenders
@@ -82,7 +84,8 @@ def disallow_privilege_escalation(namespaced_resources: NamespacedResources):
 
     if offenders:
         print_pod_table(
-            offenders, "Set allowPrivilegeEscalation in the pod spec to false"
+            offenders,
+            "[red]Set allowPrivilegeEscalation in the pod spec to false",
         )
 
     return offenders
@@ -102,7 +105,7 @@ def check_read_only_root_file_system(
     if offenders:
         print_pod_table(
             offenders,
-            "Configure your images with a read-only root file system",
+            "[red]Configure your images with a read-only root file system",
         )
 
     return offenders

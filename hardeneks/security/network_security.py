@@ -27,5 +27,7 @@ def use_encryption_with_aws_load_balancers(
                 offenders.append(service)
 
     if offenders:
-        print_service_table(offenders, "Make sure you specify an ssl cert")
+        print_service_table(
+            offenders, "[red]Make sure you specify an ssl cert"
+        )
     return offenders

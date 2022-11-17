@@ -1,4 +1,6 @@
 import boto3
+from rich import print
+from rich.panel import Panel
 from rich.console import Console
 
 
@@ -14,7 +16,7 @@ def check_logs_are_enabled(resources: Resources):
         "enabled"
     ]
     if not logs:
-        console.print("Enable control plane logs for auditing", style="red")
+        print(Panel("[red]Enable control plane logs for auditing"))
         console.print()
 
     return logs

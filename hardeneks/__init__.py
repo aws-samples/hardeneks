@@ -64,6 +64,7 @@ def run_hardeneks(
 ):
 
     console = Console()
+    console.rule("[b]HARDENEKS", characters="*  ")
     console.print(f"You are operating at {region}")
     console.print(f"You context is {context}")
     console.print(f"You are using {config} as your config file")
@@ -84,7 +85,7 @@ def run_hardeneks(
     rules = config["rules"]
     cluster_wide_rules = config["rules"].pop("cluster_wide")
 
-    console.print("Checking cluster wide rules", style="green")
+    console.rule("[b]Checking cluster wide rules", characters="- ")
     print()
 
     resources = Resources(region, context, cluster, namespaces)
@@ -92,8 +93,11 @@ def run_hardeneks(
     harden_cluster(resources, cluster_wide_rules)
 
     for ns in namespaces:
-        console.print(f"Checking rules against namespace: {ns}", style="green")
+        console.rule(
+            f"[b]Checking rules against namespace: {ns}", characters=" -"
+        )
         console.print()
         resources = NamespacedResources(region, context, cluster, ns)
         resources.set_resources()
         harden_namespace(resources, rules)
+        console.print()

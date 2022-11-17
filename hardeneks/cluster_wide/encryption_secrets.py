@@ -15,7 +15,8 @@ def use_encryption_with_ebs(resources: Resources):
 
     if offenders:
         print_storage_class_table(
-            offenders, "EBS Storage Classes should have encryption parameter"
+            offenders,
+            "[red]EBS Storage Classes should have encryption parameter",
         )
     return offenders
 
@@ -34,7 +35,8 @@ def use_encryption_with_efs(resources: Resources):
 
     if offenders:
         print_persistent_volume_table(
-            offenders, "EFS Persistent volumes should have tls mount option"
+            offenders,
+            "[red]EFS Persistent volumes should have tls mount option",
         )
     return offenders
 
@@ -49,6 +51,7 @@ def use_efs_access_points(resources: Resources):
 
     if offenders:
         print_persistent_volume_table(
-            offenders, "EFS Persistent volumes should leverage access points"
+            offenders,
+            "[red]EFS Persistent volumes should leverage access points",
         )
     return offenders

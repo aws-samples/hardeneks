@@ -1,6 +1,8 @@
 import boto3
 from kubernetes import client
 from rich.console import Console
+from rich.panel import Panel
+from rich import print
 
 
 from ..resources import Resources
@@ -22,7 +24,7 @@ def check_vpc_flow_logs(resources: Resources):
     )["FlowLogs"]
 
     if not flow_logs:
-        console.print("Enable flow logs for your VPC.", style="red")
+        print(Panel("[red]Enable flow logs for your VPC."))
         console.print()
         return False
 
@@ -33,8 +35,10 @@ def check_awspca_exists(resources: Resources):
         if service.metadata.name.startswith("aws-privateca-issuer"):
             return True
 
-    console.print(
-        "Install aws privateca issuer for your certificates.", style="red"
+    print(
+        Panel(
+            "[red]Install aws privateca issuer for your certificates.",
+        )
     )
     console.print()
     return False
@@ -49,7 +53,7 @@ def check_default_deny_policy_exists(resources: Resources):
     if offenders:
         print_namespace_table(
             offenders,
-            "Namespaces that does not have default network deny policies",
+            "[red]Namespaces that does not have default network deny policies",
         )
 
     return offenders
