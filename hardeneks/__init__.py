@@ -54,7 +54,7 @@ def run_hardeneks(
         help="Specific namespace to harden. Default is all namespaces.",
     ),
     config: str = typer.Option(
-        default=Path.cwd() / "config.yaml",
+        default=Path.cwd() / "hardeneks" / "config.yaml",
         callback=_config_callback,
         help="Path to a hardeneks config file.",
     ),

@@ -116,6 +116,22 @@ def print_service_table(services, message):
     console.print()
 
 
+def print_deployment_table(deployments, message):
+    table = Table()
+
+    table.add_column("Kind", style="cyan")
+    table.add_column("Namespace", style="magenta")
+    table.add_column("Name", style="green")
+
+    for workload in deployments:
+        table.add_row(
+            "Deployment", workload.metadata.namespace, workload.metadata.name
+        )
+
+    print(Panel(table, title=message))
+    console.print()
+
+
 def print_storage_class_table(storage_classes, message):
     table = Table()
 
