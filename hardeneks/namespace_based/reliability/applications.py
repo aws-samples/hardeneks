@@ -43,15 +43,16 @@ def schedule_replicas_across_nodes(namespaced_resources: NamespacedResources):
         affinity = deployment.spec.template.spec.affinity
         if not affinity:
             offenders.append(deployment)
-        elif affinity and affinity.node_affinity:
-            node_selectors = (
-                affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms  # noqa: E501
+        elif affinity and affinity.pod_anti_affinity:
+            pod_selectors = (
+                affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution  # noqa: E501
             )
-            expressions = [i.match_expressions for i in node_selectors]
-            keys = set([i[0].key for i in expressions])
+            topology_keys = set(
+                [i.pod_affinity_term.topology_key for i in pod_selectors]
+            )
             if not set(
                 ["topology.kubernetes.io/zone", "kubernetes.io/hostname"]
-            ).issubset(keys):
+            ).issubset(topology_keys):
                 offenders.append(deployment)
 
     if offenders:
