@@ -9,15 +9,15 @@
                     "deployment.kubernetes.io/revision": "1",
                     "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"nginx\"},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":3,\"selector\":{\"matchLabels\":{\"app\":\"nginx\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"nginx\"}},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}}}\n"
                 },
-                "creationTimestamp": "2022-11-22T16:17:23Z",
+                "creationTimestamp": "2022-11-23T16:53:45Z",
                 "generation": 1,
                 "labels": {
                     "app": "nginx"
                 },
                 "name": "bad",
                 "namespace": "test-namespace",
-                "resourceVersion": "9702863",
-                "uid": "a7324c40-0586-48cb-a6a4-bdf734de59a9"
+                "resourceVersion": "9968127",
+                "uid": "631e2daa-a0f9-4fc2-8e29-72eb2b4c8082"
             },
             "spec": {
                 "progressDeadlineSeconds": 600,
@@ -71,16 +71,16 @@
                 "availableReplicas": 3,
                 "conditions": [
                     {
-                        "lastTransitionTime": "2022-11-22T16:17:25Z",
-                        "lastUpdateTime": "2022-11-22T16:17:25Z",
+                        "lastTransitionTime": "2022-11-23T16:53:47Z",
+                        "lastUpdateTime": "2022-11-23T16:53:47Z",
                         "message": "Deployment has minimum availability.",
                         "reason": "MinimumReplicasAvailable",
                         "status": "True",
                         "type": "Available"
                     },
                     {
-                        "lastTransitionTime": "2022-11-22T16:17:23Z",
-                        "lastUpdateTime": "2022-11-22T16:17:25Z",
+                        "lastTransitionTime": "2022-11-23T16:53:45Z",
+                        "lastUpdateTime": "2022-11-23T16:53:47Z",
                         "message": "ReplicaSet \"bad-66b6c48dd5\" has successfully progressed.",
                         "reason": "NewReplicaSetAvailable",
                         "status": "True",
@@ -99,25 +99,22 @@
             "metadata": {
                 "annotations": {
                     "deployment.kubernetes.io/revision": "1",
-                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"web-server\"},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":4,\"selector\":{\"matchLabels\":{\"app\":\"web-server\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"web-server\"}},\"spec\":{\"affinity\":{\"podAntiAffinity\":{\"preferredDuringSchedulingIgnoredDuringExecution\":[{\"podAffinityTerm\":{\"labelSelector\":{\"matchExpressions\":[{\"key\":\"app\",\"operator\":\"In\",\"values\":[\"web-server\"]}]},\"topologyKey\":\"topology.kubernetes.io/zone\"},\"weight\":100},{\"podAffinityTerm\":{\"labelSelector\":{\"matchExpressions\":[{\"key\":\"app\",\"operator\":\"In\",\"values\":[\"web-server\"]}]},\"topologyKey\":\"kubernetes.io/hostname\"},\"weight\":99}]}},\"containers\":[{\"image\":\"nginx:1.16-alpine\",\"name\":\"web-app\"}]}}}}\n"
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":3,\"selector\":{\"matchLabels\":{\"app\":\"good\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"good\"}},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"web-app\",\"resources\":{\"requests\":{\"cpu\":1}}}],\"topologySpreadConstraints\":[{\"labelSelector\":{\"matchLabels\":{\"app\":\"good\"}},\"maxSkew\":1,\"topologyKey\":\"topology.kubernetes.io/zone\",\"whenUnsatisfiable\":\"ScheduleAnyway\"}]}}}}\n"
                 },
-                "creationTimestamp": "2022-11-22T16:17:22Z",
+                "creationTimestamp": "2022-11-23T16:55:41Z",
                 "generation": 1,
-                "labels": {
-                    "app": "web-server"
-                },
                 "name": "good",
                 "namespace": "test-namespace",
-                "resourceVersion": "9702858",
-                "uid": "b1af15ed-cb59-41ad-b100-2f213fc009f7"
+                "resourceVersion": "9968572",
+                "uid": "d5cf2173-f22f-4d56-925b-d149ef700eaa"
             },
             "spec": {
                 "progressDeadlineSeconds": 600,
-                "replicas": 4,
+                "replicas": 3,
                 "revisionHistoryLimit": 10,
                 "selector": {
                     "matchLabels": {
-                        "app": "web-server"
+                        "app": "good"
                     }
                 },
                 "strategy": {
@@ -131,56 +128,20 @@
                     "metadata": {
                         "creationTimestamp": null,
                         "labels": {
-                            "app": "web-server"
+                            "app": "good"
                         }
                     },
                     "spec": {
-                        "affinity": {
-                            "podAntiAffinity": {
-                                "preferredDuringSchedulingIgnoredDuringExecution": [
-                                    {
-                                        "podAffinityTerm": {
-                                            "labelSelector": {
-                                                "matchExpressions": [
-                                                    {
-                                                        "key": "app",
-                                                        "operator": "In",
-                                                        "values": [
-                                                            "web-server"
-                                                        ]
-                                                    }
-                                                ]
-                                            },
-                                            "topologyKey": "topology.kubernetes.io/zone"
-                                        },
-                                        "weight": 100
-                                    },
-                                    {
-                                        "podAffinityTerm": {
-                                            "labelSelector": {
-                                                "matchExpressions": [
-                                                    {
-                                                        "key": "app",
-                                                        "operator": "In",
-                                                        "values": [
-                                                            "web-server"
-                                                        ]
-                                                    }
-                                                ]
-                                            },
-                                            "topologyKey": "kubernetes.io/hostname"
-                                        },
-                                        "weight": 99
-                                    }
-                                ]
-                            }
-                        },
                         "containers": [
                             {
-                                "image": "nginx:1.16-alpine",
-                                "imagePullPolicy": "IfNotPresent",
+                                "image": "nginx",
+                                "imagePullPolicy": "Always",
                                 "name": "web-app",
-                                "resources": {},
+                                "resources": {
+                                    "requests": {
+                                        "cpu": "1"
+                                    }
+                                },
                                 "terminationMessagePath": "/dev/termination-log",
                                 "terminationMessagePolicy": "File"
                             }
@@ -189,35 +150,46 @@
                         "restartPolicy": "Always",
                         "schedulerName": "default-scheduler",
                         "securityContext": {},
-                        "terminationGracePeriodSeconds": 30
+                        "terminationGracePeriodSeconds": 30,
+                        "topologySpreadConstraints": [
+                            {
+                                "labelSelector": {
+                                    "matchLabels": {
+                                        "app": "good"
+                                    }
+                                },
+                                "maxSkew": 1,
+                                "topologyKey": "topology.kubernetes.io/zone",
+                                "whenUnsatisfiable": "ScheduleAnyway"
+                            }
+                        ]
                     }
                 }
             },
             "status": {
-                "availableReplicas": 2,
+                "availableReplicas": 3,
                 "conditions": [
                     {
-                        "lastTransitionTime": "2022-11-22T16:17:22Z",
-                        "lastUpdateTime": "2022-11-22T16:17:22Z",
-                        "message": "Deployment does not have minimum availability.",
-                        "reason": "MinimumReplicasUnavailable",
-                        "status": "False",
+                        "lastTransitionTime": "2022-11-23T16:55:43Z",
+                        "lastUpdateTime": "2022-11-23T16:55:43Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
                         "type": "Available"
                     },
                     {
-                        "lastTransitionTime": "2022-11-22T16:17:22Z",
-                        "lastUpdateTime": "2022-11-22T16:17:24Z",
-                        "message": "ReplicaSet \"good-f4bdf564d\" is progressing.",
-                        "reason": "ReplicaSetUpdated",
+                        "lastTransitionTime": "2022-11-23T16:55:41Z",
+                        "lastUpdateTime": "2022-11-23T16:55:43Z",
+                        "message": "ReplicaSet \"good-79fd9d657c\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
                         "status": "True",
                         "type": "Progressing"
                     }
                 ],
                 "observedGeneration": 1,
-                "readyReplicas": 2,
-                "replicas": 4,
-                "unavailableReplicas": 2,
-                "updatedReplicas": 4
+                "readyReplicas": 3,
+                "replicas": 3,
+                "updatedReplicas": 3
             }
         }
     ],

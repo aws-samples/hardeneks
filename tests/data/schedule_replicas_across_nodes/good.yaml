@@ -1,41 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: test-namespace
   name: good
-  labels:
-    app: web-server
+  namespace: test-namespace
 spec:
-  replicas: 4
+  replicas: 3
   selector:
     matchLabels:
-      app: web-server
+      app: good
   template:
     metadata:
       labels:
-        app: web-server
+        app: good
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - web-server
-              topologyKey: topology.kubernetes.io/zone
-            weight: 100
-          - podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - web-server
-              topologyKey: kubernetes.io/hostname 
-            weight: 99
+      topologySpreadConstraints:
+        - maxSkew: 1
+          whenUnsatisfiable: ScheduleAnyway
+          topologyKey: topology.kubernetes.io/zone
+          labelSelector:
+            matchLabels:
+              app: good
       containers:
       - name: web-app
-        image: nginx:1.16-alpine
+        image: nginx
+        resources:
+          requests:
+            cpu: 1
