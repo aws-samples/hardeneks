@@ -10,6 +10,8 @@ from hardeneks.namespace_based.reliability.applications import (
     run_multiple_replicas,
     schedule_replicas_across_nodes,
     check_horizontal_pod_autoscaling_exists,
+    check_liveness_probes,
+    check_readiness_probes,
 )
 
 from hardeneks.cluster_wide.reliability.applications import (
@@ -108,6 +110,30 @@ def test_check_vertical_pod_autoscaler_exists(mocked_client):
 )
 def test_check_horizontal_pod_autoscaling_exists(namespaced_resources):
     offenders = check_horizontal_pod_autoscaling_exists(namespaced_resources)
+
+    assert "good" not in [i.metadata.name for i in offenders]
+    assert "bad" in [i.metadata.name for i in offenders]
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("check_liveness_probes")],
+    indirect=["namespaced_resources"],
+)
+def test_check_liveness_probes(namespaced_resources):
+    offenders = check_liveness_probes(namespaced_resources)
+
+    assert "good" not in [i.metadata.name for i in offenders]
+    assert "bad" in [i.metadata.name for i in offenders]
+
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
+    [("check_readiness_probes")],
+    indirect=["namespaced_resources"],
+)
+def test_check_readiness_probes(namespaced_resources):
+    offenders = check_readiness_probes(namespaced_resources)
 
     assert "good" not in [i.metadata.name for i in offenders]
     assert "bad" in [i.metadata.name for i in offenders]

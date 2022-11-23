@@ -78,3 +78,29 @@ def check_horizontal_pod_autoscaling_exists(
             offenders, "[red]Deploy horizontal pod autoscaler for deployments"
         )
     return offenders
+
+
+def check_readiness_probes(namespaced_resources: NamespacedResources):
+    offenders = []
+
+    for pod in namespaced_resources.pods:
+        for container in pod.spec.containers:
+            if not container.readiness_probe:
+                offenders.append(pod)
+
+    if offenders:
+        print_pod_table(offenders, "[red]Define readiness probes for pods.")
+    return offenders
+
+
+def check_liveness_probes(namespaced_resources: NamespacedResources):
+    offenders = []
+
+    for pod in namespaced_resources.pods:
+        for container in pod.spec.containers:
+            if not container.liveness_probe:
+                offenders.append(pod)
+
+    if offenders:
+        print_pod_table(offenders, "[red]Define liveness probes for pods.")
+    return offenders
