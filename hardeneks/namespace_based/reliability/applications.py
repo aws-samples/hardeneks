@@ -40,19 +40,14 @@ def schedule_replicas_across_nodes(namespaced_resources: NamespacedResources):
     offenders = []
 
     for deployment in namespaced_resources.deployments:
-        affinity = deployment.spec.template.spec.affinity
-        if not affinity:
+        spread = deployment.spec.template.spec.topology_spread_constraints
+        if not spread:
             offenders.append(deployment)
-        elif affinity and affinity.pod_anti_affinity:
-            pod_selectors = (
-                affinity.pod_anti_affinity.preferred_during_scheduling_ignored_during_execution  # noqa: E501
-            )
-            topology_keys = set(
-                [i.pod_affinity_term.topology_key for i in pod_selectors]
-            )
-            if not set(
-                ["topology.kubernetes.io/zone", "kubernetes.io/hostname"]
-            ).issubset(topology_keys):
+        else:
+            topology_keys = set([i.topology_key for i in spread])
+            if not set(["topology.kubernetes.io/zone"]).issubset(
+                topology_keys
+            ):
                 offenders.append(deployment)
 
     if offenders:
