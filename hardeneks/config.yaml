@@ -27,6 +27,8 @@ rules:
         - use_efs_access_points
       infrastructure_security:
         - deploy_workers_onto_private_subnets
+      pod_security:
+        - ensure_namespace_psa_exist
     reliability:
       applications:
         - check_metrics_server_is_running
