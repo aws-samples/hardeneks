@@ -51,6 +51,8 @@ rules:
         - check_read_only_root_file_system
       network_security:
         - use_encryption_with_aws_load_balancers
+      encryption_secrets:
+        - disallow_secrets_from_env_vars      
     reliability:
       applications:
         - check_horizontal_pod_autoscaling_exists
