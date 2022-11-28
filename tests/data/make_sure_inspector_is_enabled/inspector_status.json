@@ -1,0 +1,33 @@
+{
+    "ResponseMetadata": {
+        "RequestId": "c894ca13-7bde-41a6-a6d3-c4b567a95506",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "date": "Mon, 28 Nov 2022 04:42:24 GMT",
+            "content-type": "application/json",
+            "content-length": "195",
+            "connection": "keep-alive",
+            "x-amzn-requestid": "c894ca13-7bde-41a6-a6d3-c4b567a95506",
+            "x-amz-apigw-id": "cS5XkFJzPHcF0qA=",
+            "x-amzn-trace-id": "Root=1-63843c30-7846a7b361b2604103a76200"
+        },
+        "RetryAttempts": 0
+    },
+    "accounts": [
+        {
+            "accountId": "foo",
+            "resourceState": {
+                "ec2": {
+                    "status": "DISABLED"
+                },
+                "ecr": {
+                    "status": "DISABLED"
+                }
+            },
+            "state": {
+                "status": "DISABLED"
+            }
+        }
+    ],
+    "failedAccounts": []
+}
