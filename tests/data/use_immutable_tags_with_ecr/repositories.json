@@ -1,0 +1,32 @@
+{
+    "repositories": [
+        {
+            "repositoryArn": "arn:aws:ecr:us-west-2::repository/rolling-deployment-service-ecrrepo714fb1b2-xbs3hua1h3ud",
+            "registryId": "",
+            "repositoryName": "rolling-deployment-service-ecrrepo714fb1b2-xbs3hua1h3ud",
+            "repositoryUri": ".dkr.ecr.us-west-2.amazonaws.com/rolling-deployment-service-ecrrepo714fb1b2-xbs3hua1h3ud",
+            "createdAt": "2022-08-12 14:07:16-04:00",
+            "imageTagMutability": "MUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-west-2:foo:repository/rolling-deployment-service-ecrrepo714fb1b2-nyrkgiafcyyx",
+            "registryId": "foo",
+            "repositoryName": "rolling-deployment-service-ecrrepo714fb1b2-nyrkgiafcyyx",
+            "repositoryUri": "foo.dkr.ecr.us-west-2.amazonaws.com/rolling-deployment-service-ecrrepo714fb1b2-nyrkgiafcyyx",
+            "createdAt": "2022-08-12 11:49:13-04:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        }
+    ]
+}

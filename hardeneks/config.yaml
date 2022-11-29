@@ -30,6 +30,8 @@ rules:
         - make_sure_inspector_is_enabled
       pod_security:
         - ensure_namespace_psa_exist
+      image_security:
+        - use_immutable_tags_with_ecr
     reliability:
       applications:
         - check_metrics_server_is_running
