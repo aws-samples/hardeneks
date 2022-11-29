@@ -39,8 +39,10 @@ def deploy_workers_onto_private_subnets(resources: Resources):
 
 
 def make_sure_inspector_is_enabled(resources: Resources):
-    client = boto3.client("inspector2")
-    account_id = boto3.client("sts").get_caller_identity()["Account"]
+    client = boto3.client("inspector2", region_name=resources.region)
+    account_id = boto3.client(
+        "sts", region_name=resources.region
+    ).get_caller_identity()["Account"]
 
     response = client.batch_get_account_status(
         accountIds=[

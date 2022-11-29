@@ -1,4 +1,5 @@
 from pathlib import Path
+from pkg_resources import resource_filename
 import yaml
 
 import kubernetes
@@ -54,7 +55,7 @@ def run_hardeneks(
         help="Specific namespace to harden. Default is all namespaces.",
     ),
     config: str = typer.Option(
-        default=Path.cwd() / "hardeneks" / "config.yaml",
+        default=resource_filename(__name__, "config.yaml"),
         callback=_config_callback,
         help="Path to a hardeneks config file.",
     ),

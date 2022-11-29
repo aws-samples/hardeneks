@@ -17,7 +17,7 @@ def check_vpc_flow_logs(resources: Resources):
     cluster_metadata = client.describe_cluster(name=resources.cluster)
 
     vpc_id = cluster_metadata["cluster"]["resourcesVpcConfig"]["vpcId"]
-    client = boto3.client("ec2")
+    client = boto3.client("ec2", region_name=resources.region)
 
     flow_logs = client.describe_flow_logs(
         Filters=[{"Name": "resource-id", "Values": [vpc_id]}]

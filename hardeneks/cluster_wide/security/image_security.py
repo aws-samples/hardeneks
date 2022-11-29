@@ -7,7 +7,7 @@ from ...resources import Resources
 def use_immutable_tags_with_ecr(resources: Resources):
     offenders = []
 
-    client = boto3.client("ecr")
+    client = boto3.client("ecr", region_name=resources.region)
     repositories = client.describe_repositories()
     for repository in repositories["repositories"]:
         if repository["imageTagMutability"] != "IMMUTABLE":
