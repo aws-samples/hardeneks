@@ -53,7 +53,9 @@ rules:
       network_security:
         - use_encryption_with_aws_load_balancers
       encryption_secrets:
-        - disallow_secrets_from_env_vars      
+        - disallow_secrets_from_env_vars    
+      runtime_security:
+        - disallow_linux_capabilities
     reliability:
       applications:
         - check_horizontal_pod_autoscaling_exists
