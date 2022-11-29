@@ -46,7 +46,7 @@
                     "EnaSupport": true,
                     "Hypervisor": "xen",
                     "IamInstanceProfile": {
-                        "Arn": "arn:aws:iam::260476877451:instance-profile/eks-06c1e98b-5bf6-419a-2bab-2bc4dda09e8c",
+                        "Arn": "arn:aws:iam::foo:instance-profile/eks-06c1e98b-5bf6-419a-2bab-2bc4dda09e8c",
                         "Id": "AIPATZJNBXKFXZOOTFSYB"
                     },
                     "NetworkInterfaces": [
@@ -69,7 +69,7 @@
                             "Ipv6Addresses": [],
                             "MacAddress": "0a:10:f4:b2:b0:73",
                             "NetworkInterfaceId": "eni-07acc9be5f6d97dfb",
-                            "OwnerId": "260476877451",
+                            "OwnerId": "foo",
                             "PrivateDnsName": "ip-192-168-36-119.ec2.internal",
                             "PrivateIpAddress": "192.168.36.119",
                             "PrivateIpAddresses": [
@@ -154,7 +154,7 @@
                             "Ipv6Addresses": [],
                             "MacAddress": "0a:49:3a:77:78:ff",
                             "NetworkInterfaceId": "eni-0c6b98b0e2037d17e",
-                            "OwnerId": "260476877451",
+                            "OwnerId": "foo",
                             "PrivateDnsName": "ip-192-168-44-181.ec2.internal",
                             "PrivateIpAddress": "192.168.44.181",
                             "PrivateIpAddresses": [
@@ -323,7 +323,7 @@
                     }
                 }
             ],
-            "OwnerId": "260476877451",
+            "OwnerId": "foo",
             "RequesterId": "376696368883",
             "ReservationId": "r-01398d6415f503cab"
         },
@@ -372,7 +372,7 @@
                     "EnaSupport": true,
                     "Hypervisor": "xen",
                     "IamInstanceProfile": {
-                        "Arn": "arn:aws:iam::260476877451:instance-profile/eks-3ec241dc-b518-8483-5a4f-9f6fa11fa0eb",
+                        "Arn": "arn:aws:iam::foo:instance-profile/eks-3ec241dc-b518-8483-5a4f-9f6fa11fa0eb",
                         "Id": "AIPATZJNBXKFT7T2LBSPF"
                     },
                     "NetworkInterfaces": [
@@ -395,7 +395,7 @@
                             "Ipv6Addresses": [],
                             "MacAddress": "0a:31:fd:2a:14:0b",
                             "NetworkInterfaceId": "eni-004913cbf133569ae",
-                            "OwnerId": "260476877451",
+                            "OwnerId": "foo",
                             "PrivateDnsName": "ip-192-168-116-36.ec2.internal",
                             "PrivateIpAddress": "192.168.116.36",
                             "PrivateIpAddresses": [
@@ -539,7 +539,7 @@
                     }
                 }
             ],
-            "OwnerId": "260476877451",
+            "OwnerId": "foo",
             "RequesterId": "376696368883",
             "ReservationId": "r-0ccd694b834e51f06"
         },
@@ -589,7 +589,7 @@
                     "EnaSupport": true,
                     "Hypervisor": "xen",
                     "IamInstanceProfile": {
-                        "Arn": "arn:aws:iam::260476877451:instance-profile/eks-06c1e98b-5bf6-419a-2bab-2bc4dda09e8c",
+                        "Arn": "arn:aws:iam::foo:instance-profile/eks-06c1e98b-5bf6-419a-2bab-2bc4dda09e8c",
                         "Id": "AIPATZJNBXKFXZOOTFSYB"
                     },
                     "NetworkInterfaces": [
@@ -617,7 +617,7 @@
                             "Ipv6Addresses": [],
                             "MacAddress": "02:63:8f:0a:67:f9",
                             "NetworkInterfaceId": "eni-050b490b781070ddc",
-                            "OwnerId": "260476877451",
+                            "OwnerId": "foo",
                             "PrivateDnsName": "ip-192-168-30-4.ec2.internal",
                             "PrivateIpAddress": "192.168.30.4",
                             "PrivateIpAddresses": [
@@ -702,7 +702,7 @@
                             "Ipv6Addresses": [],
                             "MacAddress": "02:95:1c:52:cb:a5",
                             "NetworkInterfaceId": "eni-07c30434251f545ec",
-                            "OwnerId": "260476877451",
+                            "OwnerId": "foo",
                             "PrivateDnsName": "ip-192-168-19-134.ec2.internal",
                             "PrivateIpAddress": "192.168.19.134",
                             "PrivateIpAddresses": [
@@ -866,7 +866,7 @@
                     }
                 }
             ],
-            "OwnerId": "260476877451",
+            "OwnerId": "foo",
             "RequesterId": "376696368883",
             "ReservationId": "r-03009a49f0f8bf882"
         },
@@ -915,7 +915,7 @@
                     "EnaSupport": true,
                     "Hypervisor": "xen",
                     "IamInstanceProfile": {
-                        "Arn": "arn:aws:iam::260476877451:instance-profile/eks-3ec241dc-b518-8483-5a4f-9f6fa11fa0eb",
+                        "Arn": "arn:aws:iam::foo:instance-profile/eks-3ec241dc-b518-8483-5a4f-9f6fa11fa0eb",
                         "Id": "AIPATZJNBXKFT7T2LBSPF"
                     },
                     "NetworkInterfaces": [
@@ -938,7 +938,7 @@
                             "Ipv6Addresses": [],
                             "MacAddress": "02:f8:d8:02:4b:ab",
                             "NetworkInterfaceId": "eni-0efb66ac9ec50fb41",
-                            "OwnerId": "260476877451",
+                            "OwnerId": "foo",
                             "PrivateDnsName": "ip-192-168-73-42.ec2.internal",
                             "PrivateIpAddress": "192.168.73.42",
                             "PrivateIpAddresses": [
@@ -1082,7 +1082,7 @@
                     }
                 }
             ],
-            "OwnerId": "260476877451",
+            "OwnerId": "foo",
             "RequesterId": "376696368883",
             "ReservationId": "r-0a19d843eca74b323"
         }

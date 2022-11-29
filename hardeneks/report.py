@@ -56,6 +56,20 @@ def print_instance_public_table(instances, message):
     console.print()
 
 
+def print_repository_table(repositories, attribute, message):
+    table = Table()
+    table.add_column("Repository", style="cyan")
+    table.add_column(attribute, style="magenta")
+    for repository in repositories:
+        table.add_row(
+            repository["repositoryName"],
+            repository[attribute],
+        )
+
+    print(Panel(table, title=message))
+    console.print()
+
+
 def print_pod_table(pods, message):
     table = Table()
 
