@@ -64,9 +64,7 @@ rules:
         - schedule_replicas_across_nodes
         - run_multiple_replicas
         - avoid_running_singleton_pods
-    #   control_plane:
     #   data_plane:
-    #   network:
     # networking:
     #   vpc_subnets:
     #   vpc_cni:
