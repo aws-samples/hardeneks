@@ -39,7 +39,9 @@ hardeneks --context <K8S_CONTEXT> --cluster <CLUSTER_NAME> --region <AWS_REGION>
   
 **Configuration File**:
 
-You can create a configuration file to specify list of rules to run. You can also add namespaces to be skipped. Following is a sample config file:
+Default behavior is to run all the checks. If you want to provide your own config file to specify list of rules to run, you can use the --config flag.You can also add namespaces to be skipped. 
+
+Following is a sample config file:
 
 ```yaml
 ---
@@ -109,9 +111,7 @@ rules:
         - run_multiple_replicas
         - avoid_running_singleton_pods
 ```
-
-Default behavior is to run all the checks. If you want to provide your
-own config file, you can specify the --config flag.
+  
 
 ## For Developers
 
