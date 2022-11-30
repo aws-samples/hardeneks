@@ -47,3 +47,24 @@ jobs:
    
     - name: Test with tox
       run: tox
+      
+    #----------------------------------------------
+    #              run test suite
+    #----------------------------------------------
+    - name: Run tests
+      run: |
+        source .venv/bin/activate
+        pytest --cov=hardeneks tests/ \
+          --cov-report term-missing \
+          --cov-report xml:coverage.xml
+
+    #----------------------------------------------
+    #              coverage report
+    #----------------------------------------------
+    - uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        flags: unittests 
+        name: codecov-umbrella
+        verbose: true
