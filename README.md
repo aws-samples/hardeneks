@@ -19,7 +19,7 @@ pip install hardeneks
 hardeneks --context <K8S_CONTEXT> --cluster <CLUSTER_NAME> --region <AWS_REGION>
 ```
 
-- <b>K8S_CONTEXT<b> 
+- <b><K8S_CONTEXT><b> 
   
     You can get the contexts by running:
     ```
@@ -30,7 +30,7 @@ hardeneks --context <K8S_CONTEXT> --cluster <CLUSTER_NAME> --region <AWS_REGION>
     kubectl config current-context
     ```
 
-- <b>CLUSTER_NAME<b>
+- <b><CLUSTER_NAME><b>
   
     You can get the cluster names by running:
     ```
