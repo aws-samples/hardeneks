@@ -9,8 +9,6 @@
 
 Runs checks to see if an EKS cluster follows [EKS Best Practices](https://aws.github.io/aws-eks-best-practices/).
 
-![alt text](https://github.com/dorukozturk/hardeneks/blob/e9168a857a57a13cee8fae870e33d585d8bd3be1/docs/hardeneks.png)
-
 **Quick Start**:
 
 ```
@@ -19,6 +17,8 @@ source /tmp/.venv/bin/activate
 pip install hardeneks
 hardeneks --context <K8S_CONTEXT> --cluster <CLUSTER_NAME> --region <AWS_REGION>
 ```
+
+![alt text](https://github.com/dorukozturk/hardeneks/blob/e9168a857a57a13cee8fae870e33d585d8bd3be1/docs/hardeneks.png)
 
 - <b><K8S_CONTEXT><b> 
   
