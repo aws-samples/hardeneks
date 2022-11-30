@@ -39,7 +39,7 @@ hardeneks --context <K8S_CONTEXT> --cluster <CLUSTER_NAME> --region <AWS_REGION>
   
 **Configuration File**:
 
-There is a configuration file that you can provide which allows customization of which checks to run as well as namespaces to be skipped by the checks. Following is a sample config file.
+You can create a configuration file to specify list of rules to run. You can also add namespaces to be skipped. Following is a sample config file:
 
 ```yaml
 ---
