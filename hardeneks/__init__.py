@@ -63,6 +63,21 @@ def run_hardeneks(
         default=None, help="Path to the kube config file."
     ),
 ):
+    """
+    Main entry point to hardeneks.
+
+    Args:
+        region (str): AWS region of the cluster. Ex: us-east-1
+        context (str): K8s context
+        cluster (str): Cluster name
+        namespace (str): Specific namespace to be checked
+        config (str): Path to hardeneks config file
+        kube_config (str): Path to the kube config file
+
+    Returns:
+        None
+
+    """
 
     console = Console()
     console.rule("[b]HARDENEKS", characters="*  ")
