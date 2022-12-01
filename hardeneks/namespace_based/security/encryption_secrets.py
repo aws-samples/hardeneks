@@ -19,6 +19,6 @@ def disallow_secrets_from_env_vars(resources: NamespacedResources):
                         offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, "[red]Running as root is not allowed")
+        print_pod_table(offenders, "[red]Disallow secrets from env vars")
 
     return offenders
