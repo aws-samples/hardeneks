@@ -21,11 +21,6 @@ tox = "^3.27.0"
 [tool.poetry.scripts]
 hardeneks = "hardeneks:app"
 
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.1.0"
-tag_format = "$version"
-
 [tool.black]
 line-length = 79
 include = '\.pyi?$'
@@ -43,6 +38,10 @@ exclude = '''
 )/
 '''
 
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+tag_format = "v$version"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
