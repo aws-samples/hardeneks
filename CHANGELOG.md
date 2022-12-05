@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Fix
+
+- Add a try except block
+
 ## v0.1.1 (2022-12-02)
 
 ### Fix
