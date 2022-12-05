@@ -1,4 +1,10 @@
-## Unreleased
+## v0.1.4 (2022-12-05)
+
+### Fix
+
+- Fix secret env var exception
+
+## v0.1.3 (2022-12-05)
 
 ### Fix
 
