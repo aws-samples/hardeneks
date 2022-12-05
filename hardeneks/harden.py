@@ -13,4 +13,7 @@ def harden(resources, config, _type):
                     func = getattr(module, rule)
                 except AttributeError as exc:
                     print(f"[bold][red]{exc}")
-                func(resources)
+                try:
+                    func(resources)
+                except Exception as exc:
+                    print(f"[bold][red]{exc}")
