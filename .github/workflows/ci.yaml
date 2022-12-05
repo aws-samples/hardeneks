@@ -52,6 +52,7 @@ jobs:
     #              run test suite
     #----------------------------------------------
     - name: Run tests
+      if: ${{ matrix.python-version == '3.11' }}
       run: |
         source .venv/bin/activate
         pytest --cov=hardeneks tests/ \
@@ -61,7 +62,9 @@ jobs:
     #----------------------------------------------
     #              coverage report
     #----------------------------------------------
-    - uses: codecov/codecov-action@v3
+    - name: Upload coverage results
+      if: ${{ matrix.python-version == '3.11' }}
+      uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml
