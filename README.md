@@ -52,6 +52,13 @@ ignore-namespaces:
   - kube-public
   - kube-system
   - kube-apiserver
+  - karpenter
+  - kubecost
+  - external-dns
+  - argocd
+  - aws-for-fluent-bit
+  - amazon-cloudwatch
+  - vpa
 rules: 
   cluster_wide:
     security:
