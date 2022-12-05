@@ -11,7 +11,7 @@ def disallow_secrets_from_env_vars(resources: NamespacedResources):
         for container in pod.spec.containers:
             if container.env:
                 for env in container.env:
-                    if env.value_from.secret_key_ref:
+                    if env.value_from and env.value_from.secret_key_ref:
                         offenders.append(pod)
             if container.env_from:
                 for env_from in container.env_from:
