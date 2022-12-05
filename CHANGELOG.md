@@ -1,3 +1,17 @@
+## Unreleased
+
+## v0.1.6 (2022-12-05)
+
+### Fix
+
+- Fix coverage ci issue
+
+## v0.1.5 (2022-12-05)
+
+### Fix
+
+- Add check for security context
+
 ## v0.1.4 (2022-12-05)
 
 ### Fix
