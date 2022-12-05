@@ -24,7 +24,10 @@ def disallow_linux_capabilities(namespaced_resources: NamespacedResources):
     ]
     for pod in namespaced_resources.pods:
         for container in pod.spec.containers:
-            if container.security_context.capabilities:
+            if (
+                container.security_context
+                and container.security_context.capabilities
+            ):
                 capabilities = set(container.security_context.capabilities.add)
                 if not capabilities.issubset(set(allowed_list)):
                     offenders.append(pod)
