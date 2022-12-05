@@ -41,6 +41,7 @@ exclude = '''
 [tool.commitizen]
 name = "cz_conventional_commits"
 version = "0.1.6"
+version_files = ["pyproject.toml:version"]
 tag_format = "v$version"
 [build-system]
 requires = ["poetry-core"]
