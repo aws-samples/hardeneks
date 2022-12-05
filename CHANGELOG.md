@@ -2,6 +2,12 @@
 
 ### Fix
 
+- Add more namespaces to the ignore list
+
+## v0.1.2 (2022-12-05)
+
+### Fix
+
 - Add a try except block
 
 ## v0.1.1 (2022-12-02)
