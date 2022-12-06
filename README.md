@@ -24,7 +24,7 @@ hardeneks
 **Usage**:
 
 ```console
-eks-best-practices-cli [OPTIONS]
+hardeneks [OPTIONS]
 ```
 
 **Options**:
@@ -37,7 +37,7 @@ eks-best-practices-cli [OPTIONS]
 * `--help`: Show this message and exit.
 
 
-- <b><K8S_CONTEXT><b> 
+- <b>K8S_CONTEXT<b> 
   
     You can get the contexts by running:
     ```
@@ -48,7 +48,7 @@ eks-best-practices-cli [OPTIONS]
     kubectl config current-context
     ```
 
-- <b><CLUSTER_NAME><b>
+- <b>CLUSTER_NAME<b>
   
     You can get the cluster names by running:
     ```
