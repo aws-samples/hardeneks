@@ -1,6 +1,10 @@
-## Unreleased
+## v0.3.0 (2022-12-06)
 
-## v0.1.6 (2022-12-05)
+### Feat
+
+- Get sensible defaults for args
+
+## push (2022-12-05)
 
 ### Fix
 
