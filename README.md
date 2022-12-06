@@ -16,10 +16,26 @@ Runs checks to see if an EKS cluster follows [EKS Best Practices](https://aws.gi
 python3 -m venv /tmp/.venv
 source /tmp/.venv/bin/activate
 pip install hardeneks
-hardeneks --context <K8S_CONTEXT> --cluster <CLUSTER_NAME> --region <AWS_REGION>
+hardeneks
 ```
 
 ![alt text](https://github.com/dorukozturk/hardeneks/blob/e9168a857a57a13cee8fae870e33d585d8bd3be1/docs/hardeneks.png)
+
+**Usage**:
+
+```console
+eks-best-practices-cli [OPTIONS]
+```
+
+**Options**:
+
+* `--region TEXT`: AWS region of the cluster. Ex: us-east-1
+* `--context TEXT`: K8s context
+* `--cluster TEXT`: EKS Cluster name
+* `--namespace TEXT`: Namespace to be checked (default is all namespaces)
+* `--config TEXT`: Path to a hardeneks config file
+* `--help`: Show this message and exit.
+
 
 - <b><K8S_CONTEXT><b> 
   
