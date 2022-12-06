@@ -1,13 +1,15 @@
+from unittest.mock import patch
 from pathlib import Path
 
 from click import exceptions
 import pytest
-from typer.testing import CliRunner
 
 
-from hardeneks import app, _config_callback
-
-runner = CliRunner()
+from hardeneks import (
+    _config_callback,
+    _get_cluster_name,
+    _get_current_context,
+)
 
 
 def test_config_callback_path_non_existent():
@@ -36,6 +38,25 @@ def test_config_callback_bad_yaml(tmp_path):
         _config_callback(config)
 
 
-def test_app_no_input():
-    result = runner.invoke(app, [])
-    assert result.exit_code == 2
+@patch("kubernetes.config.list_kube_config_contexts")
+def test_get_current_context_None(config):
+    config.return_value = ({}, {"name": "some-context"})
+    context = _get_current_context("")
+    assert context == "some-context"
+
+
+def test_get_current_context():
+    context = "some-context"
+    assert _get_current_context(context) == context
+
+
+@patch("boto3.client")
+def test_get_cluster_name(client):
+    client.return_value.list_clusters.return_value = {
+        "clusters": ["gpu-cluster-test", "foo-cluster", "bad-cluster"]
+    }
+    context = "someperson@gpu-cluster-test.us-west-2.eksctl.io"
+    region = "us-west-2"
+    cluster_name = "gpu-cluster-test"
+
+    assert _get_cluster_name(context, region) == cluster_name

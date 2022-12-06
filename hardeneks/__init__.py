@@ -2,6 +2,8 @@ from pathlib import Path
 from pkg_resources import resource_filename
 import yaml
 
+from botocore.exceptions import EndpointConnectionError
+import boto3
 import kubernetes
 from rich.console import Console
 import typer
@@ -34,22 +36,43 @@ def _config_callback(value: str):
     return value
 
 
+def _get_current_context(context):
+    if context:
+        return context
+    _, active_context = kubernetes.config.list_kube_config_contexts()
+    return active_context["name"]
+
+
 def _get_namespaces(ignored_ns: list) -> list:
     v1 = kubernetes.client.CoreV1Api()
     namespaces = [i.metadata.name for i in v1.list_namespace().items]
     return list(set(namespaces) - set(ignored_ns))
 
 
+def _get_cluster_name(context, region):
+    try:
+        client = boto3.client("eks", region_name=region)
+        for name in client.list_clusters()["clusters"]:
+            if name in context:
+                return name
+    except EndpointConnectionError:
+        raise ValueError(f"{region} seems like a bad region name")
+
+
+def _get_region():
+    return boto3.session.Session().region_name
+
+
 @app.command()
 def run_hardeneks(
     region: str = typer.Option(
-        ..., help="AWS region of the cluster. Ex: us-east-1"
+        default=None, help="AWS region of the cluster. Ex: us-east-1"
     ),
     context: str = typer.Option(
-        ...,
+        default=None,
         help="K8s context.",
     ),
-    cluster: str = typer.Option(..., help="Cluster name."),
+    cluster: str = typer.Option(default=None, help="Cluster name."),
     namespace: str = typer.Option(
         default=None,
         help="Specific namespace to harden. Default is all namespaces.",
@@ -58,9 +81,6 @@ def run_hardeneks(
         default=resource_filename(__name__, "config.yaml"),
         callback=_config_callback,
         help="Path to a hardeneks config file.",
-    ),
-    kube_config: str = typer.Option(
-        default=None, help="Path to the kube config file."
     ),
 ):
     """
@@ -72,23 +92,27 @@ def run_hardeneks(
         cluster (str): Cluster name
         namespace (str): Specific namespace to be checked
         config (str): Path to hardeneks config file
-        kube_config (str): Path to the kube config file
 
     Returns:
         None
 
     """
 
+    kubernetes.config.load_kube_config(context=context)
+    context = _get_current_context(context)
+    if not cluster:
+        cluster = _get_cluster_name(context, region)
+
+    if not region:
+        region = _get_region()
+
     console = Console()
     console.rule("[b]HARDENEKS", characters="*  ")
     console.print(f"You are operating at {region}")
     console.print(f"You context is {context}")
+    console.print(f"Your cluster name is {cluster}")
     console.print(f"You are using {config} as your config file")
     console.print()
-
-    kubernetes.config.load_kube_config(
-        config_file=kube_config, context=context
-    )
 
     with open(config, "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
