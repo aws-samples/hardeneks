@@ -1,3 +1,11 @@
+## v0.4.2 (2022-12-10)
+
+### Fix
+
+- Fix non existent csi driver issue
+
+## 0.4.1 (2022-12-10)
+
 ## v0.4.1 (2022-12-10)
 
 ### Feat
