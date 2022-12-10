@@ -33,6 +33,6 @@ def check_vertical_pod_autoscaler_exists(resources: Resources):
     if "vpa-recommender" in deployments:
         return True
     else:
-        print(Panel("[red]Deploy vertical pod autoscaler."))
+        print(Panel("[red]Deploy vertical pod autoscaler if needed."))
         console.print()
         return False
