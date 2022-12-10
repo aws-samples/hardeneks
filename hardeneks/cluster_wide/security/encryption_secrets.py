@@ -25,7 +25,8 @@ def use_encryption_with_efs(resources: Resources):
     offenders = []
 
     for persistent_volume in resources.persistent_volumes:
-        if persistent_volume.spec.csi.driver == "efs.csi.aws.com":
+        csi = persistent_volume.spec.csi
+        if csi and csi.driver == "efs.csi.aws.com":
             mount_options = persistent_volume.spec.mount_options
             if not mount_options:
                 offenders.append(persistent_volume)
@@ -45,8 +46,9 @@ def use_efs_access_points(resources: Resources):
     offenders = []
 
     for persistent_volume in resources.persistent_volumes:
-        if persistent_volume.spec.csi.driver == "efs.csi.aws.com":
-            if "::" not in persistent_volume.spec.csi.volume_handle:
+        csi = persistent_volume.spec.csi
+        if csi and csi.driver == "efs.csi.aws.com":
+            if "::" not in csi.volume_handle:
                 offenders.append(persistent_volume)
 
     if offenders:
