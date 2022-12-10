@@ -16,7 +16,12 @@ def check_logs_are_enabled(resources: Resources):
         "enabled"
     ]
     if not logs:
-        print(Panel("[red]Enable control plane logs for auditing"))
+        print(
+            Panel(
+                "[red]Enable control plane logs for auditing",
+                subtitle="Link: https://aws.github.io/aws-eks-best-practices/security/docs/detective/#enable-audit-logs",
+            )
+        )
         console.print()
 
     return logs

@@ -17,6 +17,7 @@ def use_encryption_with_ebs(resources: Resources):
         print_storage_class_table(
             offenders,
             "[red]EBS Storage Classes should have encryption parameter",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/data/#encryption-at-rest",
         )
     return offenders
 
@@ -38,6 +39,7 @@ def use_encryption_with_efs(resources: Resources):
         print_persistent_volume_table(
             offenders,
             "[red]EFS Persistent volumes should have tls mount option",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/data/#encryption-at-rest",
         )
     return offenders
 
@@ -55,5 +57,6 @@ def use_efs_access_points(resources: Resources):
         print_persistent_volume_table(
             offenders,
             "[red]EFS Persistent volumes should leverage access points",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-efs-access-points-to-simplify-access-to-shared-datasets",
         )
     return offenders

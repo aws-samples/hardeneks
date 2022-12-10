@@ -17,7 +17,12 @@ def check_metrics_server_is_running(resources: Resources):
     if "metrics-server" in services:
         return True
     else:
-        print(Panel("[red]Deploy metrics server."))
+        print(
+            Panel(
+                "[red]Deploy metrics server.",
+                subtitle="Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server",
+            )
+        )
         console.print()
         return False
 
@@ -33,6 +38,11 @@ def check_vertical_pod_autoscaler_exists(resources: Resources):
     if "vpa-recommender" in deployments:
         return True
     else:
-        print(Panel("[red]Deploy vertical pod autoscaler if needed."))
+        print(
+            Panel(
+                "[red]Deploy vertical pod autoscaler if needed.",
+                subtitle="Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#vertical-pod-autoscaler-vpa",
+            )
+        )
         console.print()
         return False

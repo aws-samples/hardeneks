@@ -22,6 +22,7 @@ def ensure_namespace_psa_exist(resources: Resources):
         print_namespace_table(
             offenders,
             "[red]Namespaces should have psa modes.",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/pods/#pod-security-standards-pss-and-pod-security-admission-psa",
         )
 
     return offenders

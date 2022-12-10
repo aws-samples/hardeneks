@@ -18,6 +18,7 @@ def use_immutable_tags_with_ecr(resources: Resources):
             offenders,
             "imageTagMutability",
             "[red]Make image tags immutable.",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/image/#use-immutable-tags-with-ecr",
         )
 
     return offenders

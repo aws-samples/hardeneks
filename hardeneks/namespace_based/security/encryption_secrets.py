@@ -19,6 +19,10 @@ def disallow_secrets_from_env_vars(resources: NamespacedResources):
                         offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, "[red]Disallow secrets from env vars")
+        print_pod_table(
+            offenders,
+            "[red]Disallow secrets from env vars",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-volume-mounts-instead-of-environment-variables",
+        )
 
     return offenders

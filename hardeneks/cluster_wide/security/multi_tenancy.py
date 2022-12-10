@@ -20,6 +20,7 @@ def ensure_namespace_quotas_exist(resources: Resources):
         print_namespace_table(
             offenders,
             "[red]Namespaces should have quotas assigned",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/multitenancy/#namespaces",
         )
 
     return offenders

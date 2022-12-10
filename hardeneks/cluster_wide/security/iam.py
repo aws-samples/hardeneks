@@ -24,6 +24,7 @@ def restrict_wildcard_for_cluster_roles(resources: Resources):
         print_role_table(
             offenders,
             "[red]ClusterRoles should not have '*' in Verbs or Resources",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings",
             "ClusterRole",
         )
     return offenders
@@ -36,7 +37,12 @@ def check_endpoint_public_access(resources: Resources):
         "endpointPublicAccess"
     ]
     if endpoint_access:
-        print(Panel("[red]EKS Cluster Endpoint is not Private"))
+        print(
+            Panel(
+                "[red]EKS Cluster Endpoint is not Private",
+                subtitle="Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private",
+            )
+        )
         console.print()
         return False
 
@@ -49,7 +55,12 @@ def check_aws_node_daemonset_service_account(resources: Resources):
     )
 
     if daemonset.spec.template.spec.service_account_name == "aws-node":
-        print(Panel("[red]Update the aws-node daemonset to use IRSA"))
+        print(
+            Panel(
+                "[red]Update the aws-node daemonset to use IRSA",
+                subtitle="Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa",
+            )
+        )
         console.print()
         return False
 
@@ -84,6 +95,7 @@ def check_access_to_instance_profile(resources: Resources):
         print_instance_metadata_table(
             offenders,
             "[red]Restrict access to the instance profile assigned to nodes",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2",
         )
     return offenders
 
@@ -104,6 +116,7 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
         print_role_table(
             offenders,
             "[red]Don't bind clusterroles to anonymous/unauthenticated groups",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access",
             "ClusterRoleBinding",
         )
 

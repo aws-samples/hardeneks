@@ -24,7 +24,12 @@ def check_vpc_flow_logs(resources: Resources):
     )["FlowLogs"]
 
     if not flow_logs:
-        print(Panel("[red]Enable flow logs for your VPC."))
+        print(
+            Panel(
+                "[red]Enable flow logs for your VPC.",
+                subtitle="Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#log-network-traffic-metadata",
+            )
+        )
         console.print()
         return False
 
@@ -38,6 +43,7 @@ def check_awspca_exists(resources: Resources):
     print(
         Panel(
             "[red]Install aws privateca issuer for your certificates.",
+            subtitle="Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#acm-private-ca-with-cert-manager",
         )
     )
     console.print()
@@ -54,6 +60,7 @@ def check_default_deny_policy_exists(resources: Resources):
         print_namespace_table(
             offenders,
             "[red]Namespaces that does not have default network deny policies",
+            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#create-a-default-deny-policy",
         )
 
     return offenders
