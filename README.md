@@ -16,7 +16,7 @@ pip install hardeneks
 hardeneks
 ```
 
-![alt text](https://github.com/dorukozturk/hardeneks/blob/e9168a857a57a13cee8fae870e33d585d8bd3be1/docs/hardeneks.png)
+![alt text](https://github.com/dorukozturk/hardeneks/blob/e9168a857a57a13cee8fae870e33d585d8bd3be1/docs/hardeneks.gif)
 
 **Usage**:
 
