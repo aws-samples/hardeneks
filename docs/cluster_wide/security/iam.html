@@ -52,6 +52,7 @@ def restrict_wildcard_for_cluster_roles(resources: Resources):
         print_role_table(
             offenders,
             &#34;[red]ClusterRoles should not have &#39;*&#39; in Verbs or Resources&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings&#34;,
             &#34;ClusterRole&#34;,
         )
     return offenders
@@ -64,7 +65,12 @@ def check_endpoint_public_access(resources: Resources):
         &#34;endpointPublicAccess&#34;
     ]
     if endpoint_access:
-        print(Panel(&#34;[red]EKS Cluster Endpoint is not Private&#34;))
+        print(
+            Panel(
+                &#34;[red]EKS Cluster Endpoint is not Private&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private&#34;,
+            )
+        )
         console.print()
         return False
 
@@ -77,7 +83,12 @@ def check_aws_node_daemonset_service_account(resources: Resources):
     )
 
     if daemonset.spec.template.spec.service_account_name == &#34;aws-node&#34;:
-        print(Panel(&#34;[red]Update the aws-node daemonset to use IRSA&#34;))
+        print(
+            Panel(
+                &#34;[red]Update the aws-node daemonset to use IRSA&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa&#34;,
+            )
+        )
         console.print()
         return False
 
@@ -112,6 +123,7 @@ def check_access_to_instance_profile(resources: Resources):
         print_instance_metadata_table(
             offenders,
             &#34;[red]Restrict access to the instance profile assigned to nodes&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2&#34;,
         )
     return offenders
 
@@ -132,6 +144,7 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
         print_role_table(
             offenders,
             &#34;[red]Don&#39;t bind clusterroles to anonymous/unauthenticated groups&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access&#34;,
             &#34;ClusterRoleBinding&#34;,
         )
 
@@ -182,6 +195,7 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
         print_instance_metadata_table(
             offenders,
             &#34;[red]Restrict access to the instance profile assigned to nodes&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2&#34;,
         )
     return offenders</code></pre>
 </details>
@@ -201,7 +215,12 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
     )
 
     if daemonset.spec.template.spec.service_account_name == &#34;aws-node&#34;:
-        print(Panel(&#34;[red]Update the aws-node daemonset to use IRSA&#34;))
+        print(
+            Panel(
+                &#34;[red]Update the aws-node daemonset to use IRSA&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa&#34;,
+            )
+        )
         console.print()
         return False
 
@@ -224,7 +243,12 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
         &#34;endpointPublicAccess&#34;
     ]
     if endpoint_access:
-        print(Panel(&#34;[red]EKS Cluster Endpoint is not Private&#34;))
+        print(
+            Panel(
+                &#34;[red]EKS Cluster Endpoint is not Private&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private&#34;,
+            )
+        )
         console.print()
         return False
 
@@ -256,6 +280,7 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
         print_role_table(
             offenders,
             &#34;[red]Don&#39;t bind clusterroles to anonymous/unauthenticated groups&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access&#34;,
             &#34;ClusterRoleBinding&#34;,
         )
 
@@ -285,6 +310,7 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
         print_role_table(
             offenders,
             &#34;[red]ClusterRoles should not have &#39;*&#39; in Verbs or Resources&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings&#34;,
             &#34;ClusterRole&#34;,
         )
     return offenders</code></pre>

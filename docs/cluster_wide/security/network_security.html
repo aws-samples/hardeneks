@@ -52,7 +52,12 @@ def check_vpc_flow_logs(resources: Resources):
     )[&#34;FlowLogs&#34;]
 
     if not flow_logs:
-        print(Panel(&#34;[red]Enable flow logs for your VPC.&#34;))
+        print(
+            Panel(
+                &#34;[red]Enable flow logs for your VPC.&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#log-network-traffic-metadata&#34;,
+            )
+        )
         console.print()
         return False
 
@@ -66,6 +71,7 @@ def check_awspca_exists(resources: Resources):
     print(
         Panel(
             &#34;[red]Install aws privateca issuer for your certificates.&#34;,
+            subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#acm-private-ca-with-cert-manager&#34;,
         )
     )
     console.print()
@@ -82,6 +88,7 @@ def check_default_deny_policy_exists(resources: Resources):
         print_namespace_table(
             offenders,
             &#34;[red]Namespaces that does not have default network deny policies&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#create-a-default-deny-policy&#34;,
         )
 
     return offenders</code></pre>
@@ -112,6 +119,7 @@ def check_default_deny_policy_exists(resources: Resources):
     print(
         Panel(
             &#34;[red]Install aws privateca issuer for your certificates.&#34;,
+            subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#acm-private-ca-with-cert-manager&#34;,
         )
     )
     console.print()
@@ -137,6 +145,7 @@ def check_default_deny_policy_exists(resources: Resources):
         print_namespace_table(
             offenders,
             &#34;[red]Namespaces that does not have default network deny policies&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#create-a-default-deny-policy&#34;,
         )
 
     return offenders</code></pre>
@@ -163,7 +172,12 @@ def check_default_deny_policy_exists(resources: Resources):
     )[&#34;FlowLogs&#34;]
 
     if not flow_logs:
-        print(Panel(&#34;[red]Enable flow logs for your VPC.&#34;))
+        print(
+            Panel(
+                &#34;[red]Enable flow logs for your VPC.&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#log-network-traffic-metadata&#34;,
+            )
+        )
         console.print()
         return False</code></pre>
 </details>

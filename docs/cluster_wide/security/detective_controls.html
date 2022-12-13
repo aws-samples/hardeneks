@@ -44,7 +44,12 @@ def check_logs_are_enabled(resources: Resources):
         &#34;enabled&#34;
     ]
     if not logs:
-        print(Panel(&#34;[red]Enable control plane logs for auditing&#34;))
+        print(
+            Panel(
+                &#34;[red]Enable control plane logs for auditing&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/detective/#enable-audit-logs&#34;,
+            )
+        )
         console.print()
 
     return logs</code></pre>
@@ -73,7 +78,12 @@ def check_logs_are_enabled(resources: Resources):
         &#34;enabled&#34;
     ]
     if not logs:
-        print(Panel(&#34;[red]Enable control plane logs for auditing&#34;))
+        print(
+            Panel(
+                &#34;[red]Enable control plane logs for auditing&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/detective/#enable-audit-logs&#34;,
+            )
+        )
         console.print()
 
     return logs</code></pre>

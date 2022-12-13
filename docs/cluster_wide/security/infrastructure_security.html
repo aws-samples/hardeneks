@@ -62,6 +62,7 @@ def deploy_workers_onto_private_subnets(resources: Resources):
         print_instance_public_table(
             offenders,
             &#34;[red]Place worker nodes on private subnets.&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#deploy-workers-onto-private-subnets&#34;,
         )
     return offenders
 
@@ -83,7 +84,12 @@ def make_sure_inspector_is_enabled(resources: Resources):
     ecr_status = resource_state[&#34;ecr&#34;][&#34;status&#34;]
 
     if ec2_status != &#34;ENABLED&#34; and ecr_status != &#34;ENABLED&#34;:
-        print(Panel(&#34;[red]Enable Amazon Inspector for ec2 and ecr&#34;))
+        print(
+            Panel(
+                &#34;[red]Enable Amazon Inspector for ec2 and ecr&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#run-amazon-inspector-to-assess-hosts-for-exposure-vulnerabilities-and-deviations-from-best-practices&#34;,
+            )
+        )
         console.print()
         return False
 
@@ -130,6 +136,7 @@ def make_sure_inspector_is_enabled(resources: Resources):
         print_instance_public_table(
             offenders,
             &#34;[red]Place worker nodes on private subnets.&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#deploy-workers-onto-private-subnets&#34;,
         )
     return offenders</code></pre>
 </details>
@@ -160,7 +167,12 @@ def make_sure_inspector_is_enabled(resources: Resources):
     ecr_status = resource_state[&#34;ecr&#34;][&#34;status&#34;]
 
     if ec2_status != &#34;ENABLED&#34; and ecr_status != &#34;ENABLED&#34;:
-        print(Panel(&#34;[red]Enable Amazon Inspector for ec2 and ecr&#34;))
+        print(
+            Panel(
+                &#34;[red]Enable Amazon Inspector for ec2 and ecr&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#run-amazon-inspector-to-assess-hosts-for-exposure-vulnerabilities-and-deviations-from-best-practices&#34;,
+            )
+        )
         console.print()
         return False
 

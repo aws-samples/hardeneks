@@ -34,7 +34,7 @@ from rich import print
 console = Console()
 
 
-def print_role_table(roles, message, type):
+def print_role_table(roles, message, docs, type):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -44,11 +44,11 @@ def print_role_table(roles, message, type):
     for role in roles:
         table.add_row(type, role.metadata.namespace, role.metadata.name)
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_instance_metadata_table(instances, message):
+def print_instance_metadata_table(instances, message, docs):
     table = Table()
 
     table.add_column(&#34;InstanceId&#34;, style=&#34;cyan&#34;)
@@ -64,11 +64,11 @@ def print_instance_metadata_table(instances, message):
             ),
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_instance_public_table(instances, message):
+def print_instance_public_table(instances, message, docs):
     table = Table()
 
     table.add_column(&#34;InstanceId&#34;, style=&#34;cyan&#34;)
@@ -84,7 +84,7 @@ def print_instance_public_table(instances, message):
     console.print()
 
 
-def print_repository_table(repositories, attribute, message):
+def print_repository_table(repositories, attribute, message, docs):
     table = Table()
     table.add_column(&#34;Repository&#34;, style=&#34;cyan&#34;)
     table.add_column(attribute, style=&#34;magenta&#34;)
@@ -94,11 +94,11 @@ def print_repository_table(repositories, attribute, message):
             repository[attribute],
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_pod_table(pods, message):
+def print_pod_table(pods, message, docs):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -108,11 +108,11 @@ def print_pod_table(pods, message):
     for pod in pods:
         table.add_row(&#34;Pod&#34;, pod.metadata.namespace, pod.metadata.name)
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_workload_table(workloads, message, kind):
+def print_workload_table(workloads, message, docs, kind):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -124,11 +124,11 @@ def print_workload_table(workloads, message, kind):
             kind, workload.metadata.namespace, workload.metadata.name
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_namespace_table(namespaces, message):
+def print_namespace_table(namespaces, message, docs):
     table = Table()
 
     table.add_column(&#34;Namespace&#34;, style=&#34;cyan&#34;)
@@ -138,11 +138,11 @@ def print_namespace_table(namespaces, message):
             namespace,
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_service_table(services, message):
+def print_service_table(services, message, docs):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -154,11 +154,11 @@ def print_service_table(services, message):
             &#34;Service&#34;, workload.metadata.namespace, workload.metadata.name
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_deployment_table(deployments, message):
+def print_deployment_table(deployments, message, docs):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -170,11 +170,11 @@ def print_deployment_table(deployments, message):
             &#34;Deployment&#34;, workload.metadata.namespace, workload.metadata.name
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_storage_class_table(storage_classes, message):
+def print_storage_class_table(storage_classes, message, docs):
     table = Table()
 
     table.add_column(&#34;StorageClass&#34;, style=&#34;cyan&#34;)
@@ -183,11 +183,11 @@ def print_storage_class_table(storage_classes, message):
     for storage_class in storage_classes:
         table.add_row(storage_class.metadata.name, &#34;false&#34;)
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 
-def print_persistent_volume_table(persistent_volumes, message):
+def print_persistent_volume_table(persistent_volumes, message, docs):
     table = Table()
 
     table.add_column(&#34;PersistentVolume&#34;, style=&#34;cyan&#34;)
@@ -196,7 +196,7 @@ def print_persistent_volume_table(persistent_volumes, message):
     for persistent_volume in persistent_volumes:
         table.add_row(persistent_volume.metadata.name, &#34;false&#34;)
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </section>
@@ -208,7 +208,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="hardeneks.report.print_deployment_table"><code class="name flex">
-<span>def <span class="ident">print_deployment_table</span></span>(<span>deployments, message)</span>
+<span>def <span class="ident">print_deployment_table</span></span>(<span>deployments, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -216,7 +216,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_deployment_table(deployments, message):
+<pre><code class="python">def print_deployment_table(deployments, message, docs):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -228,12 +228,12 @@ def print_persistent_volume_table(persistent_volumes, message):
             &#34;Deployment&#34;, workload.metadata.namespace, workload.metadata.name
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_instance_metadata_table"><code class="name flex">
-<span>def <span class="ident">print_instance_metadata_table</span></span>(<span>instances, message)</span>
+<span>def <span class="ident">print_instance_metadata_table</span></span>(<span>instances, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -241,7 +241,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_instance_metadata_table(instances, message):
+<pre><code class="python">def print_instance_metadata_table(instances, message, docs):
     table = Table()
 
     table.add_column(&#34;InstanceId&#34;, style=&#34;cyan&#34;)
@@ -257,12 +257,12 @@ def print_persistent_volume_table(persistent_volumes, message):
             ),
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_instance_public_table"><code class="name flex">
-<span>def <span class="ident">print_instance_public_table</span></span>(<span>instances, message)</span>
+<span>def <span class="ident">print_instance_public_table</span></span>(<span>instances, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -270,7 +270,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_instance_public_table(instances, message):
+<pre><code class="python">def print_instance_public_table(instances, message, docs):
     table = Table()
 
     table.add_column(&#34;InstanceId&#34;, style=&#34;cyan&#34;)
@@ -287,7 +287,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 </details>
 </dd>
 <dt id="hardeneks.report.print_namespace_table"><code class="name flex">
-<span>def <span class="ident">print_namespace_table</span></span>(<span>namespaces, message)</span>
+<span>def <span class="ident">print_namespace_table</span></span>(<span>namespaces, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -295,7 +295,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_namespace_table(namespaces, message):
+<pre><code class="python">def print_namespace_table(namespaces, message, docs):
     table = Table()
 
     table.add_column(&#34;Namespace&#34;, style=&#34;cyan&#34;)
@@ -305,12 +305,12 @@ def print_persistent_volume_table(persistent_volumes, message):
             namespace,
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_persistent_volume_table"><code class="name flex">
-<span>def <span class="ident">print_persistent_volume_table</span></span>(<span>persistent_volumes, message)</span>
+<span>def <span class="ident">print_persistent_volume_table</span></span>(<span>persistent_volumes, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -318,7 +318,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_persistent_volume_table(persistent_volumes, message):
+<pre><code class="python">def print_persistent_volume_table(persistent_volumes, message, docs):
     table = Table()
 
     table.add_column(&#34;PersistentVolume&#34;, style=&#34;cyan&#34;)
@@ -327,12 +327,12 @@ def print_persistent_volume_table(persistent_volumes, message):
     for persistent_volume in persistent_volumes:
         table.add_row(persistent_volume.metadata.name, &#34;false&#34;)
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_pod_table"><code class="name flex">
-<span>def <span class="ident">print_pod_table</span></span>(<span>pods, message)</span>
+<span>def <span class="ident">print_pod_table</span></span>(<span>pods, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -340,7 +340,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_pod_table(pods, message):
+<pre><code class="python">def print_pod_table(pods, message, docs):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -350,12 +350,12 @@ def print_persistent_volume_table(persistent_volumes, message):
     for pod in pods:
         table.add_row(&#34;Pod&#34;, pod.metadata.namespace, pod.metadata.name)
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_repository_table"><code class="name flex">
-<span>def <span class="ident">print_repository_table</span></span>(<span>repositories, attribute, message)</span>
+<span>def <span class="ident">print_repository_table</span></span>(<span>repositories, attribute, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -363,7 +363,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_repository_table(repositories, attribute, message):
+<pre><code class="python">def print_repository_table(repositories, attribute, message, docs):
     table = Table()
     table.add_column(&#34;Repository&#34;, style=&#34;cyan&#34;)
     table.add_column(attribute, style=&#34;magenta&#34;)
@@ -373,12 +373,12 @@ def print_persistent_volume_table(persistent_volumes, message):
             repository[attribute],
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_role_table"><code class="name flex">
-<span>def <span class="ident">print_role_table</span></span>(<span>roles, message, type)</span>
+<span>def <span class="ident">print_role_table</span></span>(<span>roles, message, docs, type)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -386,7 +386,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_role_table(roles, message, type):
+<pre><code class="python">def print_role_table(roles, message, docs, type):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -396,12 +396,12 @@ def print_persistent_volume_table(persistent_volumes, message):
     for role in roles:
         table.add_row(type, role.metadata.namespace, role.metadata.name)
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_service_table"><code class="name flex">
-<span>def <span class="ident">print_service_table</span></span>(<span>services, message)</span>
+<span>def <span class="ident">print_service_table</span></span>(<span>services, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -409,7 +409,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_service_table(services, message):
+<pre><code class="python">def print_service_table(services, message, docs):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -421,12 +421,12 @@ def print_persistent_volume_table(persistent_volumes, message):
             &#34;Service&#34;, workload.metadata.namespace, workload.metadata.name
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_storage_class_table"><code class="name flex">
-<span>def <span class="ident">print_storage_class_table</span></span>(<span>storage_classes, message)</span>
+<span>def <span class="ident">print_storage_class_table</span></span>(<span>storage_classes, message, docs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -434,7 +434,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_storage_class_table(storage_classes, message):
+<pre><code class="python">def print_storage_class_table(storage_classes, message, docs):
     table = Table()
 
     table.add_column(&#34;StorageClass&#34;, style=&#34;cyan&#34;)
@@ -443,12 +443,12 @@ def print_persistent_volume_table(persistent_volumes, message):
     for storage_class in storage_classes:
         table.add_row(storage_class.metadata.name, &#34;false&#34;)
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
 <dt id="hardeneks.report.print_workload_table"><code class="name flex">
-<span>def <span class="ident">print_workload_table</span></span>(<span>workloads, message, kind)</span>
+<span>def <span class="ident">print_workload_table</span></span>(<span>workloads, message, docs, kind)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -456,7 +456,7 @@ def print_persistent_volume_table(persistent_volumes, message):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_workload_table(workloads, message, kind):
+<pre><code class="python">def print_workload_table(workloads, message, docs, kind):
     table = Table()
 
     table.add_column(&#34;Kind&#34;, style=&#34;cyan&#34;)
@@ -468,7 +468,7 @@ def print_persistent_volume_table(persistent_volumes, message):
             kind, workload.metadata.namespace, workload.metadata.name
         )
 
-    print(Panel(table, title=message))
+    print(Panel(table, title=message, subtitle=docs))
     console.print()</code></pre>
 </details>
 </dd>
