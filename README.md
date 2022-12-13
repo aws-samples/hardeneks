@@ -133,7 +133,78 @@ rules:
         - run_multiple_replicas
         - avoid_running_singleton_pods
 ```
-  
+
+**RBAC**:
+ 
+In order to run hardeneks we need to have some permissions both on AWS side and k8s side.
+
+Minimal IAM role policy:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "eks:ListClusters",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "eks:DescribeCluster",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ecr:DescribeRepositories",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "inspector2:BatchGetAccountStatus",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ec2:DescribeFlowLogs",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ec2:DescribeInstances",
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+Minimal ClusterRole:
+
+```yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: hardeneks-runner
+rules:
+- apiGroups: [""]
+  resources: ["namespaces", "resourcequotas", "persistentvolumes", "pods", "services"]
+  verbs: ["list"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
+  verbs: ["list"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["list"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["list"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "daemonsets", "statefulsets"]
+  verbs: ["list", "get"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["list"]
+```
 
 ## For Developers
 
