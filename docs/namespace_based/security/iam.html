@@ -55,6 +55,7 @@ def restrict_wildcard_for_roles(resources: NamespacedResources):
         print_role_table(
             offenders,
             &#34;[red]Roles should not have &#39;*&#39; in Verbs or Resources&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings&#34;,
             &#34;Role&#34;,
         )
     return offenders
@@ -71,6 +72,7 @@ def disable_service_account_token_mounts(resources: NamespacedResources):
         print_pod_table(
             offenders,
             &#34;[red]Auto-mounting of Service Account tokens is not allowed&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens&#34;,
         )
     return offenders
 
@@ -87,7 +89,11 @@ def disable_run_as_root_user(resources: NamespacedResources):
             offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, &#34;[red]Running as root is not allowed&#34;)
+        print_pod_table(
+            offenders,
+            &#34;[red]Running as root is not allowed&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#run-the-application-as-a-non-root-user&#34;,
+        )
 
     return offenders
 
@@ -108,6 +114,7 @@ def disable_anonymous_access_for_roles(resources: NamespacedResources):
         print_role_table(
             offenders,
             &#34;[red]Don&#39;t bind roles to anonymous or unauthenticated groups&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access&#34;,
             &#34;RoleBinding&#34;,
         )
     return offenders
@@ -137,6 +144,7 @@ def use_dedicated_service_accounts_for_each_deployment(
         print_workload_table(
             offenders,
             &#34;[red]Don&#39;t share service accounts between Deployments&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application&#34;,
             &#34;Deployment&#34;,
         )
 
@@ -167,6 +175,7 @@ def use_dedicated_service_accounts_for_each_stateful_set(
         print_workload_table(
             offenders,
             &#34;[red]Don&#39;t share service accounts between StatefulSets&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application&#34;,
             &#34;StatefulSet&#34;,
         )
 
@@ -197,6 +206,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
         print_workload_table(
             offenders,
             &#34;[red]Don&#39;t share service accounts between DaemonSets&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application&#34;,
             &#34;DaemonSet&#34;,
         )
 
@@ -235,6 +245,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
         print_role_table(
             offenders,
             &#34;[red]Don&#39;t bind roles to anonymous or unauthenticated groups&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access&#34;,
             &#34;RoleBinding&#34;,
         )
     return offenders</code></pre>
@@ -261,7 +272,11 @@ def use_dedicated_service_accounts_for_each_daemon_set(
             offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, &#34;[red]Running as root is not allowed&#34;)
+        print_pod_table(
+            offenders,
+            &#34;[red]Running as root is not allowed&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#run-the-application-as-a-non-root-user&#34;,
+        )
 
     return offenders</code></pre>
 </details>
@@ -286,6 +301,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
         print_pod_table(
             offenders,
             &#34;[red]Auto-mounting of Service Account tokens is not allowed&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens&#34;,
         )
     return offenders</code></pre>
 </details>
@@ -313,6 +329,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
         print_role_table(
             offenders,
             &#34;[red]Roles should not have &#39;*&#39; in Verbs or Resources&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings&#34;,
             &#34;Role&#34;,
         )
     return offenders</code></pre>
@@ -351,6 +368,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
         print_workload_table(
             offenders,
             &#34;[red]Don&#39;t share service accounts between DaemonSets&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application&#34;,
             &#34;DaemonSet&#34;,
         )
 
@@ -390,6 +408,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
         print_workload_table(
             offenders,
             &#34;[red]Don&#39;t share service accounts between Deployments&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application&#34;,
             &#34;Deployment&#34;,
         )
 
@@ -429,6 +448,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
         print_workload_table(
             offenders,
             &#34;[red]Don&#39;t share service accounts between StatefulSets&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application&#34;,
             &#34;StatefulSet&#34;,
         )
 

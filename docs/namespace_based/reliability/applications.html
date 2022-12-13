@@ -45,7 +45,9 @@ def avoid_running_singleton_pods(namespaced_resources: NamespacedResources):
 
     if offenders:
         print_pod_table(
-            offenders, &#34;[red]Avoid running pods without deployments.&#34;
+            offenders,
+            &#34;[red]Avoid running pods without deployments.&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods&#34;,
         )
     return offenders
 
@@ -59,7 +61,9 @@ def run_multiple_replicas(namespaced_resources: NamespacedResources):
 
     if offenders:
         print_deployment_table(
-            offenders, &#34;[red]Avoid running single replica deployments&#34;
+            offenders,
+            &#34;[red]Avoid running single replica deployments&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas&#34;,
         )
     return offenders
 
@@ -80,7 +84,9 @@ def schedule_replicas_across_nodes(namespaced_resources: NamespacedResources):
 
     if offenders:
         print_service_table(
-            offenders, &#34;[red]Spread replicas across AZs and Nodes&#34;
+            offenders,
+            &#34;[red]Spread replicas across AZs and Nodes&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes&#34;,
         )
     return offenders
 
@@ -98,7 +104,9 @@ def check_horizontal_pod_autoscaling_exists(
 
     if offenders:
         print_service_table(
-            offenders, &#34;[red]Deploy horizontal pod autoscaler for deployments&#34;
+            offenders,
+            &#34;[red]Deploy horizontal pod autoscaler for deployments&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa&#34;,
         )
     return offenders
 
@@ -112,7 +120,11 @@ def check_readiness_probes(namespaced_resources: NamespacedResources):
                 offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, &#34;[red]Define readiness probes for pods.&#34;)
+        print_pod_table(
+            offenders,
+            &#34;[red]Define readiness probes for pods.&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-readiness-probe-to-detect-partial-unavailability&#34;,
+        )
     return offenders
 
 
@@ -125,7 +137,11 @@ def check_liveness_probes(namespaced_resources: NamespacedResources):
                 offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, &#34;[red]Define liveness probes for pods.&#34;)
+        print_pod_table(
+            offenders,
+            &#34;[red]Define liveness probes for pods.&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-liveness-probe-to-remove-unhealthy-pods&#34;,
+        )
     return offenders</code></pre>
 </details>
 </section>
@@ -154,7 +170,9 @@ def check_liveness_probes(namespaced_resources: NamespacedResources):
 
     if offenders:
         print_pod_table(
-            offenders, &#34;[red]Avoid running pods without deployments.&#34;
+            offenders,
+            &#34;[red]Avoid running pods without deployments.&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods&#34;,
         )
     return offenders</code></pre>
 </details>
@@ -181,7 +199,9 @@ def check_liveness_probes(namespaced_resources: NamespacedResources):
 
     if offenders:
         print_service_table(
-            offenders, &#34;[red]Deploy horizontal pod autoscaler for deployments&#34;
+            offenders,
+            &#34;[red]Deploy horizontal pod autoscaler for deployments&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa&#34;,
         )
     return offenders</code></pre>
 </details>
@@ -204,7 +224,11 @@ def check_liveness_probes(namespaced_resources: NamespacedResources):
                 offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, &#34;[red]Define liveness probes for pods.&#34;)
+        print_pod_table(
+            offenders,
+            &#34;[red]Define liveness probes for pods.&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-liveness-probe-to-remove-unhealthy-pods&#34;,
+        )
     return offenders</code></pre>
 </details>
 </dd>
@@ -226,7 +250,11 @@ def check_liveness_probes(namespaced_resources: NamespacedResources):
                 offenders.append(pod)
 
     if offenders:
-        print_pod_table(offenders, &#34;[red]Define readiness probes for pods.&#34;)
+        print_pod_table(
+            offenders,
+            &#34;[red]Define readiness probes for pods.&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-readiness-probe-to-detect-partial-unavailability&#34;,
+        )
     return offenders</code></pre>
 </details>
 </dd>
@@ -248,7 +276,9 @@ def check_liveness_probes(namespaced_resources: NamespacedResources):
 
     if offenders:
         print_deployment_table(
-            offenders, &#34;[red]Avoid running single replica deployments&#34;
+            offenders,
+            &#34;[red]Avoid running single replica deployments&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas&#34;,
         )
     return offenders</code></pre>
 </details>
@@ -278,7 +308,9 @@ def check_liveness_probes(namespaced_resources: NamespacedResources):
 
     if offenders:
         print_service_table(
-            offenders, &#34;[red]Spread replicas across AZs and Nodes&#34;
+            offenders,
+            &#34;[red]Spread replicas across AZs and Nodes&#34;,
+            &#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes&#34;,
         )
     return offenders</code></pre>
 </details>

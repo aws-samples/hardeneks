@@ -41,7 +41,10 @@ def harden(resources, config, _type):
                     func = getattr(module, rule)
                 except AttributeError as exc:
                     print(f&#34;[bold][red]{exc}&#34;)
-                func(resources)</code></pre>
+                try:
+                    func(resources)
+                except Exception as exc:
+                    print(f&#34;[bold][red]{exc}&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -70,7 +73,10 @@ def harden(resources, config, _type):
                     func = getattr(module, rule)
                 except AttributeError as exc:
                     print(f&#34;[bold][red]{exc}&#34;)
-                func(resources)</code></pre>
+                try:
+                    func(resources)
+                except Exception as exc:
+                    print(f&#34;[bold][red]{exc}&#34;)</code></pre>
 </details>
 </dd>
 </dl>

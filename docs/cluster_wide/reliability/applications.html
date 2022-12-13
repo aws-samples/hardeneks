@@ -45,7 +45,12 @@ def check_metrics_server_is_running(resources: Resources):
     if &#34;metrics-server&#34; in services:
         return True
     else:
-        print(Panel(&#34;[red]Deploy metrics server.&#34;))
+        print(
+            Panel(
+                &#34;[red]Deploy metrics server.&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server&#34;,
+            )
+        )
         console.print()
         return False
 
@@ -61,7 +66,12 @@ def check_vertical_pod_autoscaler_exists(resources: Resources):
     if &#34;vpa-recommender&#34; in deployments:
         return True
     else:
-        print(Panel(&#34;[red]Deploy vertical pod autoscaler.&#34;))
+        print(
+            Panel(
+                &#34;[red]Deploy vertical pod autoscaler if needed.&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#vertical-pod-autoscaler-vpa&#34;,
+            )
+        )
         console.print()
         return False</code></pre>
 </details>
@@ -93,7 +103,12 @@ def check_vertical_pod_autoscaler_exists(resources: Resources):
     if &#34;metrics-server&#34; in services:
         return True
     else:
-        print(Panel(&#34;[red]Deploy metrics server.&#34;))
+        print(
+            Panel(
+                &#34;[red]Deploy metrics server.&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server&#34;,
+            )
+        )
         console.print()
         return False</code></pre>
 </details>
@@ -118,7 +133,12 @@ def check_vertical_pod_autoscaler_exists(resources: Resources):
     if &#34;vpa-recommender&#34; in deployments:
         return True
     else:
-        print(Panel(&#34;[red]Deploy vertical pod autoscaler.&#34;))
+        print(
+            Panel(
+                &#34;[red]Deploy vertical pod autoscaler if needed.&#34;,
+                subtitle=&#34;Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#vertical-pod-autoscaler-vpa&#34;,
+            )
+        )
         console.print()
         return False</code></pre>
 </details>
