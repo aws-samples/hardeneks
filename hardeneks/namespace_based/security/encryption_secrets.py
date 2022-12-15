@@ -22,7 +22,7 @@ def disallow_secrets_from_env_vars(resources: NamespacedResources):
         print_pod_table(
             offenders,
             "[red]Disallow secrets from env vars",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-volume-mounts-instead-of-environment-variables",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-volume-mounts-instead-of-environment-variables]Click to see the guide[/link]",
         )
 
     return offenders

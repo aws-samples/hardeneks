@@ -20,7 +20,7 @@ def check_metrics_server_is_running(resources: Resources):
         print(
             Panel(
                 "[red]Deploy metrics server.",
-                subtitle="Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server",
+                subtitle="[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server]Click to see the guide[/link]",
             )
         )
         console.print()
@@ -41,7 +41,7 @@ def check_vertical_pod_autoscaler_exists(resources: Resources):
         print(
             Panel(
                 "[red]Deploy vertical pod autoscaler if needed.",
-                subtitle="Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#vertical-pod-autoscaler-vpa",
+                subtitle="[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#vertical-pod-autoscaler-vpa]Click to see the guide[/link]",
             )
         )
         console.print()

@@ -24,7 +24,7 @@ def restrict_wildcard_for_cluster_roles(resources: Resources):
         print_role_table(
             offenders,
             "[red]ClusterRoles should not have '*' in Verbs or Resources",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings]Click to see the guide[/link]",
             "ClusterRole",
         )
     return offenders
@@ -40,7 +40,7 @@ def check_endpoint_public_access(resources: Resources):
         print(
             Panel(
                 "[red]EKS Cluster Endpoint is not Private",
-                subtitle="Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private",
+                subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private]Click to see the guide[/link]",
             )
         )
         console.print()
@@ -58,7 +58,7 @@ def check_aws_node_daemonset_service_account(resources: Resources):
         print(
             Panel(
                 "[red]Update the aws-node daemonset to use IRSA",
-                subtitle="Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa",
+                subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa]Click to see the guide[/link]",
             )
         )
         console.print()
@@ -95,7 +95,7 @@ def check_access_to_instance_profile(resources: Resources):
         print_instance_metadata_table(
             offenders,
             "[red]Restrict access to the instance profile assigned to nodes",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2]Click to see the guide[/link]",
         )
     return offenders
 
@@ -116,7 +116,7 @@ def disable_anonymous_access_for_cluster_roles(resources: Resources):
         print_role_table(
             offenders,
             "[red]Don't bind clusterroles to anonymous/unauthenticated groups",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access]Click to see the guide[/link]",
             "ClusterRoleBinding",
         )
 

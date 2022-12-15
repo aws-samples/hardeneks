@@ -27,7 +27,7 @@ def restrict_wildcard_for_roles(resources: NamespacedResources):
         print_role_table(
             offenders,
             "[red]Roles should not have '*' in Verbs or Resources",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings]Click to see the guide[/link]",
             "Role",
         )
     return offenders
@@ -44,7 +44,7 @@ def disable_service_account_token_mounts(resources: NamespacedResources):
         print_pod_table(
             offenders,
             "[red]Auto-mounting of Service Account tokens is not allowed",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens]Click to see the guide[/link]",
         )
     return offenders
 
@@ -64,7 +64,7 @@ def disable_run_as_root_user(resources: NamespacedResources):
         print_pod_table(
             offenders,
             "[red]Running as root is not allowed",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#run-the-application-as-a-non-root-user",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#run-the-application-as-a-non-root-user]Click to see the guide[/link]",
         )
 
     return offenders
@@ -86,7 +86,7 @@ def disable_anonymous_access_for_roles(resources: NamespacedResources):
         print_role_table(
             offenders,
             "[red]Don't bind roles to anonymous or unauthenticated groups",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access]Click to see the guide[/link]",
             "RoleBinding",
         )
     return offenders
@@ -116,7 +116,7 @@ def use_dedicated_service_accounts_for_each_deployment(
         print_workload_table(
             offenders,
             "[red]Don't share service accounts between Deployments",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application]Click to see the guide[/link]",
             "Deployment",
         )
 
@@ -147,7 +147,7 @@ def use_dedicated_service_accounts_for_each_stateful_set(
         print_workload_table(
             offenders,
             "[red]Don't share service accounts between StatefulSets",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application]Click to see the guide[/link]",
             "StatefulSet",
         )
 
@@ -178,7 +178,7 @@ def use_dedicated_service_accounts_for_each_daemon_set(
         print_workload_table(
             offenders,
             "[red]Don't share service accounts between DaemonSets",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application]Click to see the guide[/link]",
             "DaemonSet",
         )
 

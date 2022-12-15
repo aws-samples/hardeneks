@@ -27,7 +27,7 @@ def disallow_container_socket_mount(namespaced_resources: NamespacedResources):
         print_pod_table(
             offenders,
             "[red]Container socket mounts are not allowed",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/pods/#never-run-docker-in-docker-or-mount-the-socket-in-the-container",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#never-run-docker-in-docker-or-mount-the-socket-in-the-container]Click to see the guide[/link]",
         )
 
     return offenders
@@ -47,7 +47,7 @@ def disallow_host_path_or_make_it_read_only(
         print_pod_table(
             offenders,
             "[red]Restrict the use of hostpath.",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/pods/#restrict-the-use-of-hostpath-or-if-hostpath-is-necessary-restrict-which-prefixes-can-be-used-and-configure-the-volume-as-read-only",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#restrict-the-use-of-hostpath-or-if-hostpath-is-necessary-restrict-which-prefixes-can-be-used-and-configure-the-volume-as-read-only]Click to see the guide[/link]",
         )
 
     return offenders
@@ -69,7 +69,7 @@ def set_requests_limits_for_containers(
         print_pod_table(
             offenders,
             "[red]Set requests and limits for each container.",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/pods/#set-requests-and-limits-for-each-container-to-avoid-resource-contention-and-dos-attacks",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#set-requests-and-limits-for-each-container-to-avoid-resource-contention-and-dos-attacks]Click to see the guide[/link]",
         )
 
     return offenders
@@ -90,7 +90,7 @@ def disallow_privilege_escalation(namespaced_resources: NamespacedResources):
         print_pod_table(
             offenders,
             "[red]Set allowPrivilegeEscalation in the pod spec to false",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/pods/#do-not-allow-privileged-escalation",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#do-not-allow-privileged-escalation]Click to see the guide[/link]",
         )
 
     return offenders
@@ -111,7 +111,7 @@ def check_read_only_root_file_system(
         print_pod_table(
             offenders,
             "[red]Configure your images with a read-only root file system",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/pods/#configure-your-images-with-read-only-root-file-system",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#configure-your-images-with-read-only-root-file-system]Click to see the guide[/link]",
         )
 
     return offenders

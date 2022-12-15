@@ -30,6 +30,6 @@ def use_encryption_with_aws_load_balancers(
         print_service_table(
             offenders,
             "[red]Make sure you specify an ssl cert",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/network/#use-encryption-with-aws-load-balancers",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/network/#use-encryption-with-aws-load-balancers]Click to see the guide[/link]",
         )
     return offenders
