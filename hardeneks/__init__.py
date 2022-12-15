@@ -1,5 +1,8 @@
+import os
 from pathlib import Path
 from pkg_resources import resource_filename
+import tempfile
+import urllib3
 import yaml
 
 from botocore.exceptions import EndpointConnectionError
@@ -63,6 +66,22 @@ def _get_region():
     return boto3.session.Session().region_name
 
 
+def _load_kube_config():
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    kube_config_orig = f"{Path.home()}/.kube/config"
+    tmp_config = tempfile.NamedTemporaryFile().name
+
+    with open(kube_config_orig, "r") as fd:
+        kubeconfig = yaml.load(fd, Loader=yaml.FullLoader)
+    for cluster in kubeconfig["clusters"]:
+        cluster["cluster"]["insecure-skip-tls-verify"] = True
+    with open(tmp_config, "w") as fd:
+        yaml.dump(kubeconfig, fd, default_flow_style=False)
+
+    kubernetes.config.load_kube_config(tmp_config)
+    os.remove(tmp_config)
+
+
 @app.command()
 def run_hardeneks(
     region: str = typer.Option(
@@ -82,6 +101,10 @@ def run_hardeneks(
         callback=_config_callback,
         help="Path to a hardeneks config file.",
     ),
+    insecure_skip_tls_verify: bool = typer.Option(
+        False,
+        "--insecure-skip-tls-verify",
+    ),
 ):
     """
     Main entry point to hardeneks.
@@ -92,14 +115,19 @@ def run_hardeneks(
         cluster (str): Cluster name
         namespace (str): Specific namespace to be checked
         config (str): Path to hardeneks config file
+        insecure-skip-tls-verify (str): Skip tls verification
 
     Returns:
         None
 
     """
+    if insecure_skip_tls_verify:
+        _load_kube_config()
+    else:
+        kubernetes.config.load_kube_config(context=context)
 
-    kubernetes.config.load_kube_config(context=context)
     context = _get_current_context(context)
+
     if not cluster:
         cluster = _get_cluster_name(context, region)
 

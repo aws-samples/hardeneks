@@ -31,6 +31,7 @@ hardeneks [OPTIONS]
 * `--cluster TEXT`: EKS Cluster name
 * `--namespace TEXT`: Namespace to be checked (default is all namespaces)
 * `--config TEXT`: Path to a hardeneks config file
+* `--insecure-skip-tls-verify`: Skip TLS verification
 * `--help`: Show this message and exit.
 
 
