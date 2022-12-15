@@ -1,3 +1,11 @@
+## Unreleased
+
+### Feat
+
+- Add a cli option for skipping tls verification
+
+## 0.5.0 (2022-12-10)
+
 ## v0.5.0 (2022-12-10)
 
 ### Feat
