@@ -19,7 +19,7 @@ def avoid_running_singleton_pods(namespaced_resources: NamespacedResources):
         print_pod_table(
             offenders,
             "[red]Avoid running pods without deployments.",
-            "Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods",
+            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods]Click to see the guide[/link]",
         )
     return offenders
 
@@ -35,7 +35,7 @@ def run_multiple_replicas(namespaced_resources: NamespacedResources):
         print_deployment_table(
             offenders,
             "[red]Avoid running single replica deployments",
-            "Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas",
+            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas]Click to see the guide[/link]",
         )
     return offenders
 
@@ -58,7 +58,7 @@ def schedule_replicas_across_nodes(namespaced_resources: NamespacedResources):
         print_service_table(
             offenders,
             "[red]Spread replicas across AZs and Nodes",
-            "Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes",
+            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes]Click to see the guide[/link]",
         )
     return offenders
 
@@ -78,7 +78,7 @@ def check_horizontal_pod_autoscaling_exists(
         print_service_table(
             offenders,
             "[red]Deploy horizontal pod autoscaler for deployments",
-            "Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa",
+            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa]Click to see the guide[/link]",
         )
     return offenders
 
@@ -95,7 +95,7 @@ def check_readiness_probes(namespaced_resources: NamespacedResources):
         print_pod_table(
             offenders,
             "[red]Define readiness probes for pods.",
-            "Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-readiness-probe-to-detect-partial-unavailability",
+            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-readiness-probe-to-detect-partial-unavailability]Click to see the guide[/link]",
         )
     return offenders
 
@@ -112,6 +112,6 @@ def check_liveness_probes(namespaced_resources: NamespacedResources):
         print_pod_table(
             offenders,
             "[red]Define liveness probes for pods.",
-            "Link: https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-liveness-probe-to-remove-unhealthy-pods",
+            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-liveness-probe-to-remove-unhealthy-pods]Click to see the guide[/link]",
         )
     return offenders

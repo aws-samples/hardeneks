@@ -40,7 +40,7 @@ def disallow_linux_capabilities(namespaced_resources: NamespacedResources):
             """
             [red]Capabilities beyond the allowed list are disallowed.
             """,
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/runtime/#consider-adddropping-linux-capabilities-before-writing-seccomp-policies",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/runtime/#consider-adddropping-linux-capabilities-before-writing-seccomp-policies]Click to see the guide[/link]",
         )
 
     return offenders

@@ -34,7 +34,7 @@ def deploy_workers_onto_private_subnets(resources: Resources):
         print_instance_public_table(
             offenders,
             "[red]Place worker nodes on private subnets.",
-            "Link: https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#deploy-workers-onto-private-subnets",
+            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#deploy-workers-onto-private-subnets]Click to see the guide[/link]",
         )
     return offenders
 
@@ -59,7 +59,7 @@ def make_sure_inspector_is_enabled(resources: Resources):
         print(
             Panel(
                 "[red]Enable Amazon Inspector for ec2 and ecr",
-                subtitle="Link: https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#run-amazon-inspector-to-assess-hosts-for-exposure-vulnerabilities-and-deviations-from-best-practices",
+                subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#run-amazon-inspector-to-assess-hosts-for-exposure-vulnerabilities-and-deviations-from-best-practices]Click to see the guide[/link]",
             )
         )
         console.print()
