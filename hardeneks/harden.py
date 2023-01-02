@@ -1,7 +1,5 @@
 from importlib import import_module
 
-from hardeneks import console
-
 
 def harden(resources, config, _type):
     config = config[_type]
@@ -12,8 +10,8 @@ def harden(resources, config, _type):
                 try:
                     func = getattr(module, rule)
                 except AttributeError as exc:
-                    console.print(f"[bold][red]{exc}")
+                    print(f"[bold][red]{exc}")
                 try:
                     func(resources)
                 except Exception as exc:
-                    console.print(f"[bold][red]{exc}")
+                    print(f"[bold][red]{exc}")
