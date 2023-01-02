@@ -1,12 +1,8 @@
-from rich.console import Console
-
 from ...resources import Resources
 
 from ...report import (
     print_namespace_table,
 )
-
-console = Console()
 
 
 def ensure_namespace_quotas_exist(resources: Resources):

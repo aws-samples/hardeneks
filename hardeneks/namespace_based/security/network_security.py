@@ -1,12 +1,7 @@
-from rich.console import Console
-
 from ...report import (
     print_service_table,
 )
 from hardeneks.resources import NamespacedResources
-
-
-console = Console()
 
 
 def use_encryption_with_aws_load_balancers(

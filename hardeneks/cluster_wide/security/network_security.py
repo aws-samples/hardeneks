@@ -1,15 +1,10 @@
 import boto3
 from kubernetes import client
-from rich.console import Console
 from rich.panel import Panel
-from rich import print
 
-
+from hardeneks import console
 from ...resources import Resources
 from ...report import print_namespace_table
-
-
-console = Console()
 
 
 def check_vpc_flow_logs(resources: Resources):
@@ -24,7 +19,7 @@ def check_vpc_flow_logs(resources: Resources):
     )["FlowLogs"]
 
     if not flow_logs:
-        print(
+        console.print(
             Panel(
                 "[red]Enable flow logs for your VPC.",
                 subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/network/#log-network-traffic-metadata]Click to see the guide[/link]",
@@ -40,7 +35,7 @@ def check_awspca_exists(resources: Resources):
         if service.metadata.name.startswith("aws-privateca-issuer"):
             return True
 
-    print(
+    console.print(
         Panel(
             "[red]Install aws privateca issuer for your certificates.",
             subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/network/#acm-private-ca-with-cert-manager]Click to see the guide[/link]",

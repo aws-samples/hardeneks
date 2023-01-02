@@ -32,6 +32,8 @@ hardeneks [OPTIONS]
 * `--cluster TEXT`: EKS Cluster name
 * `--namespace TEXT`: Namespace to be checked (default is all namespaces)
 * `--config TEXT`: Path to a hardeneks config file
+* `--export-txt TEXT`: Export the report in txt format
+* `--export-html TEXT`: Export the report in html format
 * `--insecure-skip-tls-verify`: Skip TLS verification
 * `--help`: Show this message and exit.
 
