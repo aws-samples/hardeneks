@@ -11,12 +11,13 @@ typer = {extras = ["all"], version = "^0.6.1"}
 kubernetes = "^25.3.0"
 boto3 = "^1.26.2"
 pre-commit = "^2.20.0"
+tox-gh-actions = "^3.0.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2.0"
 pytest-cov = "^4.0.0"
 pytest-datadir = "^1.4.1"
-tox = "^3.27.0"
+tox = "^4.1.2"
 
 [tool.poetry.scripts]
 hardeneks = "hardeneks:app"
