@@ -1,5 +1,4 @@
-from rich import print
-
+from hardeneks import console
 from ...resources import NamespacedResources
 from ...report import print_pod_table
 
@@ -33,8 +32,8 @@ def disallow_linux_capabilities(namespaced_resources: NamespacedResources):
                     offenders.append(pod)
 
     if offenders:
-        print()
-        print(allowed_list)
+        console.print()
+        console.print(allowed_list)
         print_pod_table(
             offenders,
             """

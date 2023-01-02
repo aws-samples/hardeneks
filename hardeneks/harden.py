@@ -1,7 +1,5 @@
 from importlib import import_module
 
-from rich import print
-
 
 def harden(resources, config, _type):
     config = config[_type]

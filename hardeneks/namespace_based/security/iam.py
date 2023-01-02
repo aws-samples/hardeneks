@@ -1,16 +1,11 @@
 from collections import Counter
 
-from rich.console import Console
-
 from ...resources import NamespacedResources
 from ...report import (
     print_role_table,
     print_pod_table,
     print_workload_table,
 )
-
-
-console = Console()
 
 
 def restrict_wildcard_for_roles(resources: NamespacedResources):

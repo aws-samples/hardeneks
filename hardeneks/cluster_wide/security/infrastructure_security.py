@@ -1,13 +1,9 @@
 import boto3
-from rich.console import Console
 from rich.panel import Panel
-from rich import print
 
+from hardeneks import console
 from ...resources import Resources
 from ...report import print_instance_public_table
-
-
-console = Console()
 
 
 def deploy_workers_onto_private_subnets(resources: Resources):
@@ -56,7 +52,7 @@ def make_sure_inspector_is_enabled(resources: Resources):
     ecr_status = resource_state["ecr"]["status"]
 
     if ec2_status != "ENABLED" and ecr_status != "ENABLED":
-        print(
+        console.print(
             Panel(
                 "[red]Enable Amazon Inspector for ec2 and ecr",
                 subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#run-amazon-inspector-to-assess-hosts-for-exposure-vulnerabilities-and-deviations-from-best-practices]Click to see the guide[/link]",

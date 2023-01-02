@@ -19,6 +19,7 @@ from .harden import harden
 
 
 app = typer.Typer()
+console = Console(record=True)
 
 
 def _config_callback(value: str):
@@ -101,6 +102,14 @@ def run_hardeneks(
         callback=_config_callback,
         help="Path to a hardeneks config file.",
     ),
+    export_txt: str = typer.Option(
+        default=None,
+        help="Export the report in txt format",
+    ),
+    export_html: str = typer.Option(
+        default=None,
+        help="Export the report in html format",
+    ),
     insecure_skip_tls_verify: bool = typer.Option(
         False,
         "--insecure-skip-tls-verify",
@@ -115,6 +124,8 @@ def run_hardeneks(
         cluster (str): Cluster name
         namespace (str): Specific namespace to be checked
         config (str): Path to hardeneks config file
+        export-txt (str): Export the report in txt format
+        export-html (str): Export the report in html format
         insecure-skip-tls-verify (str): Skip tls verification
 
     Returns:
@@ -134,7 +145,6 @@ def run_hardeneks(
     if not region:
         region = _get_region()
 
-    console = Console()
     console.rule("[b]HARDENEKS", characters="*  ")
     console.print(f"You are operating at {region}")
     console.print(f"You context is {context}")
@@ -153,7 +163,7 @@ def run_hardeneks(
     rules = config["rules"]
 
     console.rule("[b]Checking cluster wide rules", characters="- ")
-    print()
+    console.print()
 
     resources = Resources(region, context, cluster, namespaces)
     resources.set_resources()
@@ -168,3 +178,8 @@ def run_hardeneks(
         resources.set_resources()
         harden(resources, rules, "namespace_based")
         console.print()
+
+    if export_txt:
+        console.save_text(export_txt)
+    if export_html:
+        console.save_html(export_html)

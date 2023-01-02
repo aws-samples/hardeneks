@@ -1,3 +1,9 @@
+## v0.7.0 (2023-01-02)
+
+### Feat
+
+- Add option to export the report as html or txt
+
 ## v0.6.0 (2022-12-15)
 
 ### Feat

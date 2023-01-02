@@ -1,13 +1,10 @@
 import boto3
 from kubernetes import client
-from rich import print
 from rich.panel import Panel
-from rich.console import Console
 
+from hardeneks import console
 from ...resources import Resources
 from ...report import print_role_table, print_instance_metadata_table
-
-console = Console()
 
 
 def restrict_wildcard_for_cluster_roles(resources: Resources):
@@ -37,7 +34,7 @@ def check_endpoint_public_access(resources: Resources):
         "endpointPublicAccess"
     ]
     if endpoint_access:
-        print(
+        console.print(
             Panel(
                 "[red]EKS Cluster Endpoint is not Private",
                 subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private]Click to see the guide[/link]",
@@ -55,7 +52,7 @@ def check_aws_node_daemonset_service_account(resources: Resources):
     )
 
     if daemonset.spec.template.spec.service_account_name == "aws-node":
-        print(
+        console.print(
             Panel(
                 "[red]Update the aws-node daemonset to use IRSA",
                 subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa]Click to see the guide[/link]",

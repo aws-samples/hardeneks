@@ -1,12 +1,8 @@
 import boto3
-from rich import print
 from rich.panel import Panel
-from rich.console import Console
 
-
+from hardeneks import console
 from ...resources import Resources
-
-console = Console()
 
 
 def check_logs_are_enabled(resources: Resources):
@@ -16,7 +12,7 @@ def check_logs_are_enabled(resources: Resources):
         "enabled"
     ]
     if not logs:
-        print(
+        console.print(
             Panel(
                 "[red]Enable control plane logs for auditing",
                 subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/detective/#enable-audit-logs]Click to see the guide[/link]",
