@@ -153,7 +153,7 @@ def run_hardeneks(
     console.print()
 
     with open(config, "r") as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
+        config = yaml.safe_load(f)
 
     if not namespace:
         namespaces = _get_namespaces(config["ignore-namespaces"])
