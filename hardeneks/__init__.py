@@ -33,7 +33,7 @@ def _config_callback(value: str):
 
     with open(value, "r") as f:
         try:
-            yaml.load(f, Loader=yaml.FullLoader)
+            yaml.safe_load(f)
         except yaml.YAMLError as exc:
             raise typer.BadParameter(exc)
 
@@ -73,7 +73,7 @@ def _load_kube_config():
     tmp_config = tempfile.NamedTemporaryFile().name
 
     with open(kube_config_orig, "r") as fd:
-        kubeconfig = yaml.load(fd, Loader=yaml.FullLoader)
+        kubeconfig = yaml.safe_load(fd)
     for cluster in kubeconfig["clusters"]:
         cluster["cluster"]["insecure-skip-tls-verify"] = True
     with open(tmp_config, "w") as fd:

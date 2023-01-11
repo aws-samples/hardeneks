@@ -1,3 +1,10 @@
+## v0.7.2 (2023-01-11)
+
+### Refactor
+
+- Fix insecure yaml load method
+- Use more secure yaml load method
+
 ## v0.7.0 (2023-01-02)
 
 ### Feat
