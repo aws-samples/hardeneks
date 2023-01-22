@@ -1,22 +1,30 @@
+from rich.console import Console
+
+import copy
+
 from ...resources import Resources
 
-from ...report import (
-    print_namespace_table,
-)
+console = Console()
 
 
 def ensure_namespace_quotas_exist(resources: Resources):
 
-    offenders = resources.namespaces
-
+    status = None
+    message = ""
+    objectType = "Namespace"
+    objectsList = []
+    
+    objectsList = copy.deepcopy(resources.namespaces)
+    
     for quota in resources.resource_quotas:
-        offenders.remove(quota.metadata.namespace)
-
-    if offenders:
-        print_namespace_table(
-            offenders,
-            "[red]Namespaces should have quotas assigned",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/multitenancy/#namespaces]Click to see the guide[/link]",
-        )
-
-    return offenders
+        if quota.metadata.namespace in objectsList:
+            objectsList.remove(quota.metadata.namespace)        
+    
+    if objectsList:
+        status = False
+        message = "Namespaces does not have quotas assigned"
+    else:
+        status = True
+        message = "Namespaces have quotas assigned"
+    
+    return (status, message, objectsList, objectType)

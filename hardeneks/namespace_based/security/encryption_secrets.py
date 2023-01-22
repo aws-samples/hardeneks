@@ -1,28 +1,29 @@
 from ...resources import NamespacedResources
-from ...report import (
-    print_pod_table,
-)
-
 
 def disallow_secrets_from_env_vars(resources: NamespacedResources):
-    offenders = []
-
+    
+    status = None
+    message = ""
+    objectType = "Pod"
+    objectsList = []
+    
     for pod in resources.pods:
         for container in pod.spec.containers:
             if container.env:
                 for env in container.env:
                     if env.value_from and env.value_from.secret_key_ref:
-                        offenders.append(pod)
+                        objectsList.append(pod)
             if container.env_from:
                 for env_from in container.env_from:
                     if env_from.secret_ref:
-                        offenders.append(pod)
+                        objectsList.append(pod)
 
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Disallow secrets from env vars",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-volume-mounts-instead-of-environment-variables]Click to see the guide[/link]",
-        )
+    if objectsList:
+        status = False
+        message = "Disallow secrets from env vars"
+    else:
+        status = True
+        message = "secrets are not allowed env vars"
+    
+    return (status, message, objectsList, objectType)
 
-    return offenders

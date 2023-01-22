@@ -1,13 +1,18 @@
-from ...report import (
-    print_service_table,
-)
+from rich.console import Console
+
 from hardeneks.resources import NamespacedResources
 
 
-def use_encryption_with_aws_load_balancers(
-    namespaced_resources: NamespacedResources,
-):
-    offenders = []
+console = Console()
+
+
+def use_encryption_with_aws_load_balancers(namespaced_resources: NamespacedResources):
+    
+    status = None
+    message = ""
+    objectType = "Service"
+    objectsList = []
+    
     for service in namespaced_resources.services:
         annotations = service.metadata.annotations
         if annotations:
@@ -19,12 +24,17 @@ def use_encryption_with_aws_load_balancers(
                 "service.beta.kubernetes.io/aws-load-balancer-ssl-ports"
             )
             if not (ssl_cert and ssl_cert_port == "443"):
-                offenders.append(service)
+                objectsList.append(service)
 
-    if offenders:
-        print_service_table(
-            offenders,
-            "[red]Make sure you specify an ssl cert",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/network/#use-encryption-with-aws-load-balancers]Click to see the guide[/link]",
-        )
-    return offenders
+    if objectsList:
+        status = False
+        message = "Make sure you specify an ssl cert"
+    else:
+        status = True
+        message = "ssl cert are configured for the services"
+    
+    return (status, message, objectsList, objectType)
+
+
+
+

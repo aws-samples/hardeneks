@@ -1,12 +1,18 @@
-from ...report import (
-    print_pod_table,
-)
+from rich.console import Console
+
 from ...resources import NamespacedResources
 
 
-def disallow_container_socket_mount(namespaced_resources: NamespacedResources):
-    offenders = []
+console = Console()
 
+
+def disallow_container_socket_mount(namespaced_resources: NamespacedResources):
+    
+    status = None
+    message = ""
+    objectType = "Pod"
+    objectsList = []
+    
     sockets = [
         "/var/run/docker.sock",
         "/var/run/containerd.sock",
@@ -16,97 +22,114 @@ def disallow_container_socket_mount(namespaced_resources: NamespacedResources):
     for pod in namespaced_resources.pods:
         for volume in pod.spec.volumes:
             if volume.host_path and volume.host_path.path in sockets:
-                offenders.append(pod)
+                objectsList.append(pod)
 
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Container socket mounts are not allowed",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#never-run-docker-in-docker-or-mount-the-socket-in-the-container]Click to see the guide[/link]",
-        )
+    if objectsList:
+        status = False
+        message = "Container socket mounts are not allowed"
+    else:
+        status = True
+        message = "There are no Container socket mounted"
+    
+    return (status, message, objectsList, objectType)
+    
+    
 
-    return offenders
+def disallow_host_path_or_make_it_read_only(namespaced_resources: NamespacedResources):
+  
+    status = None
+    message = ""
+    objectType = "Pod"
+    objectsList = []
 
-
-def disallow_host_path_or_make_it_read_only(
-    namespaced_resources: NamespacedResources,
-):
-    offenders = []
-
+    
     for pod in namespaced_resources.pods:
         for volume in pod.spec.volumes:
             if volume.host_path:
-                offenders.append(pod)
+                objectsList.append(pod)
 
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Restrict the use of hostpath.",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#restrict-the-use-of-hostpath-or-if-hostpath-is-necessary-restrict-which-prefixes-can-be-used-and-configure-the-volume-as-read-only]Click to see the guide[/link]",
-        )
-
-    return offenders
-
-
-def set_requests_limits_for_containers(
-    namespaced_resources: NamespacedResources,
-):
-    offenders = []
+    if objectsList:
+        status = False
+        message = "Restrict the use of hostpath"
+    else:
+        status = True
+        message = "hostpath are not mounted"
+    
+    return (status, message, objectsList, objectType)
+    
+    
+def set_requests_limits_for_containers(namespaced_resources: NamespacedResources):
+    
+    status = None
+    message = ""
+    objectType = "Pod"
+    objectsList = []
 
     for pod in namespaced_resources.pods:
         for container in pod.spec.containers:
             if not (
                 container.resources.limits and container.resources.requests
             ):
-                offenders.append(pod)
+                objectsList.append(pod)
 
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Set requests and limits for each container.",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#set-requests-and-limits-for-each-container-to-avoid-resource-contention-and-dos-attacks]Click to see the guide[/link]",
-        )
-
-    return offenders
-
+    if objectsList:
+        status = False
+        message = "Set requests and limits for each container."
+    else:
+        status = True
+        message = "requests and limits are set for each containers"
+    
+    return (status, message, objectsList, objectType)
+    
+    
 
 def disallow_privilege_escalation(namespaced_resources: NamespacedResources):
-    offenders = []
-
+    
+    status = None
+    message = ""
+    objectType = "Pod"
+    objectsList = []
+        
     for pod in namespaced_resources.pods:
         for container in pod.spec.containers:
             if (
                 container.security_context
                 and container.security_context.allow_privilege_escalation
             ):
-                offenders.append(pod)
+                objectsList.append(pod)
 
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Set allowPrivilegeEscalation in the pod spec to false",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#do-not-allow-privileged-escalation]Click to see the guide[/link]",
-        )
+    if objectsList:
+        status = False
+        message = "Set allowPrivilegeEscalation in the pod spec to false"
+    else:
+        status = True
+        message = "allowPrivilegeEscalation in the pod spec is to true"
+    
+    return (status, message, objectsList, objectType)
+    
+    
 
-    return offenders
-
-
-def check_read_only_root_file_system(
-    namespaced_resources: NamespacedResources,
-):
-    offenders = []
+def check_read_only_root_file_system(namespaced_resources: NamespacedResources):
+    
+    status = None
+    message = ""
+    objectType = "Pod"
+    objectsList = []
+    
     for pod in namespaced_resources.pods:
         for container in pod.spec.containers:
             if (
                 container.security_context
                 and not container.security_context.read_only_root_filesystem
             ):
-                offenders.append(pod)
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Configure your images with a read-only root file system",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#configure-your-images-with-read-only-root-file-system]Click to see the guide[/link]",
-        )
-
-    return offenders
+                objectsList.append(pod)
+    
+    if objectsList:
+        status = False
+        message = "Configure your images with a read-only root file system"
+    else:
+        status = True
+        message = "Images are configured with a read-only root file system"
+    
+    return (status, message, objectsList, objectType)
+    
