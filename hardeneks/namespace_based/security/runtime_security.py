@@ -1,11 +1,15 @@
-from hardeneks import console
+from rich import print
+
 from ...resources import NamespacedResources
-from ...report import print_pod_table
 
 
 def disallow_linux_capabilities(namespaced_resources: NamespacedResources):
-    offenders = []
-
+    
+    status = None
+    message = ""
+    objectType = "Pod"
+    objectsList = []
+    
     allowed_list = [
         "AUDIT_WRITE",
         "CHOWN",
@@ -21,25 +25,27 @@ def disallow_linux_capabilities(namespaced_resources: NamespacedResources):
         "SETUID",
         "SYS_CHROOT",
     ]
+    
     for pod in namespaced_resources.pods:
+
         for container in pod.spec.containers:
             if (
                 container.security_context
                 and container.security_context.capabilities
             ):
-                capabilities = set(container.security_context.capabilities.add)
-                if not capabilities.issubset(set(allowed_list)):
-                    offenders.append(pod)
+                if container.security_context.capabilities.add:
+                    capabilities = set(container.security_context.capabilities.add)
+                    if not capabilities.issubset(set(allowed_list)):
+                        objectsList.append(pod)
 
-    if offenders:
-        console.print()
-        console.print(allowed_list)
-        print_pod_table(
-            offenders,
-            """
-            [red]Capabilities beyond the allowed list are disallowed.
-            """,
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/runtime/#consider-adddropping-linux-capabilities-before-writing-seccomp-policies]Click to see the guide[/link]",
-        )
+    if objectsList:
+        status = False
+        message = "Capabilities beyond the allowed list are allowed"
+    else:
+        status = True
+        message = "Capabilities beyond the allowed list are disallowed"
+    
+    return (status, message, objectsList, objectType)
 
-    return offenders
+
+

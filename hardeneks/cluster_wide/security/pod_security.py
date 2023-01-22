@@ -2,27 +2,28 @@ import kubernetes
 
 from ...resources import Resources
 
-from ...report import (
-    print_namespace_table,
-)
-
-
 def ensure_namespace_psa_exist(resources: Resources):
-    offenders = []
-    namespaces = kubernetes.client.CoreV1Api().list_namespace().items
-    for namespace in namespaces:
+    
+    status = None
+    message = ""
+    objectType = "Namespace"
+    objectsList = []
+    
+    for namespace in resources.namespaceObjList:
         if namespace.metadata.name not in resources.namespaces:
-            labels = namespace.metadata.labels.keys()
-            if "pod-security.kubernetes.io/enforce" not in labels:
-                offenders.append(namespace.metadata.name)
-            elif "pod-security.kubernetes.io/warn" not in labels:
-                offenders.append(namespace.metadata.name)
+            if namespace.metadata.labels:
+                labels = namespace.metadata.labels.keys()
+                if "pod-security.kubernetes.io/enforce" not in labels:
+                    objectsList.append(namespace.metadata.name)
+                elif "pod-security.kubernetes.io/warn" not in labels:
+                    objectsList.append(namespace.metadata.name)
 
-    if offenders:
-        print_namespace_table(
-            offenders,
-            "[red]Namespaces should have psa modes.",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/pods/#pod-security-standards-pss-and-pod-security-admission-psa]Click to see the guide[/link]",
-        )
-
-    return offenders
+    if objectsList:
+        status = False
+        message = "Namespaces should have psa modes"
+    else:
+        status = True
+        message = "Namespaces have psa modes"
+    
+    return (status, message, objectsList, objectType)
+    
