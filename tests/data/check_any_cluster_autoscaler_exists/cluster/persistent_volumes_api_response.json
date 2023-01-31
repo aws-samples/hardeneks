@@ -1,0 +1,225 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/createdby": "aws-ebs-dynamic-provisioner",
+                    "pv.kubernetes.io/bound-by-controller": "yes",
+                    "pv.kubernetes.io/provisioned-by": "kubernetes.io/aws-ebs"
+                },
+                "creationTimestamp": "2022-12-08T19:40:11Z",
+                "finalizers": [
+                    "kubernetes.io/pv-protection"
+                ],
+                "labels": {
+                    "topology.kubernetes.io/region": "us-east-1",
+                    "topology.kubernetes.io/zone": "us-east-1b"
+                },
+                "name": "pvc-3e00cd9c-ae72-4cb1-81bd-a4250f998f18",
+                "resourceVersion": "13875595",
+                "uid": "79cfa12c-57b7-4d24-a71c-3fa129fda487"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "awsElasticBlockStore": {
+                    "fsType": "ext4",
+                    "volumeID": "aws://us-east-1b/vol-02daf38a06757afa6"
+                },
+                "capacity": {
+                    "storage": "10Gi"
+                },
+                "claimRef": {
+                    "apiVersion": "v1",
+                    "kind": "PersistentVolumeClaim",
+                    "name": "websitevolume",
+                    "namespace": "default",
+                    "resourceVersion": "13875547",
+                    "uid": "3e00cd9c-ae72-4cb1-81bd-a4250f998f18"
+                },
+                "nodeAffinity": {
+                    "required": {
+                        "nodeSelectorTerms": [
+                            {
+                                "matchExpressions": [
+                                    {
+                                        "key": "topology.kubernetes.io/zone",
+                                        "operator": "In",
+                                        "values": [
+                                            "us-east-1b"
+                                        ]
+                                    },
+                                    {
+                                        "key": "topology.kubernetes.io/region",
+                                        "operator": "In",
+                                        "values": [
+                                            "us-east-1"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "persistentVolumeReclaimPolicy": "Delete",
+                "storageClassName": "gp2",
+                "volumeMode": "Filesystem"
+            },
+            "status": {
+                "phase": "Bound"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/createdby": "aws-ebs-dynamic-provisioner",
+                    "pv.kubernetes.io/bound-by-controller": "yes",
+                    "pv.kubernetes.io/provisioned-by": "kubernetes.io/aws-ebs"
+                },
+                "creationTimestamp": "2022-12-08T19:40:11Z",
+                "finalizers": [
+                    "kubernetes.io/pv-protection"
+                ],
+                "labels": {
+                    "topology.kubernetes.io/region": "us-east-1",
+                    "topology.kubernetes.io/zone": "us-east-1b"
+                },
+                "name": "pvc-927cbb2c-24e5-4432-837f-fe176c27046c",
+                "resourceVersion": "13875588",
+                "uid": "68655842-6ba9-43e0-b247-eb2051120ba2"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "awsElasticBlockStore": {
+                    "fsType": "ext4",
+                    "volumeID": "aws://us-east-1b/vol-01c784749517b12c0"
+                },
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "claimRef": {
+                    "apiVersion": "v1",
+                    "kind": "PersistentVolumeClaim",
+                    "name": "sslvolume",
+                    "namespace": "default",
+                    "resourceVersion": "13875542",
+                    "uid": "927cbb2c-24e5-4432-837f-fe176c27046c"
+                },
+                "nodeAffinity": {
+                    "required": {
+                        "nodeSelectorTerms": [
+                            {
+                                "matchExpressions": [
+                                    {
+                                        "key": "topology.kubernetes.io/region",
+                                        "operator": "In",
+                                        "values": [
+                                            "us-east-1"
+                                        ]
+                                    },
+                                    {
+                                        "key": "topology.kubernetes.io/zone",
+                                        "operator": "In",
+                                        "values": [
+                                            "us-east-1b"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "persistentVolumeReclaimPolicy": "Delete",
+                "storageClassName": "gp2",
+                "volumeMode": "Filesystem"
+            },
+            "status": {
+                "phase": "Bound"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/createdby": "aws-ebs-dynamic-provisioner",
+                    "pv.kubernetes.io/bound-by-controller": "yes",
+                    "pv.kubernetes.io/provisioned-by": "kubernetes.io/aws-ebs"
+                },
+                "creationTimestamp": "2022-12-08T19:40:11Z",
+                "finalizers": [
+                    "kubernetes.io/pv-protection"
+                ],
+                "labels": {
+                    "topology.kubernetes.io/region": "us-east-1",
+                    "topology.kubernetes.io/zone": "us-east-1b"
+                },
+                "name": "pvc-e05689dd-d815-4083-a0ca-1ad619e40dd2",
+                "resourceVersion": "13875598",
+                "uid": "fc1f8ab3-e72c-4bcb-b981-13cabbba3b09"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "awsElasticBlockStore": {
+                    "fsType": "ext4",
+                    "volumeID": "aws://us-east-1b/vol-09d6109240c2e3b5a"
+                },
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "claimRef": {
+                    "apiVersion": "v1",
+                    "kind": "PersistentVolumeClaim",
+                    "name": "letsencryptvolume",
+                    "namespace": "default",
+                    "resourceVersion": "13875545",
+                    "uid": "e05689dd-d815-4083-a0ca-1ad619e40dd2"
+                },
+                "nodeAffinity": {
+                    "required": {
+                        "nodeSelectorTerms": [
+                            {
+                                "matchExpressions": [
+                                    {
+                                        "key": "topology.kubernetes.io/zone",
+                                        "operator": "In",
+                                        "values": [
+                                            "us-east-1b"
+                                        ]
+                                    },
+                                    {
+                                        "key": "topology.kubernetes.io/region",
+                                        "operator": "In",
+                                        "values": [
+                                            "us-east-1"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "persistentVolumeReclaimPolicy": "Delete",
+                "storageClassName": "gp2",
+                "volumeMode": "Filesystem"
+            },
+            "status": {
+                "phase": "Bound"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

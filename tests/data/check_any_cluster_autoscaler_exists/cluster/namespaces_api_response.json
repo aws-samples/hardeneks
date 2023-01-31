@@ -1,0 +1,219 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2022-10-13T20:37:44Z",
+                "labels": {
+                    "kubernetes.io/metadata.name": "default"
+                },
+                "name": "default",
+                "resourceVersion": "199",
+                "uid": "92e6a239-4f96-4b94-8794-8a5901fafd36"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"ensure-namespace-psa-exist\"}}\n"
+                },
+                "creationTimestamp": "2022-12-13T16:52:57Z",
+                "labels": {
+                    "kubernetes.io/metadata.name": "ensure-namespace-psa-exist"
+                },
+                "name": "ensure-namespace-psa-exist",
+                "resourceVersion": "15138794",
+                "uid": "2777b318-e3cc-4afa-8cb0-ed45ba4034ec"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2022-10-13T20:37:41Z",
+                "labels": {
+                    "kubernetes.io/metadata.name": "kube-node-lease"
+                },
+                "name": "kube-node-lease",
+                "resourceVersion": "39",
+                "uid": "1d9817e3-8d3c-4c82-99f3-33e66e5bd129"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2022-10-13T20:37:41Z",
+                "labels": {
+                    "kubernetes.io/metadata.name": "kube-public"
+                },
+                "name": "kube-public",
+                "resourceVersion": "35",
+                "uid": "828dc42b-afa3-4a3c-8675-78f3d42cd0f8"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2022-10-13T20:37:41Z",
+                "labels": {
+                    "kubernetes.io/metadata.name": "kube-system"
+                },
+                "name": "kube-system",
+                "resourceVersion": "22",
+                "uid": "e9cc0043-25d6-48ed-829c-25ab87247ce5"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2022-12-06T00:58:54Z",
+                "deletionTimestamp": "2022-12-06T01:05:17Z",
+                "labels": {
+                    "kubernetes.io/metadata.name": "my-nginx"
+                },
+                "name": "my-nginx",
+                "resourceVersion": "13158545",
+                "uid": "b4e3ef59-63fb-4374-a063-fe0472aeabdd"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2022-12-06T01:05:22Z",
+                        "message": "Discovery failed for some groups, 1 failing: unable to retrieve the complete list of server APIs: metrics.k8s.io/v1beta1: the server is currently unable to handle the request",
+                        "reason": "DiscoveryFailed",
+                        "status": "True",
+                        "type": "NamespaceDeletionDiscoveryFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-12-06T01:05:22Z",
+                        "message": "All legacy kube types successfully parsed",
+                        "reason": "ParsedGroupVersions",
+                        "status": "False",
+                        "type": "NamespaceDeletionGroupVersionParsingFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-12-06T01:06:33Z",
+                        "message": "All content successfully deleted, may be waiting on finalization",
+                        "reason": "ContentDeleted",
+                        "status": "False",
+                        "type": "NamespaceDeletionContentFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-12-06T01:06:33Z",
+                        "message": "All content successfully removed",
+                        "reason": "ContentRemoved",
+                        "status": "False",
+                        "type": "NamespaceContentRemaining"
+                    },
+                    {
+                        "lastTransitionTime": "2022-12-06T01:05:22Z",
+                        "message": "All content-preserving finalizers finished",
+                        "reason": "ContentHasNoFinalizers",
+                        "status": "False",
+                        "type": "NamespaceFinalizersRemaining"
+                    }
+                ],
+                "phase": "Terminating"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2023-01-20T14:37:33Z",
+                "labels": {
+                    "kubernetes.io/metadata.name": "polaris",
+                    "name": "polaris"
+                },
+                "name": "polaris",
+                "resourceVersion": "25570698",
+                "uid": "56dabd7f-c338-45a1-9b52-9cbdb0a31bd6"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "creationTimestamp": "2022-12-13T16:51:24Z",
+                "labels": {
+                    "kubernetes.io/metadata.name": "test-namespace"
+                },
+                "name": "test-namespace",
+                "resourceVersion": "15138447",
+                "uid": "07d5051c-d507-4d03-97e6-9b27b10aeced"
+            },
+            "spec": {
+                "finalizers": [
+                    "kubernetes"
+                ]
+            },
+            "status": {
+                "phase": "Active"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

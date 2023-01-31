@@ -43,6 +43,9 @@ rules:
       applications:
         - check_metrics_server_is_running
         - check_vertical_pod_autoscaler_exists
+    cluster_autoscaling:
+      cluster_autoscaler:
+        - check_any_cluster_autoscaler_exists
   namespace_based:
     security: 
       iam:
@@ -71,13 +74,4 @@ rules:
         - schedule_replicas_across_nodes
         - run_multiple_replicas
         - avoid_running_singleton_pods
-    #   data_plane:
-    # networking:
-    #   vpc_subnets:
-    #   vpc_cni:
-    #   prefix_mode:
-    #   ipv6:
-    #   security_groups:
-    #   custom_networking:
-    #   load_balancing:
 
