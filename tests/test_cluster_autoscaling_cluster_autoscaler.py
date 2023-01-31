@@ -7,6 +7,7 @@ from hardeneks.resources import Resources
 from hardeneks.cluster_wide.cluster_autoscaling.cluster_autoscaler import (
     check_any_cluster_autoscaler_exists,
     ensure_cluster_autoscaler_and_cluster_versions_match,
+    ensure_cluster_autoscaler_has_autodiscovery_mode,
 )
 from .conftest import get_response
 
@@ -58,3 +59,24 @@ def test_ensure_cluster_autoscaler_and_cluster_versions_matchs(
     resources = Resources("some_region", "some_context", "some_cluster", [])
 
     assert not ensure_cluster_autoscaler_and_cluster_versions_match(resources)
+
+
+@patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
+def test_ensure_cluster_autoscaler_has_autodiscovery_mode(mocked_client):
+
+    test_data = (
+        Path.cwd()
+        / "tests"
+        / "data"
+        / "ensure_cluster_autoscaler_has_autodiscovery_mode"
+        / "cluster"
+        / "deployments_api_response.json"
+    )
+    mocked_client.return_value = get_response(
+        kubernetes.client.AppsV1Api,
+        test_data,
+        "V1DeploymentList",
+    )
+    resources = Resources("some_region", "some_context", "some_cluster", [])
+
+    assert not ensure_cluster_autoscaler_has_autodiscovery_mode(resources)

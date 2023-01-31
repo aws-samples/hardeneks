@@ -51,3 +51,28 @@ def ensure_cluster_autoscaler_and_cluster_versions_match(resources: Resources):
                 return False
             else:
                 return True
+
+
+def ensure_cluster_autoscaler_has_autodiscovery_mode(resources: Resources):
+
+    deployments = client.AppsV1Api().list_deployment_for_all_namespaces().items
+
+    for deployment in deployments:
+        if deployment.metadata.name == "cluster-autoscaler":
+            ca_containers = deployment.spec.template.spec.containers
+            ca_command = ca_containers[0].command
+            if not any(
+                "node-group-auto-discover" in item for item in ca_command
+            ):
+                console.print(
+                    Panel(
+                        "[red]Auto discovery is not enabled for Cluster Autoscaler",
+                        subtitle="[link=https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler]Click to see the guide[/link]",
+                    )
+                )
+                console.print()
+                return False
+            else:
+                break
+
+    return True
