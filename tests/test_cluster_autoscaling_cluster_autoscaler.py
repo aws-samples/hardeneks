@@ -8,6 +8,7 @@ from hardeneks.cluster_wide.cluster_autoscaling.cluster_autoscaler import (
     check_any_cluster_autoscaler_exists,
     ensure_cluster_autoscaler_and_cluster_versions_match,
     ensure_cluster_autoscaler_has_autodiscovery_mode,
+    use_separate_iam_role_for_cluster_autoscaler,
 )
 from .conftest import get_response
 
@@ -80,3 +81,40 @@ def test_ensure_cluster_autoscaler_has_autodiscovery_mode(mocked_client):
     resources = Resources("some_region", "some_context", "some_cluster", [])
 
     assert not ensure_cluster_autoscaler_has_autodiscovery_mode(resources)
+
+
+@patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
+@patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
+def test_use_separate_iam_role_for_cluster_autoscaler(
+    sa_client, deployment_client
+):
+
+    deployment_data = (
+        Path.cwd()
+        / "tests"
+        / "data"
+        / "use_separate_iam_role_for_cluster_autoscaler"
+        / "cluster"
+        / "deployments_api_response.json"
+    )
+    sa_data = (
+        Path.cwd()
+        / "tests"
+        / "data"
+        / "use_separate_iam_role_for_cluster_autoscaler"
+        / "cluster"
+        / "service_accounts_api_response.json"
+    )
+    deployment_client.return_value = get_response(
+        kubernetes.client.AppsV1Api,
+        deployment_data,
+        "V1DeploymentList",
+    )
+    sa_return_value = get_response(
+        kubernetes.client.CoreV1Api, sa_data, "V1ServiceAccount"
+    )
+    sa_client.return_value = sa_return_value
+
+    resources = Resources("some_region", "some_context", "some_cluster", [])
+
+    assert not use_separate_iam_role_for_cluster_autoscaler(resources)

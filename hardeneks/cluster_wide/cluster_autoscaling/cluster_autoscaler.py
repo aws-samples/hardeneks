@@ -76,3 +76,32 @@ def ensure_cluster_autoscaler_has_autodiscovery_mode(resources: Resources):
                 break
 
     return True
+
+
+def use_separate_iam_role_for_cluster_autoscaler(resources: Resources):
+    deployments = client.AppsV1Api().list_deployment_for_all_namespaces().items
+
+    for deployment in deployments:
+        if deployment.metadata.name == "cluster-autoscaler":
+            service_account = (
+                deployment.spec.template.spec.service_account_name
+            )
+            sa_data = client.CoreV1Api().read_namespaced_service_account(
+                service_account, "kube-system", pretty="true"
+            )
+            if (
+                "eks.amazonaws.com/role-arn"
+                not in sa_data.metadata.annotations.keys()
+            ):
+                console.print(
+                    Panel(
+                        "[red]Cluster-autoscaler deployment does not use a dedicated IAM Role (IRSA",
+                        subtitle="[link=https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role]Click to see the guide[/link]",
+                    )
+                )
+                console.print()
+                return False
+            else:
+                break
+
+    return True

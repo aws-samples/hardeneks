@@ -1,0 +1,908 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1",
+                    "meta.helm.sh/release-name": "autoscaling-cluster-autoscaler",
+                    "meta.helm.sh/release-namespace": "kube-system"
+                },
+                "creationTimestamp": "2023-01-31T15:07:46Z",
+                "generation": 1,
+                "labels": {
+                    "app.kubernetes.io/instance": "autoscaling-cluster-autoscaler",
+                    "app.kubernetes.io/managed-by": "Helm",
+                    "app.kubernetes.io/name": "aws-cluster-autoscaler",
+                    "helm.sh/chart": "cluster-autoscaler-9.21.0"
+                },
+                "name": "cluster-autoscaler",
+                "namespace": "kube-system",
+                "resourceVersion": "28819844",
+                "uid": "493fe5df-1d24-4ae2-bcfc-eeafff86b1aa"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app.kubernetes.io/instance": "autoscaling-cluster-autoscaler",
+                        "app.kubernetes.io/name": "aws-cluster-autoscaler"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app.kubernetes.io/instance": "autoscaling-cluster-autoscaler",
+                            "app.kubernetes.io/name": "aws-cluster-autoscaler"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "command": [
+                                    "./cluster-autoscaler",
+                                    "--cloud-provider=aws",
+                                    "--namespace=kube-system",
+                                    "--balance-similar-node-groups=true",
+                                    "--expander=least-waste",
+                                    "--logtostderr=true",
+                                    "--skip-nodes-with-local-storage=false",
+                                    "--skip-nodes-with-system-pods=false",
+                                    "--stderrthreshold=info",
+                                    "--v=4"
+                                ],
+                                "env": [
+                                    {
+                                        "name": "AWS_REGION",
+                                        "value": "us-east-1"
+                                    }
+                                ],
+                                "image": "k8s.gcr.io/autoscaling/cluster-autoscaler:v1.22.3",
+                                "imagePullPolicy": "IfNotPresent",
+                                "livenessProbe": {
+                                    "failureThreshold": 3,
+                                    "httpGet": {
+                                        "path": "/health-check",
+                                        "port": 8085,
+                                        "scheme": "HTTP"
+                                    },
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 1
+                                },
+                                "name": "aws-cluster-autoscaler",
+                                "ports": [
+                                    {
+                                        "containerPort": 8085,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "priorityClassName": "system-cluster-critical",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "serviceAccount": "cluster-autoscaler",
+                        "serviceAccountName": "cluster-autoscaler",
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2023-01-31T15:07:50Z",
+                        "lastUpdateTime": "2023-01-31T15:07:50Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2023-01-31T15:07:46Z",
+                        "lastUpdateTime": "2023-01-31T15:07:50Z",
+                        "message": "ReplicaSet \"cluster-autoscaler-5cc9bd5b46\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"eks.amazonaws.com/component\":\"coredns\",\"k8s-app\":\"kube-dns\",\"kubernetes.io/name\":\"CoreDNS\"},\"name\":\"coredns\",\"namespace\":\"kube-system\"},\"spec\":{\"replicas\":2,\"selector\":{\"matchLabels\":{\"eks.amazonaws.com/component\":\"coredns\",\"k8s-app\":\"kube-dns\"}},\"strategy\":{\"rollingUpdate\":{\"maxUnavailable\":1},\"type\":\"RollingUpdate\"},\"template\":{\"metadata\":{\"annotations\":{\"eks.amazonaws.com/compute-type\":\"ec2\"},\"labels\":{\"eks.amazonaws.com/component\":\"coredns\",\"k8s-app\":\"kube-dns\"}},\"spec\":{\"affinity\":{\"nodeAffinity\":{\"requiredDuringSchedulingIgnoredDuringExecution\":{\"nodeSelectorTerms\":[{\"matchExpressions\":[{\"key\":\"beta.kubernetes.io/os\",\"operator\":\"In\",\"values\":[\"linux\"]},{\"key\":\"beta.kubernetes.io/arch\",\"operator\":\"In\",\"values\":[\"amd64\",\"arm64\"]}]}]}},\"podAntiAffinity\":{\"preferredDuringSchedulingIgnoredDuringExecution\":[{\"podAffinityTerm\":{\"labelSelector\":{\"matchExpressions\":[{\"key\":\"k8s-app\",\"operator\":\"In\",\"values\":[\"kube-dns\"]}]},\"topologyKey\":\"kubernetes.io/hostname\"},\"weight\":100}]}},\"containers\":[{\"args\":[\"-conf\",\"/etc/coredns/Corefile\"],\"image\":\"602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.8.7-eksbuild.1\",\"imagePullPolicy\":\"IfNotPresent\",\"livenessProbe\":{\"failureThreshold\":5,\"httpGet\":{\"path\":\"/health\",\"port\":8080,\"scheme\":\"HTTP\"},\"initialDelaySeconds\":60,\"successThreshold\":1,\"timeoutSeconds\":5},\"name\":\"coredns\",\"ports\":[{\"containerPort\":53,\"name\":\"dns\",\"protocol\":\"UDP\"},{\"containerPort\":53,\"name\":\"dns-tcp\",\"protocol\":\"TCP\"},{\"containerPort\":9153,\"name\":\"metrics\",\"protocol\":\"TCP\"}],\"readinessProbe\":{\"httpGet\":{\"path\":\"/health\",\"port\":8080,\"scheme\":\"HTTP\"}},\"resources\":{\"limits\":{\"memory\":\"170Mi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"70Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"add\":[\"NET_BIND_SERVICE\"],\"drop\":[\"all\"]},\"readOnlyRootFilesystem\":true},\"volumeMounts\":[{\"mountPath\":\"/etc/coredns\",\"name\":\"config-volume\",\"readOnly\":true},{\"mountPath\":\"/tmp\",\"name\":\"tmp\"}]}],\"dnsPolicy\":\"Default\",\"priorityClassName\":\"system-cluster-critical\",\"serviceAccountName\":\"coredns\",\"tolerations\":[{\"effect\":\"NoSchedule\",\"key\":\"node-role.kubernetes.io/master\"},{\"key\":\"CriticalAddonsOnly\",\"operator\":\"Exists\"}],\"volumes\":[{\"emptyDir\":{},\"name\":\"tmp\"},{\"configMap\":{\"items\":[{\"key\":\"Corefile\",\"path\":\"Corefile\"}],\"name\":\"coredns\"},\"name\":\"config-volume\"}]}}}}\n"
+                },
+                "creationTimestamp": "2022-10-13T20:37:49Z",
+                "generation": 1,
+                "labels": {
+                    "eks.amazonaws.com/component": "coredns",
+                    "k8s-app": "kube-dns",
+                    "kubernetes.io/name": "CoreDNS"
+                },
+                "name": "coredns",
+                "namespace": "kube-system",
+                "resourceVersion": "26571653",
+                "uid": "0e6f9206-4feb-4ea8-b0a9-c47732b1693a"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 2,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "eks.amazonaws.com/component": "coredns",
+                        "k8s-app": "kube-dns"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "annotations": {
+                            "eks.amazonaws.com/compute-type": "ec2"
+                        },
+                        "creationTimestamp": null,
+                        "labels": {
+                            "eks.amazonaws.com/component": "coredns",
+                            "k8s-app": "kube-dns"
+                        }
+                    },
+                    "spec": {
+                        "affinity": {
+                            "nodeAffinity": {
+                                "requiredDuringSchedulingIgnoredDuringExecution": {
+                                    "nodeSelectorTerms": [
+                                        {
+                                            "matchExpressions": [
+                                                {
+                                                    "key": "beta.kubernetes.io/os",
+                                                    "operator": "In",
+                                                    "values": [
+                                                        "linux"
+                                                    ]
+                                                },
+                                                {
+                                                    "key": "beta.kubernetes.io/arch",
+                                                    "operator": "In",
+                                                    "values": [
+                                                        "amd64",
+                                                        "arm64"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            },
+                            "podAntiAffinity": {
+                                "preferredDuringSchedulingIgnoredDuringExecution": [
+                                    {
+                                        "podAffinityTerm": {
+                                            "labelSelector": {
+                                                "matchExpressions": [
+                                                    {
+                                                        "key": "k8s-app",
+                                                        "operator": "In",
+                                                        "values": [
+                                                            "kube-dns"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "topologyKey": "kubernetes.io/hostname"
+                                        },
+                                        "weight": 100
+                                    }
+                                ]
+                            }
+                        },
+                        "containers": [
+                            {
+                                "args": [
+                                    "-conf",
+                                    "/etc/coredns/Corefile"
+                                ],
+                                "image": "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.8.7-eksbuild.1",
+                                "imagePullPolicy": "IfNotPresent",
+                                "livenessProbe": {
+                                    "failureThreshold": 5,
+                                    "httpGet": {
+                                        "path": "/health",
+                                        "port": 8080,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 60,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 5
+                                },
+                                "name": "coredns",
+                                "ports": [
+                                    {
+                                        "containerPort": 53,
+                                        "name": "dns",
+                                        "protocol": "UDP"
+                                    },
+                                    {
+                                        "containerPort": 53,
+                                        "name": "dns-tcp",
+                                        "protocol": "TCP"
+                                    },
+                                    {
+                                        "containerPort": 9153,
+                                        "name": "metrics",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "failureThreshold": 3,
+                                    "httpGet": {
+                                        "path": "/health",
+                                        "port": 8080,
+                                        "scheme": "HTTP"
+                                    },
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 1
+                                },
+                                "resources": {
+                                    "limits": {
+                                        "memory": "170Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "100m",
+                                        "memory": "70Mi"
+                                    }
+                                },
+                                "securityContext": {
+                                    "allowPrivilegeEscalation": false,
+                                    "capabilities": {
+                                        "add": [
+                                            "NET_BIND_SERVICE"
+                                        ],
+                                        "drop": [
+                                            "all"
+                                        ]
+                                    },
+                                    "readOnlyRootFilesystem": true
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/etc/coredns",
+                                        "name": "config-volume",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/tmp",
+                                        "name": "tmp"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "Default",
+                        "priorityClassName": "system-cluster-critical",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "serviceAccount": "coredns",
+                        "serviceAccountName": "coredns",
+                        "terminationGracePeriodSeconds": 30,
+                        "tolerations": [
+                            {
+                                "effect": "NoSchedule",
+                                "key": "node-role.kubernetes.io/master"
+                            },
+                            {
+                                "key": "CriticalAddonsOnly",
+                                "operator": "Exists"
+                            }
+                        ],
+                        "volumes": [
+                            {
+                                "emptyDir": {},
+                                "name": "tmp"
+                            },
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "items": [
+                                        {
+                                            "key": "Corefile",
+                                            "path": "Corefile"
+                                        }
+                                    ],
+                                    "name": "coredns"
+                                },
+                                "name": "config-volume"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 2,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2022-10-13T20:37:54Z",
+                        "lastUpdateTime": "2022-10-13T20:45:56Z",
+                        "message": "ReplicaSet \"coredns-7f5998f4c\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    },
+                    {
+                        "lastTransitionTime": "2023-01-24T00:02:55Z",
+                        "lastUpdateTime": "2023-01-24T00:02:55Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 2,
+                "replicas": 2,
+                "updatedReplicas": 2
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2022-11-03T14:21:28Z",
+                "generation": 1,
+                "name": "vpa-admission-controller",
+                "namespace": "kube-system",
+                "resourceVersion": "4996635",
+                "uid": "fc87ba17-042e-4a09-99f9-878361b0aacd"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "vpa-admission-controller"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "vpa-admission-controller"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "NAMESPACE",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "metadata.namespace"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "image": "k8s.gcr.io/autoscaling/vpa-admission-controller:0.12.0",
+                                "imagePullPolicy": "Always",
+                                "name": "admission-controller",
+                                "ports": [
+                                    {
+                                        "containerPort": 8000,
+                                        "protocol": "TCP"
+                                    },
+                                    {
+                                        "containerPort": 8944,
+                                        "name": "prometheus",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {
+                                    "limits": {
+                                        "cpu": "200m",
+                                        "memory": "500Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "50m",
+                                        "memory": "200Mi"
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/etc/tls-certs",
+                                        "name": "tls-certs",
+                                        "readOnly": true
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {
+                            "runAsNonRoot": true,
+                            "runAsUser": 65534
+                        },
+                        "serviceAccount": "vpa-admission-controller",
+                        "serviceAccountName": "vpa-admission-controller",
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "name": "tls-certs",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "secretName": "vpa-tls-certs"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2022-11-03T14:21:28Z",
+                        "lastUpdateTime": "2022-11-03T14:21:28Z",
+                        "message": "Deployment does not have minimum availability.",
+                        "reason": "MinimumReplicasUnavailable",
+                        "status": "False",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-03T14:31:29Z",
+                        "lastUpdateTime": "2022-11-03T14:31:29Z",
+                        "message": "ReplicaSet \"vpa-admission-controller-64df8d4487\" has timed out progressing.",
+                        "reason": "ProgressDeadlineExceeded",
+                        "status": "False",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "replicas": 1,
+                "unavailableReplicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2022-11-03T14:21:27Z",
+                "generation": 1,
+                "name": "vpa-recommender",
+                "namespace": "kube-system",
+                "resourceVersion": "4996633",
+                "uid": "b3389b04-e460-485e-a274-5b690102370c"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "vpa-recommender"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "vpa-recommender"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "k8s.gcr.io/autoscaling/vpa-recommender:0.12.0",
+                                "imagePullPolicy": "Always",
+                                "name": "recommender",
+                                "ports": [
+                                    {
+                                        "containerPort": 8942,
+                                        "name": "prometheus",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {
+                                    "limits": {
+                                        "cpu": "200m",
+                                        "memory": "1000Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "50m",
+                                        "memory": "500Mi"
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {
+                            "runAsNonRoot": true,
+                            "runAsUser": 65534
+                        },
+                        "serviceAccount": "vpa-recommender",
+                        "serviceAccountName": "vpa-recommender",
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2022-11-03T14:21:27Z",
+                        "lastUpdateTime": "2022-11-03T14:21:27Z",
+                        "message": "Deployment does not have minimum availability.",
+                        "reason": "MinimumReplicasUnavailable",
+                        "status": "False",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-03T14:21:27Z",
+                        "lastUpdateTime": "2022-11-03T14:21:27Z",
+                        "message": "pods \"vpa-recommender-79d6f88dd4-\" is forbidden: error looking up service account kube-system/vpa-recommender: serviceaccount \"vpa-recommender\" not found",
+                        "reason": "FailedCreate",
+                        "status": "True",
+                        "type": "ReplicaFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-03T14:31:28Z",
+                        "lastUpdateTime": "2022-11-03T14:31:28Z",
+                        "message": "ReplicaSet \"vpa-recommender-79d6f88dd4\" has timed out progressing.",
+                        "reason": "ProgressDeadlineExceeded",
+                        "status": "False",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "unavailableReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2022-11-03T14:21:27Z",
+                "generation": 1,
+                "name": "vpa-updater",
+                "namespace": "kube-system",
+                "resourceVersion": "4996634",
+                "uid": "21f0a884-8743-4205-b947-303592603acd"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "vpa-updater"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "vpa-updater"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "NAMESPACE",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "metadata.namespace"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "image": "k8s.gcr.io/autoscaling/vpa-updater:0.12.0",
+                                "imagePullPolicy": "Always",
+                                "name": "updater",
+                                "ports": [
+                                    {
+                                        "containerPort": 8943,
+                                        "name": "prometheus",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {
+                                    "limits": {
+                                        "cpu": "200m",
+                                        "memory": "1000Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "50m",
+                                        "memory": "500Mi"
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {
+                            "runAsNonRoot": true,
+                            "runAsUser": 65534
+                        },
+                        "serviceAccount": "vpa-updater",
+                        "serviceAccountName": "vpa-updater",
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2022-11-03T14:21:27Z",
+                        "lastUpdateTime": "2022-11-03T14:21:27Z",
+                        "message": "Deployment does not have minimum availability.",
+                        "reason": "MinimumReplicasUnavailable",
+                        "status": "False",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-03T14:21:27Z",
+                        "lastUpdateTime": "2022-11-03T14:21:27Z",
+                        "message": "pods \"vpa-updater-798559b857-\" is forbidden: error looking up service account kube-system/vpa-updater: serviceaccount \"vpa-updater\" not found",
+                        "reason": "FailedCreate",
+                        "status": "True",
+                        "type": "ReplicaFailure"
+                    },
+                    {
+                        "lastTransitionTime": "2022-11-03T14:31:28Z",
+                        "lastUpdateTime": "2022-11-03T14:31:28Z",
+                        "message": "ReplicaSet \"vpa-updater-798559b857\" has timed out progressing.",
+                        "reason": "ProgressDeadlineExceeded",
+                        "status": "False",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "unavailableReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1",
+                    "meta.helm.sh/release-name": "polaris",
+                    "meta.helm.sh/release-namespace": "polaris"
+                },
+                "creationTimestamp": "2023-01-20T14:37:33Z",
+                "generation": 1,
+                "labels": {
+                    "app": "polaris",
+                    "app.kubernetes.io/component": "dashboard",
+                    "app.kubernetes.io/instance": "polaris",
+                    "app.kubernetes.io/managed-by": "Helm",
+                    "app.kubernetes.io/name": "polaris",
+                    "app.kubernetes.io/part-of": "polaris",
+                    "app.kubernetes.io/version": "5.7.0",
+                    "component": "dashboard",
+                    "helm.sh/chart": "polaris-5.7.0"
+                },
+                "name": "polaris-dashboard",
+                "namespace": "polaris",
+                "resourceVersion": "26571710",
+                "uid": "2c4219d0-77a9-4330-8c8e-379afc769ee0"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 2,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "polaris",
+                        "app.kubernetes.io/instance": "polaris",
+                        "app.kubernetes.io/name": "polaris",
+                        "component": "dashboard"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "polaris",
+                            "app.kubernetes.io/instance": "polaris",
+                            "app.kubernetes.io/name": "polaris",
+                            "component": "dashboard"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "command": [
+                                    "polaris",
+                                    "dashboard",
+                                    "--port",
+                                    "8080",
+                                    "--log-level",
+                                    "Info"
+                                ],
+                                "image": "quay.io/fairwinds/polaris:7.1",
+                                "imagePullPolicy": "Always",
+                                "livenessProbe": {
+                                    "failureThreshold": 3,
+                                    "httpGet": {
+                                        "path": "/health",
+                                        "port": 8080,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 5,
+                                    "periodSeconds": 20,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 1
+                                },
+                                "name": "dashboard",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "failureThreshold": 3,
+                                    "httpGet": {
+                                        "path": "/health",
+                                        "port": 8080,
+                                        "scheme": "HTTP"
+                                    },
+                                    "initialDelaySeconds": 5,
+                                    "periodSeconds": 20,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 1
+                                },
+                                "resources": {
+                                    "limits": {
+                                        "cpu": "150m",
+                                        "memory": "512Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "100m",
+                                        "memory": "128Mi"
+                                    }
+                                },
+                                "securityContext": {
+                                    "allowPrivilegeEscalation": false,
+                                    "capabilities": {
+                                        "drop": [
+                                            "ALL"
+                                        ]
+                                    },
+                                    "privileged": false,
+                                    "readOnlyRootFilesystem": true,
+                                    "runAsNonRoot": true
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "serviceAccount": "polaris",
+                        "serviceAccountName": "polaris",
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 2,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2023-01-20T14:37:33Z",
+                        "lastUpdateTime": "2023-01-20T14:37:55Z",
+                        "message": "ReplicaSet \"polaris-dashboard-856c8d6b7\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    },
+                    {
+                        "lastTransitionTime": "2023-01-24T00:03:12Z",
+                        "lastUpdateTime": "2023-01-24T00:03:12Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 2,
+                "replicas": 2,
+                "updatedReplicas": 2
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
