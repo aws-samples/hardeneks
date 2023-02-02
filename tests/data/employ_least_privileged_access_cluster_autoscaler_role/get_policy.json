@@ -1,0 +1,1 @@
+{"Policy": {"PolicyName": "AutoScalingReadOnlyAccess", "PolicyId": "ANPAIAFWUVLC2LPLSFTFG", "Arn": "arn:aws:iam::aws:policy/AutoScalingReadOnlyAccess", "Path": "/", "DefaultVersionId": "v1", "AttachmentCount": 1, "PermissionsBoundaryUsageCount": 0, "IsAttachable": true, "Description": "Provides read-only access to Auto Scaling. "}}

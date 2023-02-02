@@ -1,3 +1,14 @@
+## v0.8.0 (2023-02-02)
+
+### Feat
+
+- Add check for managed node groups
+- Add check for CA role polp
+- Add check for separate IRSA for CA
+- Add check for CA autodiscovery
+- Add check for CA-k8s version mismatch
+- Add check for cluster-autoscaler or karpenter
+
 ## v0.7.2 (2023-01-11)
 
 ### Refactor

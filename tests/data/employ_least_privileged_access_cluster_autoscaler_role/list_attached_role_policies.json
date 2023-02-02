@@ -1,0 +1,2 @@
+{"AttachedPolicies": [{"PolicyName": "AmazonEKS_EFS_CSI_Driver_Policy", "PolicyArn":
+"arn:aws:iam:::policy/AmazonEKS_EFS_CSI_Driver_Policy"}]}

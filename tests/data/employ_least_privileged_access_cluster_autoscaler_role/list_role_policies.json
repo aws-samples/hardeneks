@@ -1,0 +1,4 @@
+{"PolicyNames": ["eksctl-eks-bp-cli-addon-iamserviceaccount-kube-system-cluster-autoscaler-Policy1"], "IsTruncated":
+false, "ResponseMetadata": {"RequestId": "5e00e43f-e293-4e26-b639-9487df5dc52c", "HTTPStatusCode": 200,
+"HTTPHeaders": {"x-amzn-requestid": "5e00e43f-e293-4e26-b639-9487df5dc52c", "content-type": "text/xml",
+"content-length": "445", "date": "Thu, 02 Feb 2023 01:28:27 GMT"}, "RetryAttempts": 0}}

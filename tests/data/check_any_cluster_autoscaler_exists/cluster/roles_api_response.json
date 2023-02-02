@@ -1,0 +1,63 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "rbac.authorization.k8s.io/v1",
+            "kind": "Role",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"restrict-wildcard-for-roles\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"*\"],\"verbs\":[\"*\"]}]}\n"
+                },
+                "creationTimestamp": "2022-12-13T16:52:57Z",
+                "name": "restrict-wildcard-for-roles",
+                "namespace": "test-namespace",
+                "resourceVersion": "15138800",
+                "uid": "cb4b4100-3d38-468e-b042-5fecb1147af8"
+            },
+            "rules": [
+                {
+                    "apiGroups": [
+                        ""
+                    ],
+                    "resources": [
+                        "*"
+                    ],
+                    "verbs": [
+                        "*"
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "rbac.authorization.k8s.io/v1",
+            "kind": "Role",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"restrict_wildcard_for_roles\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"*\"],\"verbs\":[\"*\"]}]}\n"
+                },
+                "creationTimestamp": "2022-12-13T16:51:28Z",
+                "name": "restrict_wildcard_for_roles",
+                "namespace": "test-namespace",
+                "resourceVersion": "15138463",
+                "uid": "0f0de429-03db-4de0-9bc3-4322ef072637"
+            },
+            "rules": [
+                {
+                    "apiGroups": [
+                        ""
+                    ],
+                    "resources": [
+                        "*"
+                    ],
+                    "verbs": [
+                        "*"
+                    ]
+                }
+            ]
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
