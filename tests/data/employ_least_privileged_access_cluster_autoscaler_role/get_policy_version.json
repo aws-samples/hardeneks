@@ -1,0 +1,1 @@
+{"PolicyVersion": {"Document": {"Version": "2012-10-17", "Statement": [{"Effect": "Allow", "Action": "autoscaling:Describe*", "Resource": "*"}]}, "VersionId": "v1", "IsDefaultVersion": true}} 

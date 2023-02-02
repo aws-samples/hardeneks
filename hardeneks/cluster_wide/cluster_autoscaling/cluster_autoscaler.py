@@ -4,6 +4,41 @@ from rich.panel import Panel
 
 from hardeneks import console
 from ...resources import Resources
+from ...report import (
+    print_role_action_table,
+)
+
+
+def _get_policy_documents_for_role(role_name, iam_client):
+    attached_policies = iam_client.list_attached_role_policies(
+        RoleName=role_name
+    )["AttachedPolicies"]
+    inline_policies = iam_client.list_role_policies(RoleName=role_name)[
+        "PolicyNames"
+    ]
+    actions = []
+    for policy_arn in [x["PolicyArn"] for x in attached_policies]:
+        version_id = iam_client.get_policy(PolicyArn=policy_arn)["Policy"][
+            "DefaultVersionId"
+        ]
+        response = iam_client.get_policy_version(
+            PolicyArn=policy_arn, VersionId=version_id
+        )["PolicyVersion"]["Document"]["Statement"]
+        for statement in response:
+            if type(statement["Action"]) == str:
+                actions.append(statement["Action"])
+            elif type(statement["Action"]) == list:
+                actions.extend(statement["Action"])
+    for policy_name in inline_policies:
+        response = iam_client.get_role_policy(
+            RoleName=role_name, PolicyName=policy_name
+        )["PolicyDocument"]["Statement"]
+        for statement in response:
+            if type(statement["Action"]) == str:
+                actions.append(statement["Action"])
+            elif type(statement["Action"]) == list:
+                actions.extend(statement["Action"])
+    return actions
 
 
 def check_any_cluster_autoscaler_exists(resources: Resources):
@@ -27,7 +62,6 @@ def check_any_cluster_autoscaler_exists(resources: Resources):
 
 
 def ensure_cluster_autoscaler_and_cluster_versions_match(resources: Resources):
-
     eks_client = boto3.client("eks", region_name=resources.region)
     cluster_metadata = eks_client.describe_cluster(name=resources.cluster)
 
@@ -95,7 +129,7 @@ def use_separate_iam_role_for_cluster_autoscaler(resources: Resources):
             ):
                 console.print(
                     Panel(
-                        "[red]Cluster-autoscaler deployment does not use a dedicated IAM Role (IRSA",
+                        "[red]Cluster-autoscaler deployment does not use a dedicated IAM Role (IRSA)",
                         subtitle="[link=https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role]Click to see the guide[/link]",
                     )
                 )
@@ -105,3 +139,61 @@ def use_separate_iam_role_for_cluster_autoscaler(resources: Resources):
                 break
 
     return True
+
+
+def employ_least_privileged_access_cluster_autoscaler_role(
+    resources: Resources,
+):
+    deployments = client.AppsV1Api().list_deployment_for_all_namespaces().items
+
+    iam_client = boto3.client("iam", region_name=resources.region)
+
+    ACTIONS = {
+        "autoscaling:DescribeAutoScalingGroups",
+        "autoscaling:DescribeAutoScalingInstances",
+        "autoscaling:DescribeLaunchConfigurations",
+        "autoscaling:DescribeScalingActivities",
+        "autoscaling:DescribeTags",
+        "ec2:DescribeImages",
+        "ec2:DescribeInstanceTypes",
+        "ec2:DescribeLaunchTemplateVersions",
+        "ec2:GetInstanceTypesFromInstanceRequirements",
+        "eks:DescribeNodegroup",
+        "autoscaling:SetDesiredCapacity",
+        "autoscaling:TerminateInstanceInAutoScalingGroup",
+    }
+
+    for deployment in deployments:
+        if deployment.metadata.name == "cluster-autoscaler":
+            service_account = (
+                deployment.spec.template.spec.service_account_name
+            )
+            sa_data = client.CoreV1Api().read_namespaced_service_account(
+                service_account, "kube-system", pretty="true"
+            )
+            if (
+                "eks.amazonaws.com/role-arn"
+                not in sa_data.metadata.annotations.keys()
+            ):
+                break
+            else:
+
+                sa_iam_role_arn = sa_data.metadata.annotations[
+                    "eks.amazonaws.com/role-arn"
+                ]
+                sa_iam_role = sa_iam_role_arn.split("/")[-1]
+                actions = _get_policy_documents_for_role(
+                    sa_iam_role, iam_client
+                )
+
+                if len(set(actions) - ACTIONS) > 0:
+                    print_role_action_table(
+                        set(actions) - ACTIONS,
+                        "[red]Cluster autoscaler role has unnecessary actions assigned.",
+                        "[link=https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role]Click to see the guide[/link]",
+                    )
+                    return False
+                else:
+                    return True
+
+    return False

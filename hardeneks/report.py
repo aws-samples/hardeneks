@@ -168,3 +168,14 @@ def print_persistent_volume_table(persistent_volumes, message, docs):
 
     console.print(Panel(table, title=message, subtitle=docs))
     console.print()
+
+
+def print_role_action_table(actions, message, docs):
+    table = Table()
+    table.add_column("Action", style="cyan")
+
+    for action in actions:
+        table.add_row(action)
+
+    console.print(Panel(table, title=message, subtitle=docs))
+    console.print()

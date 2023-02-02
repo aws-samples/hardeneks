@@ -49,6 +49,7 @@ rules:
         - ensure_cluster_autoscaler_and_cluster_versions_match
         - ensure_cluster_autoscaler_has_autodiscovery_mode
         - use_separate_iam_role_for_cluster_autoscaler
+        - employ_least_privileged_access_cluster_autoscaler_role
   namespace_based:
     security: 
       iam:
