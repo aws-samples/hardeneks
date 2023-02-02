@@ -4,9 +4,7 @@ from rich.panel import Panel
 
 from hardeneks import console
 from ...resources import Resources
-from ...report import (
-    print_role_action_table,
-)
+from ...report import print_role_action_table, print_node_table
 
 
 def _get_policy_documents_for_role(role_name, iam_client):
@@ -197,3 +195,28 @@ def employ_least_privileged_access_cluster_autoscaler_role(
                     return True
 
     return False
+
+
+def use_managed_nodegroups(resources: Resources):
+
+    offenders = []
+    nodes = client.CoreV1Api().list_node().items
+
+    for node in nodes:
+        labels = node.metadata.labels
+        if "eks.amazonaws.com/nodegroup" in labels.keys():
+            pass
+        elif "alpha.eksctl.io/nodegroup-name" in labels.keys():
+            offenders.append(node)
+        elif "karpenter.sh/provisioner-name" in labels.keys():
+            pass
+        else:
+            offenders.append(node)
+
+    if offenders:
+        print_node_table(
+            offenders,
+            "[red]Following nodes are not part of a managed noge group.",
+            "[link=https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups]Click to see the guide[/link]",
+        )
+    return offenders

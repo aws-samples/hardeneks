@@ -50,7 +50,18 @@ def print_instance_public_table(instances, message, docs):
             str(instance["Instances"][0]["PublicDnsName"]),
         )
 
-    console.print(Panel(table, title=message))
+    console.print(Panel(table, title=message, subtitle=docs))
+    console.print()
+
+
+def print_node_table(nodes, message, docs):
+    table = Table()
+
+    table.add_column("NodeName", style="cyan")
+
+    for node in nodes:
+        table.add_row(node.metadata.name)
+    console.print(Panel(table, title=message, subtitle=docs))
     console.print()
 
 

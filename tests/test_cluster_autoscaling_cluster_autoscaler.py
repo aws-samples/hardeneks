@@ -11,6 +11,7 @@ from hardeneks.cluster_wide.cluster_autoscaling.cluster_autoscaler import (
     ensure_cluster_autoscaler_has_autodiscovery_mode,
     use_separate_iam_role_for_cluster_autoscaler,
     employ_least_privileged_access_cluster_autoscaler_role,
+    use_managed_nodegroups,
 )
 from .conftest import get_response
 
@@ -209,3 +210,29 @@ def test_employ_least_privileged_access_cluster_autoscaler_role(
     assert not employ_least_privileged_access_cluster_autoscaler_role(
         resources
     )
+
+
+@patch("kubernetes.client.CoreV1Api.list_node")
+def test_use_managed_nodegroups(mocked_client):
+
+    test_data = (
+        Path.cwd()
+        / "tests"
+        / "data"
+        / "use_managed_nodegroups"
+        / "cluster"
+        / "nodes_api_response.json"
+    )
+    mocked_client.return_value = get_response(
+        kubernetes.client.CoreV1Api,
+        test_data,
+        "V1NodeList",
+    )
+    resources = Resources("some_region", "some_context", "some_cluster", [])
+
+    not_managed = [i.metadata.name for i in use_managed_nodegroups(resources)]
+
+    assert not_managed == [
+        "ip-192-168-59-44.ec2.internal",
+        "ip-192-168-6-151.ec2.internal",
+    ]
