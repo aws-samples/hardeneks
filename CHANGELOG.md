@@ -1,6 +1,6 @@
 ## v0.8.0 (2023-02-02)
 
-### Feat
+### Feat (implemented by @ajpaws)
 
 - Add check for managed node groups
 - Add check for CA role polp
