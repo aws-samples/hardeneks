@@ -74,12 +74,12 @@ rules:
         - schedule_replicas_across_nodes
         - run_multiple_replicas
         - avoid_running_singleton_pods
-    #   data_plane:
-    # networking:
-    #   vpc_subnets:
-    #   vpc_cni:
-    #   prefix_mode:
-    #   ipv6:
-    #   security_groups:
-    #   custom_networking:
-    #   load_balancing:
+      data_plane:
+    networking:
+      vpc_subnets:
+      vpc_cni:
+      prefix_mode:
+      ipv6:
+      security_groups:
+      custom_networking:
+      load_balancing:
