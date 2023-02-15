@@ -51,6 +51,9 @@ rules:
         - use_separate_iam_role_for_cluster_autoscaler
         - employ_least_privileged_access_cluster_autoscaler_role
         - use_managed_nodegroups
+    scalability:
+      control_plane:
+        - check_EKS_version
   namespace_based:
     security: 
       iam:
@@ -79,4 +82,3 @@ rules:
         - schedule_replicas_across_nodes
         - run_multiple_replicas
         - avoid_running_singleton_pods
-
