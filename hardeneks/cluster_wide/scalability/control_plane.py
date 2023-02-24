@@ -22,3 +22,18 @@ def check_EKS_version(resources: Resources):
         return False
 
     return True
+
+
+def check_kubectl_compression(resources: Resources):
+    _, active_context = kubernetes.config.list_kube_config_contexts()
+    if active_context.get("context", {}).get("disable-compression") != True:
+        console.print(
+            Panel(
+                f"[red]Disable kubectl Compression should equal True",
+                subtitle="[link=https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression]Click to see the guide[/link]",
+            )
+        )
+        console.print()
+        return False
+    
+    return True

@@ -1,0 +1,12 @@
+[{
+    "name": "Limit workload and node bursting",
+    "link": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#limit-workload-and-node-bursting"
+},
+{
+    "name": "Scale nodes and pods down safely",
+    "link": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#scale-nodes-and-pods-down-safely"
+},
+{
+    "name": "Use Client-Side Cache when running Kubectl",
+    "link": "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-client-side-cache-when-running-kubectl"
+}]
