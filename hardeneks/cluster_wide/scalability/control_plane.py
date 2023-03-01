@@ -1,9 +1,10 @@
 import re
-from rich.panel import Panel
+import urllib3
 import kubernetes
-
+from rich.panel import Panel
+from hardeneks import helpers
 from hardeneks import console
-from ...resources import Resources
+from hardeneks import Resources
 
 
 def check_EKS_version(resources: Resources):
@@ -23,17 +24,23 @@ def check_EKS_version(resources: Resources):
 
     return True
 
-
+#
+# check_kubectl_compression
+# checks all clusters in config for disable-compression flag set to true
+# if any cluster does not have setting, it returns False
 def check_kubectl_compression(resources: Resources):
-    _, active_context = kubernetes.config.list_kube_config_contexts()
-    if active_context.get("context", {}).get("disable-compression") != True:
-        console.print(
-            Panel(
-                f"[red]Disable kubectl Compression should equal True",
-                subtitle="[link=https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression]Click to see the guide[/link]",
+    kubeconfig = helpers.get_kube_config()
+    isSetCorrectly = True
+    for cluster in kubeconfig.get("clusters", []):
+        clusterName = cluster.get("name", "NoName")
+        if cluster.get("cluster", {}).get("disable-compression", False) != True:
+            isSetCorrectly = False
+            console.print(
+                Panel(
+                    f"[red]DisableCompression in Cluster {clusterName}  should equal True",
+                    subtitle="[link=https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression]Click to see the guide[/link]",
+                )
             )
-        )
-        console.print()
-        return False
+            console.print()
     
-    return True
+    return isSetCorrectly

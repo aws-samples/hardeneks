@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from pkg_resources import resource_filename
 import tempfile
-import urllib3
+
 import yaml
 
 from botocore.exceptions import EndpointConnectionError
@@ -16,6 +16,7 @@ from .resources import (
     Resources,
 )
 from .harden import harden
+from hardeneks import helpers
 
 
 app = typer.Typer()
@@ -66,14 +67,10 @@ def _get_cluster_name(context, region):
 def _get_region():
     return boto3.session.Session().region_name
 
-
-def _load_kube_config():
-    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    kube_config_orig = f"{Path.home()}/.kube/config"
+def _add_tls_verify():
+    kubeconfig = helpers.get_kube_config()
     tmp_config = tempfile.NamedTemporaryFile().name
 
-    with open(kube_config_orig, "r") as fd:
-        kubeconfig = yaml.safe_load(fd)
     for cluster in kubeconfig["clusters"]:
         cluster["cluster"]["insecure-skip-tls-verify"] = True
     with open(tmp_config, "w") as fd:
@@ -133,8 +130,9 @@ def run_hardeneks(
 
     """
     if insecure_skip_tls_verify:
-        _load_kube_config()
+        _add_tls_verify()
     else:
+        # should pass in config file 
         kubernetes.config.load_kube_config(context=context)
 
     context = _get_current_context(context)
