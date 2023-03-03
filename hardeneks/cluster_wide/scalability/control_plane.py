@@ -1,5 +1,4 @@
 import re
-import urllib3
 import kubernetes
 from rich.panel import Panel
 from hardeneks import helpers
