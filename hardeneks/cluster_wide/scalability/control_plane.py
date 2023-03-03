@@ -31,8 +31,8 @@ def check_kubectl_compression(resources: Resources):
     kubeconfig = helpers.get_kube_config()
     isSetCorrectly = False
     for cluster in kubeconfig.get("clusters", []):
-        clusterName = cluster.get("name", None)
-        if (clusterName == resources.cluster):
+        clusterName = cluster.get("name", "")
+        if (resources.cluster in clusterName):
             if cluster.get("cluster", {}).get("disable-compression", False) != True:
                 console.print(
                     Panel(
