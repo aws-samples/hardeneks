@@ -54,6 +54,7 @@ rules:
     scalability:
       control_plane:
         - check_EKS_version
+        - check_kubectl_compression
   namespace_based:
     security: 
       iam:
