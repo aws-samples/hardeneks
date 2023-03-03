@@ -30,17 +30,21 @@ def check_EKS_version(resources: Resources):
 # if any cluster does not have setting, it returns False
 def check_kubectl_compression(resources: Resources):
     kubeconfig = helpers.get_kube_config()
-    isSetCorrectly = True
+    isSetCorrectly = False
     for cluster in kubeconfig.get("clusters", []):
-        clusterName = cluster.get("name", "NoName")
-        if cluster.get("cluster", {}).get("disable-compression", False) != True:
-            isSetCorrectly = False
-            console.print(
-                Panel(
-                    f"[red]DisableCompression in Cluster {clusterName}  should equal True",
-                    subtitle="[link=https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression]Click to see the guide[/link]",
+        clusterName = cluster.get("name", None)
+        if (clusterName == resources.cluster):
+            if cluster.get("cluster", {}).get("disable-compression", False) != True:
+                console.print(
+                    Panel(
+                        f"[red]`disable-compression` in Cluster {clusterName}  should equal True",
+                        subtitle="[link=https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression]Click to see the guide[/link]",
+                    )
                 )
-            )
-            console.print()
+                console.print()
+            else:
+                isSetCorrectly = True
+            break
+        
     
     return isSetCorrectly
