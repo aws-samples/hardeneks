@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 from pkg_resources import resource_filename
 import tempfile
-
 import yaml
 
 from botocore.exceptions import EndpointConnectionError
