@@ -44,7 +44,10 @@ def test_check_any_cluster_autoscaler_exists(mocked_client):
     )
     resources = Resources("some_region", "some_context", "some_cluster", [])
 
-    assert not check_any_cluster_autoscaler_exists(resources)
+    rule = check_any_cluster_autoscaler_exists()
+    rule.check(resources)
+
+    assert not rule.result.status
 
 
 @patch("boto3.client")
@@ -71,8 +74,10 @@ def test_ensure_cluster_autoscaler_and_cluster_versions_match(
         "cluster": {"version": "1.23"}
     }
     resources = Resources("some_region", "some_context", "some_cluster", [])
+    rule = ensure_cluster_autoscaler_and_cluster_versions_match()
+    rule.check(resources)
 
-    assert not ensure_cluster_autoscaler_and_cluster_versions_match(resources)
+    assert not rule.result.status
 
 
 @patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
@@ -92,8 +97,9 @@ def test_ensure_cluster_autoscaler_has_autodiscovery_mode(mocked_client):
         "V1DeploymentList",
     )
     resources = Resources("some_region", "some_context", "some_cluster", [])
-
-    assert not ensure_cluster_autoscaler_has_autodiscovery_mode(resources)
+    rule = ensure_cluster_autoscaler_has_autodiscovery_mode()
+    rule.check(resources)
+    assert not rule.result.status
 
 
 @patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
@@ -129,8 +135,9 @@ def test_use_separate_iam_role_for_cluster_autoscaler(
     sa_client.return_value = sa_return_value
 
     resources = Resources("some_region", "some_context", "some_cluster", [])
-
-    assert not use_separate_iam_role_for_cluster_autoscaler(resources)
+    rule = use_separate_iam_role_for_cluster_autoscaler()
+    rule.check(resources)
+    assert not rule.result.status
 
 
 @patch("boto3.client")
@@ -207,9 +214,10 @@ def test_employ_least_privileged_access_cluster_autoscaler_role(
 
     resources = Resources("some_region", "some_context", "some_cluster", [])
 
-    assert not employ_least_privileged_access_cluster_autoscaler_role(
-        resources
-    )
+    rule = employ_least_privileged_access_cluster_autoscaler_role()
+    rule.check(resources)
+
+    assert not rule.result.status
 
 
 @patch("kubernetes.client.CoreV1Api.list_node")
@@ -230,9 +238,10 @@ def test_use_managed_nodegroups(mocked_client):
     )
     resources = Resources("some_region", "some_context", "some_cluster", [])
 
-    not_managed = [i.metadata.name for i in use_managed_nodegroups(resources)]
+    rule = use_managed_nodegroups()
+    rule.check(resources)
 
-    assert not_managed == [
+    assert rule.result.resources == [
         "ip-192-168-59-44.ec2.internal",
         "ip-192-168-6-151.ec2.internal",
     ]
