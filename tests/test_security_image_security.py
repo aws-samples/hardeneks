@@ -31,13 +31,15 @@ def test_use_immutable_tags_with_ecr(mocked_client):
     mocked_client.return_value.describe_repositories.return_value = read_json(
         test_data
     )
-    offenders = use_immutable_tags_with_ecr(namespaced_resources)
-    offender_names = [i["repositoryName"] for i in offenders]
+
+    rule = use_immutable_tags_with_ecr()
+    rule.check(namespaced_resources)
+
     assert (
         "rolling-deployment-service-ecrrepo714fb1b2-xbs3hua1h3ud"
-        in offender_names
+        in rule.result.resources
     )
     assert (
         "rolling-deployment-service-ecrrepo714fb1b2-nyrkgiafcyyx"
-        not in offender_names
+        not in rule.result.resources
     )

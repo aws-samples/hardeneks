@@ -11,7 +11,8 @@ from hardeneks.cluster_wide.security.multi_tenancy import (
     indirect=["resources"],
 )
 def test_ensure_namespace_quotas_exist(resources):
-    offenders = ensure_namespace_quotas_exist(resources)
+    rule = ensure_namespace_quotas_exist()
+    rule.check(resources)
 
-    assert "good" not in offenders
-    assert "bad" in offenders
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources

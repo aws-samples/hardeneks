@@ -17,17 +17,26 @@ class restrict_wildcard_for_cluster_roles(Rule):
         offenders = []
         self.result = Result(status=True, resource_type="Cluster Role")
 
+        allow_list = [
+            "aws-node",
+            "cluster-admin",
+            "eks:addon-manager",
+            "eks:cloud-controller-manager",
+        ]
+
         for role in resources.cluster_roles:
-            for rule in role.rules:
-                if "*" in rule.verbs:
-                    offenders.append(role)
-                if rule.resources and "*" in rule.resources:
-                    offenders.append(role)
+            role_name = role.metadata.name
+            if not (role_name.startswith("system") or role_name in allow_list):
+                for rule in role.rules:
+                    if "*" in rule.verbs:
+                        offenders.append(role_name)
+                    if rule.resources and "*" in rule.resources:
+                        offenders.append(role_name)
 
         if offenders:
             self.result = Result(
                 status=False,
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 resource_type="Cluster Role",
             )
 

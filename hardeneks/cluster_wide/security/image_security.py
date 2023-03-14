@@ -1,24 +1,29 @@
 import boto3
 
-from ...report import print_repository_table
 from ...resources import Resources
+from hardeneks.rules import Rule, Result
 
 
-def use_immutable_tags_with_ecr(resources: Resources):
-    offenders = []
+class use_immutable_tags_with_ecr(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "image_security"
+    message = "Make image tags immutable."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/image/#use-immutable-tags-with-ecr"
 
-    client = boto3.client("ecr", region_name=resources.region)
-    repositories = client.describe_repositories()
-    for repository in repositories["repositories"]:
-        if repository["imageTagMutability"] != "IMMUTABLE":
-            offenders.append(repository)
+    def check(self, resources: Resources):
+        offenders = []
 
-    if offenders:
-        print_repository_table(
-            offenders,
-            "imageTagMutability",
-            "[red]Make image tags immutable.",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/image/#use-immutable-tags-with-ecr]Click to see the guide[/link]",
-        )
+        client = boto3.client("ecr", region_name=resources.region)
+        repositories = client.describe_repositories()
+        for repository in repositories["repositories"]:
+            if repository["imageTagMutability"] != "IMMUTABLE":
+                offenders.append(repository)
 
-    return offenders
+        self.result = Result(status=True, resource_type="ECR Repository")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="ECR Repository",
+                resources=[i["repositoryName"] for i in offenders],
+            )

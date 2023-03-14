@@ -99,6 +99,7 @@ def test_ensure_namespace_psa_exist(mocked_client):
         "some_cluster",
         ["kube-node-lease", "kube-public", "kube-system", "kube-apiserver"],
     )
-    offenders = ensure_namespace_psa_exist(resources)
+    rule = ensure_namespace_psa_exist()
+    rule.check(resources)
 
-    assert offenders == ["bad", "default", "test-namespace"]
+    assert rule.result.resources == ["bad", "default", "test-namespace"]

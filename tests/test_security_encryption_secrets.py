@@ -16,10 +16,11 @@ from hardeneks.namespace_based.security.encryption_secrets import (
     indirect=["resources"],
 )
 def test_use_encryption_with_ebs(resources):
-    offenders = use_encryption_with_ebs(resources)
+    rule = use_encryption_with_ebs()
+    rule.check(resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @pytest.mark.parametrize(
@@ -28,10 +29,11 @@ def test_use_encryption_with_ebs(resources):
     indirect=["resources"],
 )
 def test_use_encryption_with_efs(resources):
-    offenders = use_encryption_with_efs(resources)
+    rule = use_encryption_with_efs()
+    rule.check(resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @pytest.mark.parametrize(
@@ -40,10 +42,11 @@ def test_use_encryption_with_efs(resources):
     indirect=["resources"],
 )
 def test_use_efs_access_points(resources):
-    offenders = use_efs_access_points(resources)
+    rule = use_efs_access_points()
+    rule.check(resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @pytest.mark.parametrize(
