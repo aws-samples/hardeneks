@@ -75,8 +75,10 @@ def test_check_metrics_server_is_running(mocked_client):
     namespaced_resources = Resources(
         "some_region", "some_context", "some_cluster", []
     )
+    rule = check_metrics_server_is_running()
+    rule.check(namespaced_resources)
 
-    assert not check_metrics_server_is_running(namespaced_resources)
+    assert not rule.result.status
 
 
 @patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
@@ -99,8 +101,10 @@ def test_check_vertical_pod_autoscaler_exists(mocked_client):
     namespaced_resources = Resources(
         "some_region", "some_context", "some_cluster", []
     )
+    rule = check_vertical_pod_autoscaler_exists()
+    rule.check(namespaced_resources)
 
-    assert not check_vertical_pod_autoscaler_exists(namespaced_resources)
+    assert not rule.result.status
 
 
 @pytest.mark.parametrize(
