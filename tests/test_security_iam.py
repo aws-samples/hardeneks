@@ -50,10 +50,11 @@ def test_restrict_wildcard_for_roles(namespaced_resources):
     indirect=["namespaced_resources"],
 )
 def test_restrict_wildcard_for_cluster_roles(namespaced_resources):
-    offenders = restrict_wildcard_for_cluster_roles(namespaced_resources)
+    rule = restrict_wildcard_for_cluster_roles()
+    rule.check(namespaced_resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @patch("boto3.client")
@@ -73,7 +74,9 @@ def test_check_endpoint_public_access(mocked_client):
     mocked_client.return_value.describe_cluster.return_value = read_json(
         test_data
     )
-    assert not check_endpoint_public_access(namespaced_resources)
+    rule = check_endpoint_public_access()
+    rule.check(namespaced_resources)
+    assert not rule.result.status
 
 
 @patch("boto3.client")
@@ -93,8 +96,10 @@ def test_check_access_to_instance_profile(mocked_client):
     mocked_client.return_value.describe_instances.return_value = read_json(
         test_data
     )
-    offenders = check_access_to_instance_profile(namespaced_resources)
-    assert len(offenders) == 2
+    rule = check_access_to_instance_profile()
+    rule.check(namespaced_resources)
+    resources = rule.result.resources
+    assert len(resources) == 2
 
 
 @patch("kubernetes.client.AppsV1Api.read_namespaced_daemon_set")
@@ -115,7 +120,10 @@ def test_check_aws_node_daemonset_service_account(mocked_client):
     namespaced_resources = NamespacedResources(
         "some_region", "some_context", "some_cluster", "some_ns"
     )
-    assert not check_aws_node_daemonset_service_account(namespaced_resources)
+    rule = check_aws_node_daemonset_service_account()
+    rule.check(namespaced_resources)
+
+    assert not rule.result.status
 
 
 @pytest.mark.parametrize(
@@ -148,12 +156,11 @@ def test_disable_run_as_root_user(namespaced_resources):
     indirect=["namespaced_resources"],
 )
 def test_disable_anonymous_access_for_cluster_roles(namespaced_resources):
-    offenders = disable_anonymous_access_for_cluster_roles(
-        namespaced_resources
-    )
+    rule = disable_anonymous_access_for_cluster_roles()
+    rule.check(namespaced_resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @pytest.mark.parametrize(
