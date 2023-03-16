@@ -27,6 +27,7 @@ class restrict_wildcard_for_roles(Rule):
                 status=False,
                 resource_type="Role",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -51,6 +52,7 @@ class disable_service_account_token_mounts(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -79,6 +81,7 @@ class disable_run_as_root_user(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -108,6 +111,7 @@ class disable_anonymous_access_for_roles(Rule):
                 status=False,
                 resource_type="RoleBinding",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -143,6 +147,7 @@ class use_dedicated_service_accounts_for_each_deployment(Rule):
                 status=False,
                 resource_type="Deployment",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -180,6 +185,7 @@ class use_dedicated_service_accounts_for_each_stateful_set(
                 status=False,
                 resource_type="StatefulSet",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -217,4 +223,5 @@ class use_dedicated_service_accounts_for_each_daemon_set(
                 status=False,
                 resource_type="DaemonSet",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )

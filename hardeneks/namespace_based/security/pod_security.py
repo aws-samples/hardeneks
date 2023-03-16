@@ -29,6 +29,7 @@ class disallow_container_socket_mount(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -54,6 +55,7 @@ class disallow_host_path_or_make_it_read_only(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -81,6 +83,7 @@ class set_requests_limits_for_containers(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -109,6 +112,7 @@ class disallow_privilege_escalation(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -135,4 +139,5 @@ class check_read_only_root_file_system(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )

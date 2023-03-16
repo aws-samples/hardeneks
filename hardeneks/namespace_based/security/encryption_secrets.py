@@ -29,4 +29,5 @@ class disallow_secrets_from_env_vars(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )

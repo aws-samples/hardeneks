@@ -30,4 +30,5 @@ class use_encryption_with_aws_load_balancers(Rule):
                 status=False,
                 resource_type="Service",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )

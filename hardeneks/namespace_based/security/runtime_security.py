@@ -45,4 +45,5 @@ class disallow_linux_capabilities(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )

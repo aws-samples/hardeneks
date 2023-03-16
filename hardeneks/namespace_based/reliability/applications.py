@@ -22,6 +22,7 @@ class avoid_running_singleton_pods(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -46,6 +47,7 @@ class run_multiple_replicas(Rule):
                 status=False,
                 resource_type="Deployment",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -77,6 +79,7 @@ class schedule_replicas_across_nodes(Rule):
                 status=False,
                 resource_type="Deployment",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -105,6 +108,7 @@ class check_horizontal_pod_autoscaling_exists(Rule):
                 status=False,
                 resource_type="Deployment",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -130,6 +134,7 @@ class check_readiness_probes(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
 
 
@@ -155,4 +160,5 @@ class check_liveness_probes(Rule):
                 status=False,
                 resource_type="Pod",
                 resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
             )
