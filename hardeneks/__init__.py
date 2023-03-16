@@ -3,6 +3,8 @@ from pathlib import Path
 from pkg_resources import resource_filename
 import tempfile
 import yaml
+import json
+from collections import defaultdict
 
 from botocore.exceptions import EndpointConnectionError
 import boto3
@@ -79,6 +81,24 @@ def _add_tls_verify():
 
     kubernetes.config.load_kube_config(tmp_config)
     os.remove(tmp_config)
+
+
+def _export_json(rules: list, json_path=str):
+    def ndd():
+        return defaultdict(ndd)
+
+    json_blob = ndd()
+
+    for rule in rules:
+        result = {
+            "status": rule.result.status,
+            "resources": rule.result.resources,
+            "resource_type": rule.result.resource_type,
+            "namespace": rule.result.namespace,
+        }
+        json_blob[rule._type][rule.pillar][rule.section][rule.message] = result
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(json_blob, f, ensure_ascii=False, indent=4)
 
 
 def print_consolidated_results(rules: list):
@@ -221,6 +241,4 @@ def run_hardeneks(
     if export_html:
         console.save_html(export_html)
     if export_json:
-        import pudb
-
-        pudb.set_trace()
+        _export_json(results, export_json)
