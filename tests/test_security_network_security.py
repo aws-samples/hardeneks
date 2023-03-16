@@ -29,10 +29,11 @@ def read_json(file_path):
     indirect=["namespaced_resources"],
 )
 def test_use_encryption_with_aws_load_balancers(namespaced_resources):
-    offenders = use_encryption_with_aws_load_balancers(namespaced_resources)
+    rule = use_encryption_with_aws_load_balancers()
+    rule.check(namespaced_resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @patch("boto3.client")

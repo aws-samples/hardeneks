@@ -55,7 +55,9 @@ def test_use_efs_access_points(resources):
     indirect=["namespaced_resources"],
 )
 def test_disallow_secrets_from_env_vars(namespaced_resources):
-    offenders = disallow_secrets_from_env_vars(namespaced_resources)
+    rule = disallow_secrets_from_env_vars()
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    rule.check(namespaced_resources)
+
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources

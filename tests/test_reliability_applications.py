@@ -27,10 +27,11 @@ from .conftest import get_response
     indirect=["namespaced_resources"],
 )
 def test_avoid_running_singleton_pods(namespaced_resources):
-    offenders = avoid_running_singleton_pods(namespaced_resources)
+    rule = avoid_running_singleton_pods()
+    rule.check(namespaced_resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @pytest.mark.parametrize(
@@ -39,10 +40,12 @@ def test_avoid_running_singleton_pods(namespaced_resources):
     indirect=["namespaced_resources"],
 )
 def test_run_multiple_replicas(namespaced_resources):
-    offenders = run_multiple_replicas(namespaced_resources)
+    rule = run_multiple_replicas()
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    rule.check(namespaced_resources)
+
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @pytest.mark.parametrize(
@@ -51,10 +54,11 @@ def test_run_multiple_replicas(namespaced_resources):
     indirect=["namespaced_resources"],
 )
 def test_schedule_replicas_across_nodes(namespaced_resources):
-    offenders = schedule_replicas_across_nodes(namespaced_resources)
+    rule = schedule_replicas_across_nodes()
+    rule.check(namespaced_resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @patch("kubernetes.client.CoreV1Api.list_service_for_all_namespaces")
@@ -113,10 +117,12 @@ def test_check_vertical_pod_autoscaler_exists(mocked_client):
     indirect=["namespaced_resources"],
 )
 def test_check_horizontal_pod_autoscaling_exists(namespaced_resources):
-    offenders = check_horizontal_pod_autoscaling_exists(namespaced_resources)
+    rule = check_horizontal_pod_autoscaling_exists()
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    rule.check(namespaced_resources)
+
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @pytest.mark.parametrize(
@@ -125,10 +131,12 @@ def test_check_horizontal_pod_autoscaling_exists(namespaced_resources):
     indirect=["namespaced_resources"],
 )
 def test_check_liveness_probes(namespaced_resources):
-    offenders = check_liveness_probes(namespaced_resources)
+    rule = check_liveness_probes()
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    rule.check(namespaced_resources)
+
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @pytest.mark.parametrize(
@@ -137,7 +145,9 @@ def test_check_liveness_probes(namespaced_resources):
     indirect=["namespaced_resources"],
 )
 def test_check_readiness_probes(namespaced_resources):
-    offenders = check_readiness_probes(namespaced_resources)
+    rule = check_readiness_probes()
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    rule.check(namespaced_resources)
+
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources

@@ -1,180 +1,220 @@
 from collections import Counter
 
 from ...resources import NamespacedResources
-from ...report import (
-    print_role_table,
-    print_pod_table,
-    print_workload_table,
-)
+from hardeneks.rules import Rule, Result
 
 
-def restrict_wildcard_for_roles(resources: NamespacedResources):
-    offenders = []
+class restrict_wildcard_for_roles(Rule):
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Roles should not have '*' in Verbs or Resources."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
 
-    for role in resources.roles:
-        for rule in role.rules:
-            if "*" in rule.verbs:
-                offenders.append(role)
-            if "*" in rule.resources:
-                offenders.append(role)
+    def check(self, namespaced_resources: NamespacedResources):
+        offenders = []
 
-    if offenders:
-        print_role_table(
-            offenders,
-            "[red]Roles should not have '*' in Verbs or Resources",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings]Click to see the guide[/link]",
-            "Role",
+        for role in namespaced_resources.roles:
+            for rule in role.rules:
+                if "*" in rule.verbs:
+                    offenders.append(role)
+                if "*" in rule.resources:
+                    offenders.append(role)
+
+        self.result = Result(status=True, resource_type="Role")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Role",
+                resources=[i.metadata.name for i in offenders],
+            )
+
+
+class disable_service_account_token_mounts(Rule):
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Auto-mounting of Service Account tokens is not allowed."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+
+        for pod in namespaced_resources.pods:
+            if pod.spec.automount_service_account_token:
+                offenders.append(pod)
+
+        self.result = Result(status=True, resource_type="Pod")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                resources=[i.metadata.name for i in offenders],
+            )
+
+
+class disable_run_as_root_user(Rule):
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Running as root is not allowed."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#run-the-application-as-a-non-root-user"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+
+        for pod in namespaced_resources.pods:
+            security_context = pod.spec.security_context
+            if (
+                not security_context.run_as_group
+                and not security_context.run_as_user
+            ):
+                offenders.append(pod)
+
+        self.result = Result(status=True, resource_type="Pod")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                resources=[i.metadata.name for i in offenders],
+            )
+
+
+class disable_anonymous_access_for_roles(Rule):
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Don't bind roles to anonymous or unauthenticated groups."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+
+        for role_binding in namespaced_resources.role_bindings:
+            if role_binding.subjects:
+                for subject in role_binding.subjects:
+                    if (
+                        subject.name == "system:unauthenticated"
+                        or subject.name == "system:anonymous"
+                    ):
+                        offenders.append(role_binding)
+
+        self.result = Result(status=True, resource_type="RoleBinding")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="RoleBinding",
+                resources=[i.metadata.name for i in offenders],
+            )
+
+
+class use_dedicated_service_accounts_for_each_deployment(Rule):
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Don't share service accounts between Deployments."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+
+        count = Counter(
+            [
+                i.spec.template.spec.service_account_name
+                for i in namespaced_resources.deployments
+            ]
         )
-    return offenders
+        repeated_service_accounts = {
+            x: count for x, count in count.items() if count > 1
+        }
+
+        for k, v in repeated_service_accounts.items():
+            for deployment in namespaced_resources.deployments:
+                if k == deployment.spec.template.spec.service_account_name:
+                    offenders.append(deployment)
+
+        self.result = Result(status=True, resource_type="Deployment")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Deployment",
+                resources=[i.metadata.name for i in offenders],
+            )
 
 
-def disable_service_account_token_mounts(resources: NamespacedResources):
-    offenders = []
-
-    for pod in resources.pods:
-        if pod.spec.automount_service_account_token:
-            offenders.append(pod)
-
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Auto-mounting of Service Account tokens is not allowed",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens]Click to see the guide[/link]",
-        )
-    return offenders
-
-
-def disable_run_as_root_user(resources: NamespacedResources):
-    offenders = []
-
-    for pod in resources.pods:
-        security_context = pod.spec.security_context
-        if (
-            not security_context.run_as_group
-            and not security_context.run_as_user
-        ):
-            offenders.append(pod)
-
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Running as root is not allowed",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#run-the-application-as-a-non-root-user]Click to see the guide[/link]",
-        )
-
-    return offenders
-
-
-def disable_anonymous_access_for_roles(resources: NamespacedResources):
-    offenders = []
-
-    for role_binding in resources.role_bindings:
-        if role_binding.subjects:
-            for subject in role_binding.subjects:
-                if (
-                    subject.name == "system:unauthenticated"
-                    or subject.name == "system:anonymous"
-                ):
-                    offenders.append(role_binding)
-
-    if offenders:
-        print_role_table(
-            offenders,
-            "[red]Don't bind roles to anonymous or unauthenticated groups",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access]Click to see the guide[/link]",
-            "RoleBinding",
-        )
-    return offenders
-
-
-def use_dedicated_service_accounts_for_each_deployment(
-    resources: NamespacedResources,
+class use_dedicated_service_accounts_for_each_stateful_set(
+    Rule,
 ):
-    offenders = []
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Don't share service accounts between StatefulSets."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
 
-    count = Counter(
-        [
-            i.spec.template.spec.service_account_name
-            for i in resources.deployments
-        ]
-    )
-    repeated_service_accounts = {
-        x: count for x, count in count.items() if count > 1
-    }
+    def check(self, namespaced_resources: NamespacedResources):
 
-    for k, v in repeated_service_accounts.items():
-        for deployment in resources.deployments:
-            if k == deployment.spec.template.spec.service_account_name:
-                offenders.append(deployment)
+        offenders = []
 
-    if offenders:
-        print_workload_table(
-            offenders,
-            "[red]Don't share service accounts between Deployments",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application]Click to see the guide[/link]",
-            "Deployment",
+        count = Counter(
+            [
+                i.spec.template.spec.service_account_name
+                for i in namespaced_resources.stateful_sets
+            ]
         )
+        repeated_service_accounts = {
+            x: count for x, count in count.items() if count > 1
+        }
 
-    return offenders
+        for k, v in repeated_service_accounts.items():
+            for deployment in namespaced_resources.stateful_sets:
+                if k == deployment.spec.template.spec.service_account_name:
+                    offenders.append(deployment)
+
+        self.result = Result(status=True, resource_type="StatefulSet")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="StatefulSet",
+                resources=[i.metadata.name for i in offenders],
+            )
 
 
-def use_dedicated_service_accounts_for_each_stateful_set(
-    resources: NamespacedResources,
+class use_dedicated_service_accounts_for_each_daemon_set(
+    Rule,
 ):
-    offenders = []
+    _type = "namespace_based"
+    pillar = "security"
+    section = "iam"
+    message = "Don't share service accounts between DaemonSets."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
 
-    count = Counter(
-        [
-            i.spec.template.spec.service_account_name
-            for i in resources.stateful_sets
-        ]
-    )
-    repeated_service_accounts = {
-        x: count for x, count in count.items() if count > 1
-    }
+    def check(self, namespaced_resources: NamespacedResources):
 
-    for k, v in repeated_service_accounts.items():
-        for deployment in resources.stateful_sets:
-            if k == deployment.spec.template.spec.service_account_name:
-                offenders.append(deployment)
+        offenders = []
 
-    if offenders:
-        print_workload_table(
-            offenders,
-            "[red]Don't share service accounts between StatefulSets",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application]Click to see the guide[/link]",
-            "StatefulSet",
+        count = Counter(
+            [
+                i.spec.template.spec.service_account_name
+                for i in namespaced_resources.daemon_sets
+            ]
         )
+        repeated_service_accounts = {
+            x: count for x, count in count.items() if count > 1
+        }
 
-    return offenders
+        for k, v in repeated_service_accounts.items():
+            for deployment in namespaced_resources.daemon_sets:
+                if k == deployment.spec.template.spec.service_account_name:
+                    offenders.append(deployment)
 
-
-def use_dedicated_service_accounts_for_each_daemon_set(
-    resources: NamespacedResources,
-):
-    offenders = []
-
-    count = Counter(
-        [
-            i.spec.template.spec.service_account_name
-            for i in resources.daemon_sets
-        ]
-    )
-    repeated_service_accounts = {
-        x: count for x, count in count.items() if count > 1
-    }
-
-    for k, v in repeated_service_accounts.items():
-        for deployment in resources.daemon_sets:
-            if k == deployment.spec.template.spec.service_account_name:
-                offenders.append(deployment)
-
-    if offenders:
-        print_workload_table(
-            offenders,
-            "[red]Don't share service accounts between DaemonSets",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application]Click to see the guide[/link]",
-            "DaemonSet",
-        )
-
-    return offenders
+        self.result = Result(status=True, resource_type="DaemonSet")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="DaemonSet",
+                resources=[i.metadata.name for i in offenders],
+            )
