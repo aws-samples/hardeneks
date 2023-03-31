@@ -1,6 +1,38 @@
+## v0.9.0 (2023-03-31)
+
+### Feat
+
+- Add json output
+- Implement namespace based rules with rule class
+- Implement cluster wide security rules with Rule
+- Add consolidated tables for cleaner report
+- Implement rule class
+- Implement security iam with rule class
+- Implement reliabillity checks using rule class
+- Make scalability section use the rule class
+- Implement cluster autoscaling with new rules class
+- **scalability**: adding generic get_kube_config and getting clusters to check
+- **scalability**: adding checks for compression and skipped file
+- **scalability**: adding first scalability checks
+
+### Fix
+
+- Fix namespace bug
+- **scalability**: checking clusterName in cluster.name
+- **scalability**: fixing up some things 2
+- **scalability**: fixing up some things
+- **scalability**: only checking current cluster
+- **config**: fix up config
+- **config**: uncomment config
+
+### Refactor
+
+- Simplify tests
+- Remove Map Class
+
 ## v0.8.0 (2023-02-02)
 
-### Feat (implemented by @ajpaws)
+### Feat
 
 - Add check for managed node groups
 - Add check for CA role polp
