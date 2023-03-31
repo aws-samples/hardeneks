@@ -30,5 +30,7 @@ def test_check_logs_are_enabled(mocked_client):
     mocked_client.return_value.describe_cluster.return_value = read_json(
         test_data
     )
+    rule = check_logs_are_enabled()
+    rule.check(namespaced_resources)
 
-    assert not check_logs_are_enabled(namespaced_resources)
+    assert not rule.result.status

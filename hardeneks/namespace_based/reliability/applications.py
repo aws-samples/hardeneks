@@ -1,117 +1,164 @@
 from ...resources import NamespacedResources
+from hardeneks.rules import Rule, Result
 
 
-from ...report import (
-    print_pod_table,
-    print_service_table,
-    print_deployment_table,
-)
+class avoid_running_singleton_pods(Rule):
+    _type = "namespace_based"
+    pillar = "reliability"
+    section = "applications"
+    message = "Avoid running pods without deployments."
+    url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods"
+
+    def check(self, namespaced_resources: NamespacedResources):
+        offenders = []
+        for pod in namespaced_resources.pods:
+            owner = pod.metadata.owner_references
+            if not owner:
+                offenders.append(pod)
+
+        self.result = Result(status=True, resource_type="Pod")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
+            )
 
 
-def avoid_running_singleton_pods(namespaced_resources: NamespacedResources):
-    offenders = []
-    for pod in namespaced_resources.pods:
-        owner = pod.metadata.owner_references
-        if not owner:
-            offenders.append(pod)
+class run_multiple_replicas(Rule):
+    _type = "namespace_based"
+    pillar = "reliability"
+    section = "applications"
+    message = "Avoid running single replica deployments."
+    url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas"
 
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Avoid running pods without deployments.",
-            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods]Click to see the guide[/link]",
-        )
-    return offenders
+    def check(self, namespaced_resources: NamespacedResources):
 
+        offenders = []
 
-def run_multiple_replicas(namespaced_resources: NamespacedResources):
-    offenders = []
-
-    for deployment in namespaced_resources.deployments:
-        if deployment.spec.replicas < 2:
-            offenders.append(deployment)
-
-    if offenders:
-        print_deployment_table(
-            offenders,
-            "[red]Avoid running single replica deployments",
-            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas]Click to see the guide[/link]",
-        )
-    return offenders
-
-
-def schedule_replicas_across_nodes(namespaced_resources: NamespacedResources):
-    offenders = []
-
-    for deployment in namespaced_resources.deployments:
-        spread = deployment.spec.template.spec.topology_spread_constraints
-        if not spread:
-            offenders.append(deployment)
-        else:
-            topology_keys = set([i.topology_key for i in spread])
-            if not set(["topology.kubernetes.io/zone"]).issubset(
-                topology_keys
-            ):
+        for deployment in namespaced_resources.deployments:
+            if deployment.spec.replicas < 2:
                 offenders.append(deployment)
 
-    if offenders:
-        print_service_table(
-            offenders,
-            "[red]Spread replicas across AZs and Nodes",
-            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes]Click to see the guide[/link]",
-        )
-    return offenders
+        self.result = Result(status=True, resource_type="Deployment")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Deployment",
+                resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
+            )
 
 
-def check_horizontal_pod_autoscaling_exists(
-    namespaced_resources: NamespacedResources,
-):
-    offenders = []
+class schedule_replicas_across_nodes(Rule):
+    _type = "namespace_based"
+    pillar = "reliability"
+    section = "applications"
+    message = "Spread replicas across AZs and Nodes."
+    url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#schedule-replicas-across-nodes"
 
-    hpas = [i.spec.scale_target_ref.name for i in namespaced_resources.hpas]
+    def check(self, namespaced_resources: NamespacedResources):
 
-    for deployment in namespaced_resources.deployments:
-        if deployment.metadata.name not in hpas:
-            offenders.append(deployment)
+        offenders = []
 
-    if offenders:
-        print_service_table(
-            offenders,
-            "[red]Deploy horizontal pod autoscaler for deployments",
-            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa]Click to see the guide[/link]",
-        )
-    return offenders
+        for deployment in namespaced_resources.deployments:
+            spread = deployment.spec.template.spec.topology_spread_constraints
+            if not spread:
+                offenders.append(deployment)
+            else:
+                topology_keys = set([i.topology_key for i in spread])
+                if not set(["topology.kubernetes.io/zone"]).issubset(
+                    topology_keys
+                ):
+                    offenders.append(deployment)
 
-
-def check_readiness_probes(namespaced_resources: NamespacedResources):
-    offenders = []
-
-    for pod in namespaced_resources.pods:
-        for container in pod.spec.containers:
-            if not container.readiness_probe:
-                offenders.append(pod)
-
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Define readiness probes for pods.",
-            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-readiness-probe-to-detect-partial-unavailability]Click to see the guide[/link]",
-        )
-    return offenders
+        self.result = Result(status=True, resource_type="Deployment")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Deployment",
+                resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
+            )
 
 
-def check_liveness_probes(namespaced_resources: NamespacedResources):
-    offenders = []
+class check_horizontal_pod_autoscaling_exists(Rule):
+    _type = "namespace_based"
+    pillar = "reliability"
+    section = "applications"
+    message = "Deploy horizontal pod autoscaler for deployments."
+    url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#horizontal-pod-autoscaler-hpa"
 
-    for pod in namespaced_resources.pods:
-        for container in pod.spec.containers:
-            if not container.liveness_probe:
-                offenders.append(pod)
+    def check(self, namespaced_resources: NamespacedResources):
 
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Define liveness probes for pods.",
-            "[link=https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-liveness-probe-to-remove-unhealthy-pods]Click to see the guide[/link]",
-        )
-    return offenders
+        offenders = []
+
+        hpas = [
+            i.spec.scale_target_ref.name for i in namespaced_resources.hpas
+        ]
+
+        for deployment in namespaced_resources.deployments:
+            if deployment.metadata.name not in hpas:
+                offenders.append(deployment)
+
+        self.result = Result(status=True, resource_type="Deployment")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Deployment",
+                resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
+            )
+
+
+class check_readiness_probes(Rule):
+    _type = "namespace_based"
+    pillar = "reliability"
+    section = "applications"
+    message = "Define readiness probes for pods."
+    url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-readiness-probe-to-detect-partial-unavailability"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+
+        for pod in namespaced_resources.pods:
+            for container in pod.spec.containers:
+                if not container.readiness_probe:
+                    offenders.append(pod)
+
+        self.result = Result(status=True, resource_type="Pod")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
+            )
+
+
+class check_liveness_probes(Rule):
+    _type = "namespace_based"
+    pillar = "reliability"
+    section = "applications"
+    message = "Define liveness probes for pods."
+    url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#use-liveness-probe-to-remove-unhealthy-pods"
+
+    def check(self, namespaced_resources: NamespacedResources):
+
+        offenders = []
+
+        for pod in namespaced_resources.pods:
+            for container in pod.spec.containers:
+                if not container.liveness_probe:
+                    offenders.append(pod)
+
+        self.result = Result(status=True, resource_type="Pod")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
+            )

@@ -1,28 +1,33 @@
 from ...resources import NamespacedResources
-from ...report import (
-    print_pod_table,
-)
+from hardeneks.rules import Rule, Result
 
 
-def disallow_secrets_from_env_vars(resources: NamespacedResources):
-    offenders = []
+class disallow_secrets_from_env_vars(Rule):
+    _type = "namespace_based"
+    pillar = "security"
+    section = "encryption_secrets"
+    message = "Disallow secrets from env vars."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-volume-mounts-instead-of-environment-variables"
 
-    for pod in resources.pods:
-        for container in pod.spec.containers:
-            if container.env:
-                for env in container.env:
-                    if env.value_from and env.value_from.secret_key_ref:
-                        offenders.append(pod)
-            if container.env_from:
-                for env_from in container.env_from:
-                    if env_from.secret_ref:
-                        offenders.append(pod)
+    def check(self, namespaced_resources: NamespacedResources):
+        offenders = []
 
-    if offenders:
-        print_pod_table(
-            offenders,
-            "[red]Disallow secrets from env vars",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-volume-mounts-instead-of-environment-variables]Click to see the guide[/link]",
-        )
+        for pod in namespaced_resources.pods:
+            for container in pod.spec.containers:
+                if container.env:
+                    for env in container.env:
+                        if env.value_from and env.value_from.secret_key_ref:
+                            offenders.append(pod)
+                if container.env_from:
+                    for env_from in container.env_from:
+                        if env_from.secret_ref:
+                            offenders.append(pod)
 
-    return offenders
+        self.result = Result(status=True, resource_type="Pod")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Pod",
+                resources=[i.metadata.name for i in offenders],
+                namespace=namespaced_resources.namespace,
+            )

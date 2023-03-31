@@ -29,10 +29,11 @@ def read_json(file_path):
     indirect=["namespaced_resources"],
 )
 def test_use_encryption_with_aws_load_balancers(namespaced_resources):
-    offenders = use_encryption_with_aws_load_balancers(namespaced_resources)
+    rule = use_encryption_with_aws_load_balancers()
+    rule.check(namespaced_resources)
 
-    assert "good" not in [i.metadata.name for i in offenders]
-    assert "bad" in [i.metadata.name for i in offenders]
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
 
 
 @patch("boto3.client")
@@ -53,8 +54,10 @@ def test_check_vpc_flow_logs(mocked_client):
     mocked_client.return_value.describe_flow_logs.return_value = {
         "FlowLogs": []
     }
+    rule = check_vpc_flow_logs()
+    rule.check(resources)
 
-    assert not check_vpc_flow_logs(resources)
+    assert not rule.result.status
 
 
 @pytest.mark.parametrize(
@@ -63,8 +66,9 @@ def test_check_vpc_flow_logs(mocked_client):
     indirect=["resources"],
 )
 def test_check_default_deny_policy_exists(resources):
-    offenders = check_default_deny_policy_exists(resources)
-    assert ["good", "bad", "default"] == offenders
+    rule = check_default_deny_policy_exists()
+    rule.check(resources)
+    assert ["good", "bad", "default"] == rule.result.resources
 
 
 @patch("kubernetes.client.CoreV1Api.list_service_for_all_namespaces")
@@ -86,5 +90,7 @@ def test_check_awspca_exists(mocked_client):
     namespaced_resources = Resources(
         "some_region", "some_context", "some_cluster", []
     )
+    rule = check_awspca_exists()
+    rule.check(namespaced_resources)
 
-    assert not check_awspca_exists(namespaced_resources)
+    assert not rule.result.status

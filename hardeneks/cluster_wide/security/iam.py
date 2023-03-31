@@ -1,120 +1,149 @@
 import boto3
 from kubernetes import client
-from rich.panel import Panel
 
-from hardeneks import console
+from hardeneks.rules import Rule, Result
 from ...resources import Resources
-from ...report import print_role_table, print_instance_metadata_table
 
 
-def restrict_wildcard_for_cluster_roles(resources: Resources):
-    offenders = []
+class restrict_wildcard_for_cluster_roles(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "ClusterRoles should not have '*' in Verbs or Resources."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
 
-    for role in resources.cluster_roles:
-        for rule in role.rules:
-            if "*" in rule.verbs:
-                offenders.append(role)
-            if rule.resources and "*" in rule.resources:
-                offenders.append(role)
+    def check(self, resources: Resources):
 
-    if offenders:
-        print_role_table(
-            offenders,
-            "[red]ClusterRoles should not have '*' in Verbs or Resources",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings]Click to see the guide[/link]",
-            "ClusterRole",
-        )
-    return offenders
+        offenders = []
+        self.result = Result(status=True, resource_type="Cluster Role")
 
-
-def check_endpoint_public_access(resources: Resources):
-    client = boto3.client("eks", region_name=resources.region)
-    cluster_metadata = client.describe_cluster(name=resources.cluster)
-    endpoint_access = cluster_metadata["cluster"]["resourcesVpcConfig"][
-        "endpointPublicAccess"
-    ]
-    if endpoint_access:
-        console.print(
-            Panel(
-                "[red]EKS Cluster Endpoint is not Private",
-                subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private]Click to see the guide[/link]",
-            )
-        )
-        console.print()
-        return False
-
-    return True
-
-
-def check_aws_node_daemonset_service_account(resources: Resources):
-    daemonset = client.AppsV1Api().read_namespaced_daemon_set(
-        name="aws-node", namespace="kube-system"
-    )
-
-    if daemonset.spec.template.spec.service_account_name == "aws-node":
-        console.print(
-            Panel(
-                "[red]Update the aws-node daemonset to use IRSA",
-                subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa]Click to see the guide[/link]",
-            )
-        )
-        console.print()
-        return False
-
-    return True
-
-
-def check_access_to_instance_profile(resources: Resources):
-    client = boto3.client("ec2", region_name=resources.region)
-    offenders = []
-
-    instance_metadata = client.describe_instances(
-        Filters=[
-            {
-                "Name": "tag:aws:eks:cluster-name",
-                "Values": [
-                    resources.cluster,
-                ],
-            },
+        allow_list = [
+            "aws-node",
+            "cluster-admin",
+            "eks:addon-manager",
+            "eks:cloud-controller-manager",
         ]
-    )
 
-    for instance in instance_metadata["Reservations"]:
-        if (
-            instance["Instances"][0]["MetadataOptions"][
-                "HttpPutResponseHopLimit"
+        for role in resources.cluster_roles:
+            role_name = role.metadata.name
+            if not (role_name.startswith("system") or role_name in allow_list):
+                for rule in role.rules:
+                    if "*" in rule.verbs:
+                        offenders.append(role_name)
+                    if rule.resources and "*" in rule.resources:
+                        offenders.append(role_name)
+
+        if offenders:
+            self.result = Result(
+                status=False,
+                resources=offenders,
+                resource_type="Cluster Role",
+            )
+
+
+class check_endpoint_public_access(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "EKS Cluster Endpoint is not Private."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private"
+
+    def check(self, resources: Resources):
+        client = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = client.describe_cluster(name=resources.cluster)
+        endpoint_access = cluster_metadata["cluster"]["resourcesVpcConfig"][
+            "endpointPublicAccess"
+        ]
+        self.result = Result(status=True, resource_type="Cluster Endpoint")
+
+        if endpoint_access:
+            self.result = Result(
+                status=False, resource_type="Cluster Endpoint"
+            )
+
+
+class check_aws_node_daemonset_service_account(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Update the aws-node daemonset to use IRSA."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa"
+
+    def check(self, resources: Resources):
+        daemonset = client.AppsV1Api().read_namespaced_daemon_set(
+            name="aws-node", namespace="kube-system"
+        )
+        self.result = Result(status=True, resource_type="Daemonset")
+        if daemonset.spec.template.spec.service_account_name == "aws-node":
+            self.result = Result(
+                status=False, resources=["aws-node"], resource_type="Daemonset"
+            )
+
+
+class check_access_to_instance_profile(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Restrict access to the instance profile assigned to nodes."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2"
+
+    def check(self, resources: Resources):
+        client = boto3.client("ec2", region_name=resources.region)
+        offenders = []
+
+        instance_metadata = client.describe_instances(
+            Filters=[
+                {
+                    "Name": "tag:aws:eks:cluster-name",
+                    "Values": [
+                        resources.cluster,
+                    ],
+                },
             ]
-            == 2
-        ):
-            offenders.append(instance)
-
-    if offenders:
-        print_instance_metadata_table(
-            offenders,
-            "[red]Restrict access to the instance profile assigned to nodes",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#when-your-application-needs-access-to-imds-use-imdsv2-and-increase-the-hop-limit-on-ec2-instances-to-2]Click to see the guide[/link]",
-        )
-    return offenders
-
-
-def disable_anonymous_access_for_cluster_roles(resources: Resources):
-    offenders = []
-
-    for cluster_role_binding in resources.cluster_role_bindings:
-        if cluster_role_binding.subjects:
-            for subject in cluster_role_binding.subjects:
-                if (
-                    subject.name == "system:unauthenticated"
-                    or subject.name == "system:anonymous"
-                ):
-                    offenders.append(cluster_role_binding)
-
-    if offenders:
-        print_role_table(
-            offenders,
-            "[red]Don't bind clusterroles to anonymous/unauthenticated groups",
-            "[link=https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access]Click to see the guide[/link]",
-            "ClusterRoleBinding",
         )
 
-    return offenders
+        for instance in instance_metadata["Reservations"]:
+            if (
+                instance["Instances"][0]["MetadataOptions"][
+                    "HttpPutResponseHopLimit"
+                ]
+                == 2
+            ):
+                offenders.append(instance)
+
+        self.result = Result(status=True, resource_type="Node")
+
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="Node",
+                resources=[i["Instances"][0]["InstanceId"] for i in offenders],
+            )
+
+
+class disable_anonymous_access_for_cluster_roles(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "iam"
+    message = "Don't bind clusterroles to anonymous/unauthenticated groups."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
+
+    def check(self, resources: Resources):
+        offenders = []
+
+        for cluster_role_binding in resources.cluster_role_bindings:
+            if cluster_role_binding.subjects:
+                for subject in cluster_role_binding.subjects:
+                    if (
+                        subject.name == "system:unauthenticated"
+                        or subject.name == "system:anonymous"
+                    ):
+                        offenders.append(cluster_role_binding)
+
+        self.result = Result(status=True, resource_type="ClusterRoleBinding")
+        if offenders:
+            self.result = Result(
+                status=False,
+                resource_type="ClusterRoleBinding",
+                resources=[i.metadata.name for i in offenders],
+            )

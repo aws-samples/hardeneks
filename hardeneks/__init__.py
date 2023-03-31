@@ -3,11 +3,15 @@ from pathlib import Path
 from pkg_resources import resource_filename
 import tempfile
 import yaml
+import json
+from collections import defaultdict
 
 from botocore.exceptions import EndpointConnectionError
 import boto3
 import kubernetes
 from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
 import typer
 
 from .resources import (
@@ -16,7 +20,6 @@ from .resources import (
 )
 from .harden import harden
 from hardeneks import helpers
-
 
 app = typer.Typer()
 console = Console(record=True)
@@ -66,6 +69,7 @@ def _get_cluster_name(context, region):
 def _get_region():
     return boto3.session.Session().region_name
 
+
 def _add_tls_verify():
     kubeconfig = helpers.get_kube_config()
     tmp_config = tempfile.NamedTemporaryFile().name
@@ -77,6 +81,58 @@ def _add_tls_verify():
 
     kubernetes.config.load_kube_config(tmp_config)
     os.remove(tmp_config)
+
+
+def _export_json(rules: list, json_path=str):
+    def ndd():
+        return defaultdict(ndd)
+
+    json_blob = ndd()
+
+    for rule in rules:
+        result = {
+            "status": rule.result.status,
+            "resources": rule.result.resources,
+            "resource_type": rule.result.resource_type,
+            "namespace": rule.result.namespace,
+        }
+        json_blob[rule._type][rule.pillar][rule.section][rule.message] = result
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(json_blob, f, ensure_ascii=False, indent=4)
+
+
+def print_consolidated_results(rules: list):
+
+    pillars = set([i.pillar for i in rules])
+
+    for pillar in pillars:
+        table = Table()
+        table.add_column("Section")
+        table.add_column("Namespace")
+        table.add_column("Rule")
+        table.add_column("Resource")
+        table.add_column("Resource Type")
+        table.add_column("Resolution")
+        filtered_rules = [i for i in rules if i.pillar == pillar]
+        for rule in filtered_rules:
+            color = "red"
+            namespace = "Cluster Wide"
+            if rule.result.status:
+                color = "green"
+            if rule.result.namespace:
+                namespace = rule.result.namespace
+            for resource in rule.result.resources:
+                table.add_row(
+                    rule.section,
+                    namespace,
+                    rule.message,
+                    resource,
+                    rule.result.resource_type,
+                    f"[link={rule.url}]Link[/link]",
+                    style=color,
+                )
+        console.print(Panel(table, title=f"[cyan][bold]{pillar} rules"))
+        console.print()
 
 
 @app.command()
@@ -106,6 +162,9 @@ def run_hardeneks(
         default=None,
         help="Export the report in html format",
     ),
+    export_json: str = typer.Option(
+        default=None, help="Export the report in json format"
+    ),
     insecure_skip_tls_verify: bool = typer.Option(
         False,
         "--insecure-skip-tls-verify",
@@ -122,6 +181,7 @@ def run_hardeneks(
         config (str): Path to hardeneks config file
         export-txt (str): Export the report in txt format
         export-html (str): Export the report in html format
+        export-json (str): Export the report in json format
         insecure-skip-tls-verify (str): Skip tls verification
 
     Returns:
@@ -131,7 +191,7 @@ def run_hardeneks(
     if insecure_skip_tls_verify:
         _add_tls_verify()
     else:
-        # should pass in config file 
+        # should pass in config file
         kubernetes.config.load_kube_config(context=context)
 
     context = _get_current_context(context)
@@ -159,24 +219,26 @@ def run_hardeneks(
 
     rules = config["rules"]
 
-    console.rule("[b]Checking cluster wide rules", characters="- ")
-    console.print()
-
     resources = Resources(region, context, cluster, namespaces)
     resources.set_resources()
-    harden(resources, rules, "cluster_wide")
+
+    results = []
+
+    cluster_wide_results = harden(resources, rules, "cluster_wide")
+
+    results = results + cluster_wide_results
 
     for ns in namespaces:
-        console.rule(
-            f"[b]Checking rules against namespace: {ns}", characters=" -"
-        )
-        console.print()
         resources = NamespacedResources(region, context, cluster, ns)
         resources.set_resources()
-        harden(resources, rules, "namespace_based")
-        console.print()
+        namespace_based_results = harden(resources, rules, "namespace_based")
+        results = results + namespace_based_results
+
+    print_consolidated_results(results)
 
     if export_txt:
         console.save_text(export_txt)
     if export_html:
         console.save_html(export_html)
+    if export_json:
+        _export_json(results, export_json)

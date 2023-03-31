@@ -1,23 +1,24 @@
 import boto3
-from rich.panel import Panel
 
-from hardeneks import console
 from ...resources import Resources
+from hardeneks.rules import Rule, Result
 
 
-def check_logs_are_enabled(resources: Resources):
-    client = boto3.client("eks", region_name=resources.region)
-    cluster_metadata = client.describe_cluster(name=resources.cluster)
-    logs = cluster_metadata["cluster"]["logging"]["clusterLogging"][0][
-        "enabled"
-    ]
-    if not logs:
-        console.print(
-            Panel(
-                "[red]Enable control plane logs for auditing",
-                subtitle="[link=https://aws.github.io/aws-eks-best-practices/security/docs/detective/#enable-audit-logs]Click to see the guide[/link]",
+class check_logs_are_enabled(Rule):
+    _type = "cluster_wide"
+    pillar = "security"
+    section = "detective_controls"
+    message = "Enable control plane logs for auditing."
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/detective/#enable-audit-logs"
+
+    def check(self, resources: Resources):
+        client = boto3.client("eks", region_name=resources.region)
+        cluster_metadata = client.describe_cluster(name=resources.cluster)
+        logs = cluster_metadata["cluster"]["logging"]["clusterLogging"][0][
+            "enabled"
+        ]
+        self.result = Result(status=True, resource_type="Log Configuration")
+        if not logs:
+            self.result = Result(
+                status=False, resource_type="Log Configuration"
             )
-        )
-        console.print()
-
-    return logs
