@@ -34,6 +34,7 @@ hardeneks [OPTIONS]
 * `--config TEXT`: Path to a hardeneks config file
 * `--export-txt TEXT`: Export the report in txt format
 * `--export-html TEXT`: Export the report in html format
+* `--export-json TEXT`: Export the report in json format
 * `--insecure-skip-tls-verify`: Skip TLS verification
 * `--help`: Show this message and exit.
 
