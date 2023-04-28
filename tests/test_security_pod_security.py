@@ -99,7 +99,7 @@ def test_ensure_namespace_psa_exist(mocked_client):
         "some_region",
         "some_context",
         "some_cluster",
-        ["kube-node-lease", "kube-public", "kube-system", "kube-apiserver"],
+        ["bad", "default", "good", "test-namespace"],
     )
     rule = ensure_namespace_psa_exist()
     rule.check(resources)

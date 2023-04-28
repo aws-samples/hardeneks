@@ -15,14 +15,16 @@ class ensure_namespace_psa_exist(Rule):
         offenders = []
 
         namespaces = kubernetes.client.CoreV1Api().list_namespace().items
+        psa_labels = [
+            "pod-security.kubernetes.io/enforce",
+            "pod-security.kubernetes.io/warn",
+            "pod-security.kubernetes.io/audit",
+        ]
+
         for namespace in namespaces:
-            if namespace.metadata.name not in resources.namespaces:
+            if namespace.metadata.name in resources.namespaces:
                 labels = namespace.metadata.labels.keys()
-                if "pod-security.kubernetes.io/enforce" not in labels:
-                    offenders.append(namespace.metadata.name)
-                elif "pod-security.kubernetes.io/warn" not in labels:
-                    offenders.append(namespace.metadata.name)
-                elif not labels:
+                if not any(i in labels for i in psa_labels):
                     offenders.append(namespace.metadata.name)
 
         self.result = Result(status=True, resource_type="Namespace")
