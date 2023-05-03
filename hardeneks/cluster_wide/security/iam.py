@@ -131,8 +131,13 @@ class disable_anonymous_access_for_cluster_roles(Rule):
     def check(self, resources: Resources):
         offenders = []
 
+        ignored = ["system:public-info-viewer"]
+
         for cluster_role_binding in resources.cluster_role_bindings:
-            if cluster_role_binding.subjects:
+            if (
+                cluster_role_binding.subjects
+                and cluster_role_binding.metadata.name not in ignored
+            ):
                 for subject in cluster_role_binding.subjects:
                     if (
                         subject.name == "system:unauthenticated"

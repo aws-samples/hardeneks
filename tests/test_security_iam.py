@@ -162,7 +162,7 @@ def test_disable_run_as_root_user(namespaced_resources):
 def test_disable_anonymous_access_for_cluster_roles(namespaced_resources):
     rule = disable_anonymous_access_for_cluster_roles()
     rule.check(namespaced_resources)
-
+    assert "system:public-info-viewer" not in rule.result.resources
     assert "good" not in rule.result.resources
     assert "bad" in rule.result.resources
 
