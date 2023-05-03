@@ -1,3 +1,10 @@
+## Unreleased
+
+### Fix
+
+- Ignore public info viewer
+- Fix namespace psa bug
+
 ## v0.9.0 (2023-03-31)
 
 ### Feat
