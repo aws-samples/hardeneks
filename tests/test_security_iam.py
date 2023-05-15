@@ -104,20 +104,32 @@ def test_check_access_to_instance_profile(mocked_client):
 
 
 @patch("kubernetes.client.AppsV1Api.read_namespaced_daemon_set")
-def test_check_aws_node_daemonset_service_account(mocked_client):
-    test_data = (
+@patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
+def test_check_aws_node_daemonset_service_account(
+    mocked_core_api, mocked_apps_api
+):
+    daemon_set_data = (
         Path.cwd()
         / "tests"
         / "data"
         / "check_aws_node_daemonset_service_account"
         / "daemon_sets_api_response.json"
     )
-    mocked_client.return_value = get_response(
+    service_account_data = (
+        Path.cwd()
+        / "tests"
+        / "data"
+        / "check_aws_node_daemonset_service_account"
+        / "service_accounts_api_response.json"
+    )
+    mocked_apps_api.return_value = get_response(
         kubernetes.client.AppsV1Api,
-        test_data,
+        daemon_set_data,
         "V1DaemonSet",
     )
-
+    mocked_core_api.return_value = get_response(
+        kubernetes.client.CoreV1Api, service_account_data, "V1ServiceAccount"
+    )
     namespaced_resources = NamespacedResources(
         "some_region", "some_context", "some_cluster", "some_ns"
     )

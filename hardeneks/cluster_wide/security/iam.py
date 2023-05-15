@@ -74,7 +74,15 @@ class check_aws_node_daemonset_service_account(Rule):
             name="aws-node", namespace="kube-system"
         )
         self.result = Result(status=True, resource_type="Daemonset")
-        if daemonset.spec.template.spec.service_account_name == "aws-node":
+        v1 = client.CoreV1Api()
+        service_account = v1.read_namespaced_service_account(
+            name=daemonset.spec.template.spec.service_account_name,
+            namespace="kube-system",
+        )
+        if (
+            "eks.amazonaws.com/role-arn"
+            not in service_account.metadata.annotations
+        ):
             self.result = Result(
                 status=False, resources=["aws-node"], resource_type="Daemonset"
             )

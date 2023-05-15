@@ -1,4 +1,10 @@
-## Unreleased
+## v0.9.3 (2023-05-15)
+
+### Fix
+
+- Fix aws-node service account irsa bug
+
+## v0.9.2 (2023-05-03)
 
 ### Fix
 
