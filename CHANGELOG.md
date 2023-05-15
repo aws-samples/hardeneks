@@ -2,6 +2,12 @@
 
 ### Fix
 
+- Fix aws-node service account irsa bug
+
+## v0.9.2 (2023-05-03)
+
+### Fix
+
 - Ignore public info viewer
 - Fix namespace psa bug
 
