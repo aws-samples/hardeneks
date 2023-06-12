@@ -224,7 +224,7 @@ class use_managed_nodegroups(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Nodes are recommended to be part of a managed noge group."
+    message = "Nodes are recommended to be part of a managed node group."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
 
     def check(self, resources):
