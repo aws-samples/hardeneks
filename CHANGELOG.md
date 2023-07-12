@@ -1,3 +1,9 @@
+## Unreleased
+
+### Feat
+
+- Add console size as args
+
 ## v0.9.3 (2023-05-15)
 
 ### Fix
