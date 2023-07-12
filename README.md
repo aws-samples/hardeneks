@@ -36,6 +36,8 @@ hardeneks [OPTIONS]
 * `--export-html TEXT`: Export the report in html format
 * `--export-json TEXT`: Export the report in json format
 * `--insecure-skip-tls-verify`: Skip TLS verification
+* `--width`: Width of the output (defaults to terminal size)
+* `--height`: Height of the output (defaults to terminal size)
 * `--help`: Show this message and exit.
 
 

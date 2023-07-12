@@ -169,6 +169,13 @@ def run_hardeneks(
         False,
         "--insecure-skip-tls-verify",
     ),
+    width: int = typer.Option(
+        default=None, help="Width of the console (defaults to terminal width)"
+    ),
+    height: int = typer.Option(
+        default=None,
+        help="Height of the console (defaults to terminal height)",
+    ),
 ):
     """
     Main entry point to hardeneks.
@@ -183,6 +190,8 @@ def run_hardeneks(
         export-html (str): Export the report in html format
         export-json (str): Export the report in json format
         insecure-skip-tls-verify (str): Skip tls verification
+        width (int): Output width
+        height (int): Output height
 
     Returns:
         None
@@ -193,6 +202,11 @@ def run_hardeneks(
     else:
         # should pass in config file
         kubernetes.config.load_kube_config(context=context)
+
+    if width:
+        console.width = width
+    if height:
+        console.height = height
 
     context = _get_current_context(context)
 
