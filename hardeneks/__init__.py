@@ -95,6 +95,7 @@ def _export_json(rules: list, json_path=str):
             "resources": rule.result.resources,
             "resource_type": rule.result.resource_type,
             "namespace": rule.result.namespace,
+            "resolution": rule.url,
         }
         json_blob[rule._type][rule.pillar][rule.section][rule.message] = result
     with open(json_path, "w", encoding="utf-8") as f:

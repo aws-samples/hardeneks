@@ -18,5 +18,5 @@ class ensure_namespace_quotas_exist(Rule):
         self.result = Result(status=True, resource_type="Namespace")
         if offenders:
             self.result = Result(
-                status=False, resources=offenders, resource_type="Namepsace"
+                status=False, resources=offenders, resource_type="Namespace"
             )
