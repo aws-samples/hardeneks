@@ -1,4 +1,10 @@
-## Unreleased
+## v0.10.1 (2023-07-24)
+
+### Fix
+
+- Add resolution url to the json output
+
+## v0.10.0 (2023-07-12)
 
 ### Feat
 
