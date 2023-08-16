@@ -39,7 +39,11 @@ class disallow_linux_capabilities(Rule):
                     if not capabilities.issubset(set(allowed_list)):
                         offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,

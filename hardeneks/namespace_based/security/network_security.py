@@ -24,7 +24,11 @@ class use_encryption_with_aws_load_balancers(Rule):
                 if not (ssl_cert and ssl_cert_port == "443"):
                     offenders.append(service)
 
-        self.result = Result(status=True, resource_type="Service")
+        self.result = Result(
+            status=True, 
+            resource_type="Service",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,

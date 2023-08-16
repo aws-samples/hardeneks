@@ -23,7 +23,11 @@ class disallow_secrets_from_env_vars(Rule):
                         if env_from.secret_ref:
                             offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace
+            )
         if offenders:
             self.result = Result(
                 status=False,
