@@ -1,3 +1,9 @@
+## Unreleased
+
+### Fix
+
+- Print namespace name for passed namespace based rules
+
 ## v0.10.1 (2023-07-24)
 
 ### Fix
