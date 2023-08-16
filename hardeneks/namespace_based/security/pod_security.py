@@ -23,7 +23,11 @@ class disallow_container_socket_mount(Rule):
                 if volume.host_path and volume.host_path.path in sockets:
                     offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,
@@ -49,7 +53,11 @@ class disallow_host_path_or_make_it_read_only(Rule):
                 if volume.host_path:
                     offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,
@@ -77,7 +85,11 @@ class set_requests_limits_for_containers(Rule):
                 ):
                     offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,
@@ -106,7 +118,11 @@ class disallow_privilege_escalation(Rule):
                 ):
                     offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,
@@ -133,7 +149,11 @@ class check_read_only_root_file_system(Rule):
                     and not container.security_context.read_only_root_filesystem
                 ):
                     offenders.append(pod)
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,

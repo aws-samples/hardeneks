@@ -21,7 +21,11 @@ class restrict_wildcard_for_roles(Rule):
                 if "*" in rule.resources:
                     offenders.append(role)
 
-        self.result = Result(status=True, resource_type="Role")
+        self.result = Result(
+            status=True,
+            resource_type="Role",
+            namespace=namespaced_resources.namespace,
+        )
         if offenders:
             self.result = Result(
                 status=False,
@@ -46,7 +50,11 @@ class disable_service_account_token_mounts(Rule):
             if pod.spec.automount_service_account_token:
                 offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,
@@ -75,7 +83,11 @@ class disable_run_as_root_user(Rule):
             ):
                 offenders.append(pod)
 
-        self.result = Result(status=True, resource_type="Pod")
+        self.result = Result(
+            status=True, 
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
+        )
         if offenders:
             self.result = Result(
                 status=False,
@@ -105,7 +117,11 @@ class disable_anonymous_access_for_roles(Rule):
                     ):
                         offenders.append(role_binding)
 
-        self.result = Result(status=True, resource_type="RoleBinding")
+        self.result = Result(
+            status=True,
+            resource_type="RoleBinding",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,
@@ -141,7 +157,11 @@ class use_dedicated_service_accounts_for_each_deployment(Rule):
                 if k == deployment.spec.template.spec.service_account_name:
                     offenders.append(deployment)
 
-        self.result = Result(status=True, resource_type="Deployment")
+        self.result = Result(
+            status=True,
+            resource_type="Deployment",
+            namespace=namespaced_resources.namespace,
+        )
         if offenders:
             self.result = Result(
                 status=False,
@@ -179,7 +199,11 @@ class use_dedicated_service_accounts_for_each_stateful_set(
                 if k == deployment.spec.template.spec.service_account_name:
                     offenders.append(deployment)
 
-        self.result = Result(status=True, resource_type="StatefulSet")
+        self.result = Result(
+            status=True,
+            resource_type="StatefulSet",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,
@@ -217,7 +241,11 @@ class use_dedicated_service_accounts_for_each_daemon_set(
                 if k == deployment.spec.template.spec.service_account_name:
                     offenders.append(deployment)
 
-        self.result = Result(status=True, resource_type="DaemonSet")
+        self.result = Result(
+            status=True, 
+            resource_type="DaemonSet",
+            namespace=namespaced_resources.namespace,
+            )
         if offenders:
             self.result = Result(
                 status=False,
