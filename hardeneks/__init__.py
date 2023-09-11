@@ -239,15 +239,16 @@ def run_hardeneks(
 
     results = []
 
-    cluster_wide_results = harden(resources, rules, "cluster_wide")
+    if "cluster_wide" in rules:
+        cluster_wide_results = harden(resources, rules, "cluster_wide")
+        results = results + cluster_wide_results
 
-    results = results + cluster_wide_results
-
-    for ns in namespaces:
-        resources = NamespacedResources(region, context, cluster, ns)
-        resources.set_resources()
-        namespace_based_results = harden(resources, rules, "namespace_based")
-        results = results + namespace_based_results
+    if "namespace_based" in rules:
+        for ns in namespaces:
+            resources = NamespacedResources(region, context, cluster, ns)
+            resources.set_resources()
+            namespace_based_results = harden(resources, rules, "namespace_based")
+            results = results + namespace_based_results
 
     print_consolidated_results(results)
 
