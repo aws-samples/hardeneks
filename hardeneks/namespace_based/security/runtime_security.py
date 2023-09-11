@@ -32,6 +32,7 @@ class disallow_linux_capabilities(Rule):
                 if (
                     container.security_context
                     and container.security_context.capabilities
+                    and container.security_context.capabilities.add
                 ):
                     capabilities = set(
                         container.security_context.capabilities.add
