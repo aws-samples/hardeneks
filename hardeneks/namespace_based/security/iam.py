@@ -73,21 +73,31 @@ class disable_run_as_root_user(Rule):
 
     def check(self, namespaced_resources: NamespacedResources):
 
+        import pudb; pudb.set_trace()
         offenders = []
 
         for pod in namespaced_resources.pods:
             security_context = pod.spec.security_context
+            containers = pod.spec.containers
+            
             if (
                 not security_context.run_as_group
                 and not security_context.run_as_user
             ):
-                offenders.append(pod)
-
+                for con in containers:
+                    security_context = con.security_context
+                    try:
+                        run_as_group = security_context.run_as_group
+                        run_as_user = security_context.run_as_user
+                    except AttributeError:
+                        offenders.append(pod)
+                
         self.result = Result(
             status=True, 
             resource_type="Pod",
             namespace=namespaced_resources.namespace,
         )
+        
         if offenders:
             self.result = Result(
                 status=False,

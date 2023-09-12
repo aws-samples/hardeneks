@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: test-namespace
+  name: bad
+spec:
+  containers:
+  - name: sec-ctx-demo
+    image: busybox
+    command: [ "sh", "-c", "sleep 1h" ]
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 3000
+  - name: sec-ctx-demo-2
+    image: busybox
+    command: [ "sh", "-c", "sleep 1h" ]
