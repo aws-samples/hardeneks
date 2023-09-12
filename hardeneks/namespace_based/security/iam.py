@@ -73,7 +73,6 @@ class disable_run_as_root_user(Rule):
 
     def check(self, namespaced_resources: NamespacedResources):
 
-        import pudb; pudb.set_trace()
         offenders = []
 
         for pod in namespaced_resources.pods:
