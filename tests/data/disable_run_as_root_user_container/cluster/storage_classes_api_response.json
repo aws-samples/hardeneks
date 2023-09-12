@@ -1,0 +1,30 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "storage.k8s.io/v1",
+            "kind": "StorageClass",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"storage.k8s.io/v1\",\"kind\":\"StorageClass\",\"metadata\":{\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"},\"name\":\"gp2\"},\"parameters\":{\"fsType\":\"ext4\",\"type\":\"gp2\"},\"provisioner\":\"kubernetes.io/aws-ebs\",\"volumeBindingMode\":\"WaitForFirstConsumer\"}\n",
+                    "storageclass.kubernetes.io/is-default-class": "true"
+                },
+                "creationTimestamp": "2023-09-11T19:26:20Z",
+                "name": "gp2",
+                "resourceVersion": "301",
+                "uid": "949fdd2a-508e-407f-a36e-ade29b1ad0ea"
+            },
+            "parameters": {
+                "fsType": "ext4",
+                "type": "gp2"
+            },
+            "provisioner": "kubernetes.io/aws-ebs",
+            "reclaimPolicy": "Delete",
+            "volumeBindingMode": "WaitForFirstConsumer"
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

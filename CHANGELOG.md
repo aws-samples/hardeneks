@@ -1,3 +1,14 @@
+## v0.10.3 (2023-09-11)
+
+### Fix
+
+- Remove debugging statement
+- Fix security context container bug
+- Check container.security_context.capabilities.add before checking capabilites
+- Check rules that config has "cluster_wide" or "namespace_based"
+- Change validation condition for check_logs_are_enabled rule
+- Print namespace name for passed namespace based rules
+
 ## v0.10.1 (2023-07-24)
 
 ### Fix

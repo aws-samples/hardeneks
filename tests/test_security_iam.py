@@ -168,6 +168,20 @@ def test_disable_run_as_root_user(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
+    [("disable_run_as_root_user_container")],
+    indirect=["namespaced_resources"],
+)
+def test_disable_run_as_root_user_container(namespaced_resources):
+    rule = disable_run_as_root_user()
+
+    rule.check(namespaced_resources)
+
+    assert "good" not in rule.result.resources
+    assert "bad" in rule.result.resources
+    
+
+@pytest.mark.parametrize(
+    "namespaced_resources",
     [("disable_anonymous_access_for_cluster_roles")],
     indirect=["namespaced_resources"],
 )
