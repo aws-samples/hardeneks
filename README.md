@@ -194,7 +194,7 @@ metadata:
   name: hardeneks-runner
 rules:
 - apiGroups: [""]
-  resources: ["namespaces", "resourcequotas", "persistentvolumes", "pods", "services"]
+  resources: ["namespaces", "resourcequotas", "persistentvolumes", "pods", "services", "nodes"]
   verbs: ["list"]
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
