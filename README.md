@@ -141,11 +141,11 @@ rules:
         - avoid_running_singleton_pods
 ```
 
-**RBAC**:
+## RBAC
  
 In order to run hardeneks we need to have some permissions both on AWS side and k8s side.
 
-Minimal IAM role policy:
+### Minimal IAM role policy
 
 ```json
 {
@@ -185,7 +185,7 @@ Minimal IAM role policy:
 }
 ```
 
-Minimal ClusterRole:
+### Minimal ClusterRole
 
 ```yaml
 kind: ClusterRole
