@@ -144,6 +144,8 @@ class check_read_only_root_file_system(Rule):
         offenders = []
         for pod in namespaced_resources.pods:
             for container in pod.spec.containers:
+                if container.security_context is None:
+                    offenders.append(pod)
                 if (
                     container.security_context
                     and not container.security_context.read_only_root_filesystem
