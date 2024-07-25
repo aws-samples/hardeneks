@@ -223,7 +223,7 @@ rules:
 **Installation**:
 
 ```console
-git clone git@github.com:dorukozturk/hardeneks.git
+git clone git@github.com:aws-samples/hardeneks.git
 cd hardeneks
 poetry install
 ```
