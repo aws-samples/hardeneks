@@ -33,6 +33,7 @@ hardeneks [OPTIONS]
 * `--namespace TEXT`: Namespace to be checked (default is all namespaces)
 * `--config TEXT`: Path to a hardeneks config file
 * `--export-txt TEXT`: Export the report in txt format
+* `--export-csv TEXT`: Export the report in csv format
 * `--export-html TEXT`: Export the report in html format
 * `--export-json TEXT`: Export the report in json format
 * `--insecure-skip-tls-verify`: Skip TLS verification
