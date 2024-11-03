@@ -5,6 +5,7 @@ import tempfile
 import yaml
 import json
 from collections import defaultdict
+import csv
 
 from botocore.exceptions import EndpointConnectionError
 import boto3
@@ -101,6 +102,27 @@ def _export_json(rules: list, json_path=str):
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_blob, f, ensure_ascii=False, indent=4)
 
+def _export_csv(rules: list, csv_path=str):
+    csv_data = []
+
+    for rule in rules:
+        csv_row = {
+           "Type": rule._type,
+            "Pillar": rule.pillar,
+            "Section": rule.section,
+            "Message": rule.message,
+            "Status": rule.result.status,
+            "Resources": ', '.join(rule.result.resources) if rule.result.resources else '',
+            "Resource Type": rule.result.resource_type,
+            "Namespace": rule.result.namespace,
+            "Resolution": rule.url,
+        }
+        csv_data.append(csv_row)
+
+    with open(csv_path, "w", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=csv_data[0].keys())
+        writer.writeheader()
+        writer.writerows(csv_data)
 
 def print_consolidated_results(rules: list):
 
@@ -159,6 +181,10 @@ def run_hardeneks(
         default=None,
         help="Export the report in txt format",
     ),
+    export_csv: str = typer.Option(
+        default=None,
+        help="Export the report in csv format",
+    ),
     export_html: str = typer.Option(
         default=None,
         help="Export the report in html format",
@@ -188,6 +214,7 @@ def run_hardeneks(
         namespace (str): Specific namespace to be checked
         config (str): Path to hardeneks config file
         export-txt (str): Export the report in txt format
+        export-csv (str): Export the report in csv format
         export-html (str): Export the report in html format
         export-json (str): Export the report in json format
         insecure-skip-tls-verify (str): Skip tls verification
@@ -254,6 +281,8 @@ def run_hardeneks(
 
     if export_txt:
         console.save_text(export_txt)
+    if export_csv:
+        _export_csv(results, export_csv)
     if export_html:
         console.save_html(export_html)
     if export_json:
