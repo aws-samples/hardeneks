@@ -36,6 +36,7 @@ hardeneks [OPTIONS]
 * `--export-csv TEXT`: Export the report in csv format
 * `--export-html TEXT`: Export the report in html format
 * `--export-json TEXT`: Export the report in json format
+* `--export-security-hub`: Export failed checks to AWS Security Hub
 * `--insecure-skip-tls-verify`: Skip TLS verification
 * `--width`: Width of the output (defaults to terminal size)
 * `--height`: Height of the output (defaults to terminal size)
