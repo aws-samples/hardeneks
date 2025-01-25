@@ -239,6 +239,8 @@ class use_managed_nodegroups(Rule):
                 offenders.append(node)
             elif "karpenter.sh/provisioner-name" in labels.keys():
                 pass
+            elif "karpenter.sh/nodepool" in labels.keys():
+                pass
             else:
                 offenders.append(node)
 
