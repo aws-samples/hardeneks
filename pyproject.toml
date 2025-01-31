@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hardeneks"
-version = "0.10.4"
+version = "0.11.2"
 description = ""
 authors = ["Doruk Ozturk <dozturk@amazon.com>"]
 readme = "README.md"
