@@ -98,23 +98,17 @@
 
 - Add a cli option for skipping tls verification
 
-## 0.5.0 (2022-12-10)
-
 ## v0.5.0 (2022-12-10)
 
 ### Feat
 
 - Add links to the doc pages
 
-## 0.4.2 (2022-12-10)
-
 ## v0.4.2 (2022-12-10)
 
 ### Fix
 
 - Fix non existent csi driver issue
-
-## 0.4.1 (2022-12-10)
 
 ## v0.4.1 (2022-12-10)
 
