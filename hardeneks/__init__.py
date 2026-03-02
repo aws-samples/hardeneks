@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from pkg_resources import resource_filename
+from importlib.resources import files
 import tempfile
 import yaml
 import json
@@ -278,7 +278,7 @@ def run_hardeneks(
         help="Specific namespace to harden. Default is all namespaces.",
     ),
     config: str = typer.Option(
-        default=resource_filename(__name__, "config.yaml"),
+        default=str(files(__name__).joinpath("config.yaml")),
         callback=_config_callback,
         help="Path to a hardeneks config file.",
     ),
