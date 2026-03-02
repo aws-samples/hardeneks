@@ -1,3 +1,14 @@
+## v1.0.0 (2026-03-02)
+
+## v1.0.0 (2026-03-02)
+
+
+- upgrade dependencies and require Python 3.10+ BREAKING CHANGE: Minimum Python version is now 3.10. Updated kubernetes client to v32, boto3 to v1.35.9, and other dependencies to latest versions. Replaced deprecated pkg_resources with importlib.resources.
+
+## v0.11.1 (2024-11-17)
+
+## v0.10.5 (2024-10-15)
+
 ## v0.11.0 (2024-10-15)
 
 ## v0.10.3 (2023-09-11)
@@ -98,17 +109,23 @@
 
 - Add a cli option for skipping tls verification
 
+## 0.5.0 (2022-12-10)
+
 ## v0.5.0 (2022-12-10)
 
 ### Feat
 
 - Add links to the doc pages
 
+## 0.4.2 (2022-12-10)
+
 ## v0.4.2 (2022-12-10)
 
 ### Fix
 
 - Fix non existent csi driver issue
+
+## 0.4.1 (2022-12-10)
 
 ## v0.4.1 (2022-12-10)
 
@@ -126,3 +143,4 @@
 - Add more namespaces to the ignore list
 - Add a try except block
 - Fix changelog
+
