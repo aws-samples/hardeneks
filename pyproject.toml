@@ -48,6 +48,9 @@ version_files = [
   "pyproject.toml:^version"
 ]
 tag_format = "v$version"
+legacy_tag_formats = [
+    "${version}"
+]
 
 [build-system]
 requires = ["poetry-core"]
