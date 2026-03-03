@@ -12,7 +12,7 @@ from hardeneks.namespace_based.security.encryption_secrets import (
 
 @pytest.mark.parametrize(
     "resources",
-    [("use_encryption_with_ebs")],
+    [(("use_encryption_with_ebs", ["storage_classes"]))],
     indirect=["resources"],
 )
 def test_use_encryption_with_ebs(resources):
@@ -25,7 +25,7 @@ def test_use_encryption_with_ebs(resources):
 
 @pytest.mark.parametrize(
     "resources",
-    [("use_encryption_with_efs")],
+    [(("use_encryption_with_efs", ["persistent_volumes"]))],
     indirect=["resources"],
 )
 def test_use_encryption_with_efs(resources):
@@ -38,7 +38,7 @@ def test_use_encryption_with_efs(resources):
 
 @pytest.mark.parametrize(
     "resources",
-    [("use_efs_access_points")],
+    [(("use_efs_access_points", ["persistent_volumes"]))],
     indirect=["resources"],
 )
 def test_use_efs_access_points(resources):
@@ -51,7 +51,7 @@ def test_use_efs_access_points(resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("disallow_secrets_from_env_vars")],
+    [(("disallow_secrets_from_env_vars", ["pods"]))],
     indirect=["namespaced_resources"],
 )
 def test_disallow_secrets_from_env_vars(namespaced_resources):

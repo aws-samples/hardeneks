@@ -5,7 +5,7 @@ from unittest.mock import patch
 import kubernetes
 import pytest
 
-from hardeneks.resources import NamespacedResources
+from hardeneks.resources import NamespacedResources, Resources
 
 from hardeneks.cluster_wide.security.iam import (
     restrict_wildcard_for_cluster_roles,
@@ -34,7 +34,7 @@ def read_json(file_path):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("restrict_wildcard_for_roles")],
+    [(("restrict_wildcard_for_roles", ["roles"]))],
     indirect=["namespaced_resources"],
 )
 def test_restrict_wildcard_for_roles(namespaced_resources):
@@ -47,7 +47,7 @@ def test_restrict_wildcard_for_roles(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("restrict_wildcard_for_cluster_roles")],
+    [(("restrict_wildcard_for_cluster_roles", ["cluster_roles"]))],
     indirect=["namespaced_resources"],
 )
 def test_restrict_wildcard_for_cluster_roles(namespaced_resources):
@@ -113,14 +113,14 @@ def test_check_aws_node_daemonset_service_account(
         / "tests"
         / "data"
         / "check_aws_node_daemonset_service_account"
-        / "daemon_sets_api_response.json"
+        / "daemonset_api_response.json"
     )
     service_account_data = (
         Path.cwd()
         / "tests"
         / "data"
         / "check_aws_node_daemonset_service_account"
-        / "service_accounts_api_response.json"
+        / "serviceaccount_api_response.json"
     )
     mocked_apps_api.return_value = get_response(
         kubernetes.client.AppsV1Api,
@@ -141,7 +141,7 @@ def test_check_aws_node_daemonset_service_account(
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("disable_service_account_token_mounts")],
+    [(("disable_service_account_token_mounts", ["pods"]))],
     indirect=["namespaced_resources"],
 )
 def test_disable_service_account_token_mounts(namespaced_resources):
@@ -154,7 +154,7 @@ def test_disable_service_account_token_mounts(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("disable_run_as_root_user")],
+    [(("disable_run_as_root_user", ["pods"]))],
     indirect=["namespaced_resources"],
 )
 def test_disable_run_as_root_user(namespaced_resources):
@@ -168,7 +168,7 @@ def test_disable_run_as_root_user(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("disable_run_as_root_user_container")],
+    [(("disable_run_as_root_user_container", ["pods"]))],
     indirect=["namespaced_resources"],
 )
 def test_disable_run_as_root_user_container(namespaced_resources):
@@ -182,7 +182,7 @@ def test_disable_run_as_root_user_container(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("disable_anonymous_access_for_cluster_roles")],
+    [(("disable_anonymous_access_for_cluster_roles", ["cluster_role_bindings"]))],
     indirect=["namespaced_resources"],
 )
 def test_disable_anonymous_access_for_cluster_roles(namespaced_resources):
@@ -195,7 +195,7 @@ def test_disable_anonymous_access_for_cluster_roles(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("disable_anonymous_access_for_roles")],
+    [(("disable_anonymous_access_for_roles", ["role_bindings"]))],
     indirect=["namespaced_resources"],
 )
 def test_disable_anonymous_access_for_roles(namespaced_resources):
@@ -209,7 +209,7 @@ def test_disable_anonymous_access_for_roles(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("use_dedicated_service_accounts_for_each_daemon_set")],
+    [(("use_dedicated_service_accounts_for_each_daemon_set", ["daemon_sets"]))],
     indirect=["namespaced_resources"],
 )
 def test_use_dedicated_service_accounts_for_each_daemon_set(
@@ -224,7 +224,7 @@ def test_use_dedicated_service_accounts_for_each_daemon_set(
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("use_dedicated_service_accounts_for_each_deployment")],
+    [(("use_dedicated_service_accounts_for_each_deployment", ["deployments"]))],
     indirect=["namespaced_resources"],
 )
 def test_use_dedicated_service_accounts_for_each_deployment(
@@ -239,7 +239,7 @@ def test_use_dedicated_service_accounts_for_each_deployment(
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("use_dedicated_service_accounts_for_each_stateful_set")],
+    [(("use_dedicated_service_accounts_for_each_stateful_set", ["stateful_sets"]))],
     indirect=["namespaced_resources"],
 )
 def test_use_dedicated_service_accounts_for_each_stateful_set(

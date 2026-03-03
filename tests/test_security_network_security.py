@@ -25,7 +25,7 @@ def read_json(file_path):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("use_encryption_with_aws_load_balancers")],
+    [(("use_encryption_with_aws_load_balancers", ["services"]))],
     indirect=["namespaced_resources"],
 )
 def test_use_encryption_with_aws_load_balancers(namespaced_resources):
@@ -62,13 +62,13 @@ def test_check_vpc_flow_logs(mocked_client):
 
 @pytest.mark.parametrize(
     "resources",
-    [("check_default_deny_policy_exists")],
+    [(("check_default_deny_policy_exists", ["network_policies"]))],
     indirect=["resources"],
 )
 def test_check_default_deny_policy_exists(resources):
     rule = check_default_deny_policy_exists()
     rule.check(resources)
-    assert ["good", "bad", "default"] == rule.result.resources
+    assert sorted(["good", "bad", "default"]) == sorted(rule.result.resources)
 
 
 @patch("kubernetes.client.CoreV1Api.list_service_for_all_namespaces")
@@ -79,7 +79,7 @@ def test_check_awspca_exists(mocked_client):
         / "data"
         / "check_awspca_exists"
         / "cluster"
-        / "services_api_response.json"
+        / "service_api_response.json"
     )
     mocked_client.return_value = get_response(
         kubernetes.client.CoreV1Api,

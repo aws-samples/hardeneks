@@ -1,0 +1,73 @@
+{
+  "items": [
+    {
+      "allowedTopologies": [
+        {
+          "matchLabelExpressions": [
+            {
+              "key": "topology.ebs.csi.aws.com/zone",
+              "values": [
+                "us-east-2c"
+              ]
+            }
+          ]
+        }
+      ],
+      "apiVersion": "storage.k8s.io/v1",
+      "kind": "StorageClass",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"allowedTopologies\":[{\"matchLabelExpressions\":[{\"key\":\"topology.ebs.csi.aws.com/zone\",\"values\":[\"us-east-2c\"]}]}],\"apiVersion\":\"storage.k8s.io/v1\",\"kind\":\"StorageClass\",\"metadata\":{\"annotations\":{},\"name\":\"good\"},\"parameters\":{\"csi.storage.k8s.io/fstype\":\"xfs\",\"encrypted\":\"true\",\"iopsPerGB\":\"50\",\"type\":\"io1\"},\"provisioner\":\"ebs.csi.aws.com\",\"volumeBindingMode\":\"WaitForFirstConsumer\"}\n"
+        },
+        "creationTimestamp": "2026-03-03T01:55:15Z",
+        "name": "good",
+        "resourceVersion": "686384142",
+        "uid": "40788ed3-3136-4518-b08e-66afb5e75f9a"
+      },
+      "parameters": {
+        "csi.storage.k8s.io/fstype": "xfs",
+        "encrypted": "true",
+        "iopsPerGB": "50",
+        "type": "io1"
+      },
+      "provisioner": "ebs.csi.aws.com",
+      "reclaimPolicy": "Delete",
+      "volumeBindingMode": "WaitForFirstConsumer"
+    },
+    {
+      "allowedTopologies": [
+        {
+          "matchLabelExpressions": [
+            {
+              "key": "topology.ebs.csi.aws.com/zone",
+              "values": [
+                "us-east-2c"
+              ]
+            }
+          ]
+        }
+      ],
+      "apiVersion": "storage.k8s.io/v1",
+      "kind": "StorageClass",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"allowedTopologies\":[{\"matchLabelExpressions\":[{\"key\":\"topology.ebs.csi.aws.com/zone\",\"values\":[\"us-east-2c\"]}]}],\"apiVersion\":\"storage.k8s.io/v1\",\"kind\":\"StorageClass\",\"metadata\":{\"annotations\":{},\"name\":\"bad\"},\"parameters\":{\"csi.storage.k8s.io/fstype\":\"xfs\",\"encrypted\":\"false\",\"iopsPerGB\":\"50\",\"type\":\"io1\"},\"provisioner\":\"ebs.csi.aws.com\",\"volumeBindingMode\":\"WaitForFirstConsumer\"}\n"
+        },
+        "creationTimestamp": "2026-03-03T01:55:15Z",
+        "name": "bad",
+        "resourceVersion": "686384143",
+        "uid": "4b8c5623-c96d-4fd5-8279-8b72c85c023c"
+      },
+      "parameters": {
+        "csi.storage.k8s.io/fstype": "xfs",
+        "encrypted": "false",
+        "iopsPerGB": "50",
+        "type": "io1"
+      },
+      "provisioner": "ebs.csi.aws.com",
+      "reclaimPolicy": "Delete",
+      "volumeBindingMode": "WaitForFirstConsumer"
+    }
+  ],
+  "kind": "StorageClassList"
+}

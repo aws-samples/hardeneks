@@ -1,0 +1,113 @@
+{
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{\"service.beta.kubernetes.io/aws-load-balancer-backend-protocol\":\"http\",\"service.beta.kubernetes.io/aws-load-balancer-ssl-cert\":\"\\u003ccertificate ARN\\u003e\",\"service.beta.kubernetes.io/aws-load-balancer-ssl-ports\":\"443\",\"service.beta.kubernetes.io/aws-load-balancer-type\":\"nlb\"},\"labels\":{\"app\":\"good\"},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"ports\":[{\"port\":443,\"protocol\":\"TCP\",\"targetPort\":80}],\"selector\":{\"app\":\"good\"},\"type\":\"LoadBalancer\"}}\n",
+          "service.beta.kubernetes.io/aws-load-balancer-backend-protocol": "http",
+          "service.beta.kubernetes.io/aws-load-balancer-ssl-cert": "<certificate ARN>",
+          "service.beta.kubernetes.io/aws-load-balancer-ssl-ports": "443",
+          "service.beta.kubernetes.io/aws-load-balancer-type": "nlb"
+        },
+        "creationTimestamp": "2026-03-03T01:55:05Z",
+        "finalizers": [
+          "service.kubernetes.io/load-balancer-cleanup"
+        ],
+        "labels": {
+          "app": "good"
+        },
+        "name": "good",
+        "namespace": "test-namespace",
+        "resourceVersion": "686384027",
+        "uid": "2245f9ab-4308-49d5-805a-d3d2d2a35bb9"
+      },
+      "spec": {
+        "allocateLoadBalancerNodePorts": true,
+        "clusterIP": "10.100.142.19",
+        "clusterIPs": [
+          "10.100.142.19"
+        ],
+        "externalTrafficPolicy": "Cluster",
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "nodePort": 32302,
+            "port": 443,
+            "protocol": "TCP",
+            "targetPort": 80
+          }
+        ],
+        "selector": {
+          "app": "good"
+        },
+        "sessionAffinity": "None",
+        "type": "LoadBalancer"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"bad\"},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"ports\":[{\"port\":443,\"protocol\":\"TCP\",\"targetPort\":80}],\"selector\":{\"app\":\"bad\"},\"type\":\"LoadBalancer\"}}\n"
+        },
+        "creationTimestamp": "2026-03-03T01:55:05Z",
+        "finalizers": [
+          "service.kubernetes.io/load-balancer-cleanup"
+        ],
+        "labels": {
+          "app": "bad"
+        },
+        "name": "bad",
+        "namespace": "test-namespace",
+        "resourceVersion": "686384082",
+        "uid": "7c90647c-811b-4d9a-80be-e80acd62767b"
+      },
+      "spec": {
+        "allocateLoadBalancerNodePorts": true,
+        "clusterIP": "10.100.16.144",
+        "clusterIPs": [
+          "10.100.16.144"
+        ],
+        "externalTrafficPolicy": "Cluster",
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "nodePort": 32149,
+            "port": 443,
+            "protocol": "TCP",
+            "targetPort": 80
+          }
+        ],
+        "selector": {
+          "app": "bad"
+        },
+        "sessionAffinity": "None",
+        "type": "LoadBalancer"
+      },
+      "status": {
+        "loadBalancer": {
+          "ingress": [
+            {
+              "hostname": "a7c90647c811b4d9a80bee80acd62767-254836806.ap-southeast-2.elb.amazonaws.com"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "kind": "ServiceList"
+}

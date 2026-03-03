@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "Role",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"\"],\"verbs\":[\"\"]}]}\n"
+        },
+        "creationTimestamp": "2026-03-03T01:54:19Z",
+        "name": "good",
+        "namespace": "test-namespace",
+        "resourceVersion": "686383589",
+        "uid": "b19cd8b8-1e42-4bf0-bbe1-945ee5aaef64"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            ""
+          ],
+          "verbs": [
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "Role",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"*\"],\"verbs\":[\"*\"]}]}\n"
+        },
+        "creationTimestamp": "2026-03-03T01:54:19Z",
+        "name": "bad",
+        "namespace": "test-namespace",
+        "resourceVersion": "686383590",
+        "uid": "205b7743-d97b-4b98-bbb7-9d98efac8024"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "*"
+          ],
+          "verbs": [
+            "*"
+          ]
+        }
+      ]
+    }
+  ],
+  "kind": "RoleList"
+}

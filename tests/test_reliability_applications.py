@@ -23,7 +23,7 @@ from .conftest import get_response
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("avoid_running_singleton_pods")],
+    [(("avoid_running_singleton_pods", ["pods"]))],
     indirect=["namespaced_resources"],
 )
 def test_avoid_running_singleton_pods(namespaced_resources):
@@ -36,7 +36,7 @@ def test_avoid_running_singleton_pods(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("run_multiple_replicas")],
+    [(("run_multiple_replicas", ["deployments"]))],
     indirect=["namespaced_resources"],
 )
 def test_run_multiple_replicas(namespaced_resources):
@@ -50,7 +50,7 @@ def test_run_multiple_replicas(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("schedule_replicas_across_nodes")],
+    [(("schedule_replicas_across_nodes", ["deployments"]))],
     indirect=["namespaced_resources"],
 )
 def test_schedule_replicas_across_nodes(namespaced_resources):
@@ -69,7 +69,7 @@ def test_check_metrics_server_is_running(mocked_client):
         / "data"
         / "check_metrics_server_is_running"
         / "cluster"
-        / "services_api_response.json"
+        / "service_api_response.json"
     )
     mocked_client.return_value = get_response(
         kubernetes.client.CoreV1Api,
@@ -93,7 +93,7 @@ def test_check_vertical_pod_autoscaler_exists(mocked_client):
         / "data"
         / "check_vertical_pod_autoscaler_exists"
         / "cluster"
-        / "deployments_api_response.json"
+        / "deployment_api_response.json"
     )
 
     mocked_client.return_value = get_response(
@@ -113,7 +113,7 @@ def test_check_vertical_pod_autoscaler_exists(mocked_client):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("check_horizontal_pod_autoscaling_exists")],
+    [(("check_horizontal_pod_autoscaling_exists", ["deployments", "hpas"]))],
     indirect=["namespaced_resources"],
 )
 def test_check_horizontal_pod_autoscaling_exists(namespaced_resources):
@@ -127,7 +127,7 @@ def test_check_horizontal_pod_autoscaling_exists(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("check_liveness_probes")],
+    [(("check_liveness_probes", ["pods"]))],
     indirect=["namespaced_resources"],
 )
 def test_check_liveness_probes(namespaced_resources):
@@ -141,7 +141,7 @@ def test_check_liveness_probes(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("check_readiness_probes")],
+    [(("check_readiness_probes", ["pods"]))],
     indirect=["namespaced_resources"],
 )
 def test_check_readiness_probes(namespaced_resources):

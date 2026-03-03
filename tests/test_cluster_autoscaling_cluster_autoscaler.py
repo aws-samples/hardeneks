@@ -35,7 +35,7 @@ def test_check_any_cluster_autoscaler_exists(mocked_client):
         / "data"
         / "check_any_cluster_autoscaler_exists"
         / "cluster"
-        / "deployments_api_response.json"
+        / "deployment_api_response.json"
     )
     mocked_client.return_value = get_response(
         kubernetes.client.AppsV1Api,
@@ -62,7 +62,7 @@ def test_ensure_cluster_autoscaler_and_cluster_versions_match(
         / "data"
         / "ensure_cluster_autoscaler_and_cluster_versions_match"
         / "cluster"
-        / "deployments_api_response.json"
+        / "deployment_api_response.json"
     )
     mocked_k8s_client.return_value = get_response(
         kubernetes.client.AppsV1Api,
@@ -89,7 +89,7 @@ def test_ensure_cluster_autoscaler_has_autodiscovery_mode(mocked_client):
         / "data"
         / "ensure_cluster_autoscaler_has_autodiscovery_mode"
         / "cluster"
-        / "deployments_api_response.json"
+        / "deployment_api_response.json"
     )
     mocked_client.return_value = get_response(
         kubernetes.client.AppsV1Api,
@@ -114,7 +114,7 @@ def test_use_separate_iam_role_for_cluster_autoscaler(
         / "data"
         / "use_separate_iam_role_for_cluster_autoscaler"
         / "cluster"
-        / "deployments_api_response.json"
+        / "deployment_api_response.json"
     )
     sa_data = (
         Path.cwd()
@@ -122,7 +122,7 @@ def test_use_separate_iam_role_for_cluster_autoscaler(
         / "data"
         / "use_separate_iam_role_for_cluster_autoscaler"
         / "cluster"
-        / "service_accounts_api_response.json"
+        / "serviceaccount_api_response.json"
     )
     deployment_client.return_value = get_response(
         kubernetes.client.AppsV1Api,
@@ -153,7 +153,7 @@ def test_employ_least_privileged_access_cluster_autoscaler_role(
         / "data"
         / "employ_least_privileged_access_cluster_autoscaler_role"
         / "cluster"
-        / "deployments_api_response.json"
+        / "deployment_api_response.json"
     )
     mocked_deployment_client.return_value = get_response(
         kubernetes.client.AppsV1Api,
@@ -166,7 +166,7 @@ def test_employ_least_privileged_access_cluster_autoscaler_role(
         / "data"
         / "employ_least_privileged_access_cluster_autoscaler_role"
         / "cluster"
-        / "service_accounts_api_response.json"
+        / "serviceaccount_api_response.json"
     )
     sa_return_value = get_response(
         kubernetes.client.CoreV1Api, sa_data, "V1ServiceAccount"

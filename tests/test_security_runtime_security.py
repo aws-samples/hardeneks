@@ -7,7 +7,7 @@ from hardeneks.namespace_based.security.runtime_security import (
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [("disallow_linux_capabilities")],
+    [(("disallow_linux_capabilities", ["pods"]))],
     indirect=["namespaced_resources"],
 )
 def test_disallow_linux_capabilities(namespaced_resources):

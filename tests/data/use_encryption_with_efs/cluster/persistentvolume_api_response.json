@@ -1,0 +1,78 @@
+{
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"PersistentVolume\",\"metadata\":{\"annotations\":{},\"name\":\"good\"},\"spec\":{\"accessModes\":[\"ReadWriteOnce\"],\"capacity\":{\"storage\":\"5Gi\"},\"csi\":{\"driver\":\"efs.csi.aws.com\",\"volumeHandle\":\"some_id\"},\"mountOptions\":[\"tls\"],\"persistentVolumeReclaimPolicy\":\"Retain\",\"storageClassName\":\"efs-sc\",\"volumeMode\":\"Filesystem\"}}\n"
+        },
+        "creationTimestamp": "2026-03-03T01:55:21Z",
+        "finalizers": [
+          "kubernetes.io/pv-protection"
+        ],
+        "name": "good",
+        "resourceVersion": "686384173",
+        "uid": "cf363bac-c535-461f-ab50-cb5b6d7f2241"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "5Gi"
+        },
+        "csi": {
+          "driver": "efs.csi.aws.com",
+          "volumeHandle": "some_id"
+        },
+        "mountOptions": [
+          "tls"
+        ],
+        "persistentVolumeReclaimPolicy": "Retain",
+        "storageClassName": "efs-sc",
+        "volumeMode": "Filesystem"
+      },
+      "status": {
+        "lastPhaseTransitionTime": "2026-03-03T01:55:21Z",
+        "phase": "Available"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"PersistentVolume\",\"metadata\":{\"annotations\":{},\"name\":\"bad\"},\"spec\":{\"accessModes\":[\"ReadWriteOnce\"],\"capacity\":{\"storage\":\"5Gi\"},\"csi\":{\"driver\":\"efs.csi.aws.com\",\"volumeHandle\":\"some_id\"},\"persistentVolumeReclaimPolicy\":\"Retain\",\"storageClassName\":\"efs-sc\",\"volumeMode\":\"Filesystem\"}}\n"
+        },
+        "creationTimestamp": "2026-03-03T01:55:21Z",
+        "finalizers": [
+          "kubernetes.io/pv-protection"
+        ],
+        "name": "bad",
+        "resourceVersion": "686384175",
+        "uid": "5baa04b9-e463-432c-bb42-1d1d9322d070"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "5Gi"
+        },
+        "csi": {
+          "driver": "efs.csi.aws.com",
+          "volumeHandle": "some_id"
+        },
+        "persistentVolumeReclaimPolicy": "Retain",
+        "storageClassName": "efs-sc",
+        "volumeMode": "Filesystem"
+      },
+      "status": {
+        "lastPhaseTransitionTime": "2026-03-03T01:55:21Z",
+        "phase": "Available"
+      }
+    }
+  ],
+  "kind": "PersistentVolumeList"
+}

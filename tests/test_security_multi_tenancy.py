@@ -7,7 +7,7 @@ from hardeneks.cluster_wide.security.multi_tenancy import (
 
 @pytest.mark.parametrize(
     "resources",
-    [("ensure_namespace_quotas_exist")],
+    [(("ensure_namespace_quotas_exist", ["resource_quotas"]))],
     indirect=["resources"],
 )
 def test_ensure_namespace_quotas_exist(resources):

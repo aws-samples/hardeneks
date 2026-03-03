@@ -1,0 +1,53 @@
+{
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"good\"}}\n"
+        },
+        "creationTimestamp": "2026-03-03T03:55:14Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "good"
+        },
+        "name": "good",
+        "resourceVersion": "686414595",
+        "uid": "fec90107-a674-4fda-a61f-25015b85e9a8"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"bad\"}}\n"
+        },
+        "creationTimestamp": "2026-03-03T03:55:14Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "bad"
+        },
+        "name": "bad",
+        "resourceVersion": "686414600",
+        "uid": "0e26c5d6-ce12-45d9-a088-9e0738e89312"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    }
+  ],
+  "kind": "NamespaceList"
+}
