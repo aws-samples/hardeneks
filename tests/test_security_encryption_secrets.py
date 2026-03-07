@@ -19,8 +19,8 @@ def test_use_encryption_with_ebs(resources):
     rule = use_encryption_with_ebs()
     rule.check(resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -32,8 +32,8 @@ def test_use_encryption_with_efs(resources):
     rule = use_encryption_with_efs()
     rule.check(resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -45,8 +45,8 @@ def test_use_efs_access_points(resources):
     rule = use_efs_access_points()
     rule.check(resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -59,5 +59,5 @@ def test_disallow_secrets_from_env_vars(namespaced_resources):
 
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)

@@ -7,12 +7,12 @@
         "annotations": {
           "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"command\":[\"sh\",\"-c\",\"sleep 1h\"],\"image\":\"busybox\",\"name\":\"sec-ctx-demo\"}],\"securityContext\":{\"runAsGroup\":3000,\"runAsUser\":1000}}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:52:38Z",
+        "creationTimestamp": "2026-03-07T04:23:28Z",
         "generation": 1,
         "name": "good",
         "namespace": "test-namespace",
-        "resourceVersion": "686383004",
-        "uid": "2e7be78b-fa45-4d97-beb7-6d70b48614e8"
+        "resourceVersion": "687999236",
+        "uid": "227a5c2c-18d3-43e8-bf5e-b47fbaab347a"
       },
       "spec": {
         "containers": [
@@ -31,7 +31,7 @@
             "volumeMounts": [
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-lwnn4",
+                "name": "kube-api-access-zg54v",
                 "readOnly": true
               }
             ]
@@ -66,7 +66,7 @@
         ],
         "volumes": [
           {
-            "name": "kube-api-access-lwnn4",
+            "name": "kube-api-access-zg54v",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -109,7 +109,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:52:38Z",
+            "lastTransitionTime": "2026-03-07T04:23:28Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",
@@ -125,20 +125,20 @@
       "kind": "Pod",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:52:38Z",
+        "creationTimestamp": "2026-03-07T04:23:28Z",
         "generation": 1,
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686383007",
-        "uid": "ddb7e250-56a4-469f-8495-0d8ad94457a6"
+        "resourceVersion": "687999238",
+        "uid": "f48fbb08-106a-432c-9977-a3e54ea57e77"
       },
       "spec": {
         "containers": [
           {
-            "image": "nginx:1.14.2",
-            "imagePullPolicy": "IfNotPresent",
+            "image": "nginx",
+            "imagePullPolicy": "Always",
             "name": "nginx",
             "ports": [
               {
@@ -152,7 +152,7 @@
             "volumeMounts": [
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-wjn4s",
+                "name": "kube-api-access-vg2zt",
                 "readOnly": true
               }
             ]
@@ -184,7 +184,7 @@
         ],
         "volumes": [
           {
-            "name": "kube-api-access-wjn4s",
+            "name": "kube-api-access-vg2zt",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -227,7 +227,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:52:38Z",
+            "lastTransitionTime": "2026-03-07T04:23:28Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",

@@ -8,6 +8,6 @@ spec:
   - name: nginx
     securityContext:
       readOnlyRootFilesystem: true
-    image: nginx:1.14.2
+    image: nginx
     ports:
     - containerPort: 80

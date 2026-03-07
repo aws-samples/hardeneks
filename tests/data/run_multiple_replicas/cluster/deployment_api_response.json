@@ -6,17 +6,17 @@
       "metadata": {
         "annotations": {
           "deployment.kubernetes.io/revision": "1",
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"nginx\"},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":3,\"selector\":{\"matchLabels\":{\"app\":\"nginx\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"nginx\"}},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"nginx\"},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":3,\"selector\":{\"matchLabels\":{\"app\":\"nginx\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"nginx\"}},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:54:25Z",
+        "creationTimestamp": "2026-03-07T04:24:42Z",
         "generation": 1,
         "labels": {
           "app": "nginx"
         },
         "name": "good",
         "namespace": "test-namespace",
-        "resourceVersion": "686383639",
-        "uid": "bb42ab1b-0ac3-4bcb-872c-9d05f37c0d8c"
+        "resourceVersion": "687999679",
+        "uid": "7969209f-9e07-4ec8-b9b0-3202134078f3"
       },
       "spec": {
         "progressDeadlineSeconds": 600,
@@ -44,8 +44,8 @@
           "spec": {
             "containers": [
               {
-                "image": "nginx:1.14.2",
-                "imagePullPolicy": "IfNotPresent",
+                "image": "nginx",
+                "imagePullPolicy": "Always",
                 "name": "nginx",
                 "ports": [
                   {
@@ -69,17 +69,17 @@
       "status": {
         "conditions": [
           {
-            "lastTransitionTime": "2026-03-03T01:54:25Z",
-            "lastUpdateTime": "2026-03-03T01:54:25Z",
+            "lastTransitionTime": "2026-03-07T04:24:42Z",
+            "lastUpdateTime": "2026-03-07T04:24:42Z",
             "message": "Deployment does not have minimum availability.",
             "reason": "MinimumReplicasUnavailable",
             "status": "False",
             "type": "Available"
           },
           {
-            "lastTransitionTime": "2026-03-03T01:54:25Z",
-            "lastUpdateTime": "2026-03-03T01:54:25Z",
-            "message": "ReplicaSet \"good-647677fc66\" is progressing.",
+            "lastTransitionTime": "2026-03-07T04:24:42Z",
+            "lastUpdateTime": "2026-03-07T04:24:42Z",
+            "message": "ReplicaSet \"good-86c57bc6b8\" is progressing.",
             "reason": "ReplicaSetUpdated",
             "status": "True",
             "type": "Progressing"
@@ -97,17 +97,17 @@
       "metadata": {
         "annotations": {
           "deployment.kubernetes.io/revision": "1",
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"nginx\"},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"nginx\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"nginx\"}},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"nginx\"},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"nginx\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"nginx\"}},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:54:25Z",
+        "creationTimestamp": "2026-03-07T04:24:42Z",
         "generation": 1,
         "labels": {
           "app": "nginx"
         },
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686383651",
-        "uid": "ec96d865-a597-407b-91e7-6a6adedbb9ed"
+        "resourceVersion": "687999691",
+        "uid": "a0886d86-d435-4e41-a617-28d5475ca00b"
       },
       "spec": {
         "progressDeadlineSeconds": 600,
@@ -135,8 +135,8 @@
           "spec": {
             "containers": [
               {
-                "image": "nginx:1.14.2",
-                "imagePullPolicy": "IfNotPresent",
+                "image": "nginx",
+                "imagePullPolicy": "Always",
                 "name": "nginx",
                 "ports": [
                   {
@@ -160,17 +160,17 @@
       "status": {
         "conditions": [
           {
-            "lastTransitionTime": "2026-03-03T01:54:25Z",
-            "lastUpdateTime": "2026-03-03T01:54:25Z",
+            "lastTransitionTime": "2026-03-07T04:24:42Z",
+            "lastUpdateTime": "2026-03-07T04:24:42Z",
             "message": "Deployment does not have minimum availability.",
             "reason": "MinimumReplicasUnavailable",
             "status": "False",
             "type": "Available"
           },
           {
-            "lastTransitionTime": "2026-03-03T01:54:25Z",
-            "lastUpdateTime": "2026-03-03T01:54:25Z",
-            "message": "ReplicaSet \"bad-647677fc66\" is progressing.",
+            "lastTransitionTime": "2026-03-07T04:24:42Z",
+            "lastUpdateTime": "2026-03-07T04:24:42Z",
+            "message": "ReplicaSet \"bad-86c57bc6b8\" is progressing.",
             "reason": "ReplicaSetUpdated",
             "status": "True",
             "type": "Progressing"

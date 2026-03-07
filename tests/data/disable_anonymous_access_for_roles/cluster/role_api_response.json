@@ -5,13 +5,13 @@
       "kind": "Role",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"pods\"],\"verbs\":[\"get\",\"watch\",\"list\"]}]}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"\"],\"verbs\":[\"\"]}]}\n"
         },
-        "creationTimestamp": "2026-03-03T01:52:26Z",
+        "creationTimestamp": "2026-03-07T04:23:22Z",
         "name": "good",
         "namespace": "test-namespace",
-        "resourceVersion": "686382946",
-        "uid": "dd58a162-8ddd-45b2-adfd-3f9f0e034059"
+        "resourceVersion": "687999198",
+        "uid": "6b0edfb2-c3fb-4763-942d-812c39f8db88"
       },
       "rules": [
         {
@@ -19,12 +19,10 @@
             ""
           ],
           "resources": [
-            "pods"
+            ""
           ],
           "verbs": [
-            "get",
-            "watch",
-            "list"
+            ""
           ]
         }
       ]
@@ -34,13 +32,13 @@
       "kind": "Role",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"pods\"],\"verbs\":[\"get\",\"watch\",\"list\"]}]}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"Role\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"\"],\"verbs\":[\"\"]}]}\n"
         },
-        "creationTimestamp": "2026-03-03T01:52:26Z",
+        "creationTimestamp": "2026-03-07T04:23:22Z",
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686382948",
-        "uid": "72122cf0-02ac-4bf9-b79b-831f5eb5220f"
+        "resourceVersion": "687999202",
+        "uid": "90c24bbc-6d55-4f62-8f6e-ae72f2999cd5"
       },
       "rules": [
         {
@@ -48,12 +46,10 @@
             ""
           ],
           "resources": [
-            "pods"
+            ""
           ],
           "verbs": [
-            "get",
-            "watch",
-            "list"
+            ""
           ]
         }
       ]

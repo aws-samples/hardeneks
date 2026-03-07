@@ -7,11 +7,11 @@
         "annotations": {
           "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"ResourceQuota\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"good\"},\"spec\":{\"hard\":{\"limits.cpu\":\"2\",\"limits.memory\":\"2Gi\",\"requests.cpu\":\"1\",\"requests.memory\":\"1Gi\"}}}\n"
         },
-        "creationTimestamp": "2026-03-03T03:55:14Z",
+        "creationTimestamp": "2026-03-07T04:24:19Z",
         "name": "good",
         "namespace": "good",
-        "resourceVersion": "686414599",
-        "uid": "acfbeb8e-c6ab-4051-9279-ef3ad9a07d71"
+        "resourceVersion": "687999543",
+        "uid": "5ce6e0b4-6cd4-4fdd-a4dd-d381d08cdfd7"
       },
       "spec": {
         "hard": {

@@ -5,20 +5,20 @@
       "kind": "Pod",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}],\"resources\":{\"limits\":{\"cpu\":\"500m\",\"memory\":\"128Mi\"},\"requests\":{\"cpu\":\"250m\",\"memory\":\"64Mi\"}}}]}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}],\"resources\":{\"limits\":{\"cpu\":\"500m\",\"memory\":\"128Mi\"},\"requests\":{\"cpu\":\"250m\",\"memory\":\"64Mi\"}}}]}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:54:37Z",
+        "creationTimestamp": "2026-03-07T04:24:52Z",
         "generation": 1,
         "name": "good",
         "namespace": "test-namespace",
-        "resourceVersion": "686383776",
-        "uid": "c4cd9219-fc3b-4cf5-9802-49111efda4b1"
+        "resourceVersion": "687999809",
+        "uid": "d7ca3e5b-8fbe-4461-9911-e1da81d6ce4e"
       },
       "spec": {
         "containers": [
           {
-            "image": "nginx:1.14.2",
-            "imagePullPolicy": "IfNotPresent",
+            "image": "nginx",
+            "imagePullPolicy": "Always",
             "name": "nginx",
             "ports": [
               {
@@ -41,7 +41,7 @@
             "volumeMounts": [
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-lm6gs",
+                "name": "kube-api-access-hbbxv",
                 "readOnly": true
               }
             ]
@@ -73,7 +73,7 @@
         ],
         "volumes": [
           {
-            "name": "kube-api-access-lm6gs",
+            "name": "kube-api-access-hbbxv",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -116,7 +116,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:54:37Z",
+            "lastTransitionTime": "2026-03-07T04:24:52Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",
@@ -132,20 +132,20 @@
       "kind": "Pod",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:54:37Z",
+        "creationTimestamp": "2026-03-07T04:24:52Z",
         "generation": 1,
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686383780",
-        "uid": "22b26bc8-0641-437d-b9e3-e700c73f57f9"
+        "resourceVersion": "687999813",
+        "uid": "a4bb78e3-8bb1-4ecb-a19f-e57d89d041b3"
       },
       "spec": {
         "containers": [
           {
-            "image": "nginx:1.14.2",
-            "imagePullPolicy": "IfNotPresent",
+            "image": "nginx",
+            "imagePullPolicy": "Always",
             "name": "nginx",
             "ports": [
               {
@@ -159,7 +159,7 @@
             "volumeMounts": [
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-l97dw",
+                "name": "kube-api-access-bc5dc",
                 "readOnly": true
               }
             ]
@@ -191,7 +191,7 @@
         ],
         "volumes": [
           {
-            "name": "kube-api-access-l97dw",
+            "name": "kube-api-access-bc5dc",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -234,7 +234,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:54:37Z",
+            "lastTransitionTime": "2026-03-07T04:24:52Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",

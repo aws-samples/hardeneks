@@ -14,7 +14,7 @@ class ensure_namespace_psa_exist(Rule):
     def check(self, resources: Resources):
         offenders = []
 
-        namespaces = kubernetes.client.CoreV1Api().list_namespace().items
+        namespaces = resources.namespace_list
         psa_labels = [
             "pod-security.kubernetes.io/enforce",
             "pod-security.kubernetes.io/warn",

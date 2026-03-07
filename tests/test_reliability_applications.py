@@ -1,7 +1,5 @@
 from pathlib import Path
-from unittest.mock import patch
 
-import kubernetes
 import pytest
 
 from hardeneks.resources import Resources
@@ -30,8 +28,8 @@ def test_avoid_running_singleton_pods(namespaced_resources):
     rule = avoid_running_singleton_pods()
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -44,8 +42,8 @@ def test_run_multiple_replicas(namespaced_resources):
 
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -57,56 +55,30 @@ def test_schedule_replicas_across_nodes(namespaced_resources):
     rule = schedule_replicas_across_nodes()
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
-@patch("kubernetes.client.CoreV1Api.list_service_for_all_namespaces")
-def test_check_metrics_server_is_running(mocked_client):
-    test_data = (
-        Path.cwd()
-        / "tests"
-        / "data"
-        / "check_metrics_server_is_running"
-        / "cluster"
-        / "service_api_response.json"
-    )
-    mocked_client.return_value = get_response(
-        kubernetes.client.CoreV1Api,
-        test_data,
-        "V1ServiceList",
-    )
-    namespaced_resources = Resources(
-        "some_region", "some_context", "some_cluster", []
-    )
+@pytest.mark.parametrize(
+    "resources",
+    [("check_metrics_server_is_running", ["services"])],
+    indirect=["resources"],
+)
+def test_check_metrics_server_is_running(resources):
     rule = check_metrics_server_is_running()
-    rule.check(namespaced_resources)
+    rule.check(resources)
 
     assert not rule.result.status
 
 
-@patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
-def test_check_vertical_pod_autoscaler_exists(mocked_client):
-    test_data = (
-        Path.cwd()
-        / "tests"
-        / "data"
-        / "check_vertical_pod_autoscaler_exists"
-        / "cluster"
-        / "deployment_api_response.json"
-    )
-
-    mocked_client.return_value = get_response(
-        kubernetes.client.AppsV1Api,
-        test_data,
-        "V1DeploymentList",
-    )
-
-    namespaced_resources = Resources(
-        "some_region", "some_context", "some_cluster", []
-    )
+@pytest.mark.parametrize(
+    "resources",
+    [("check_vertical_pod_autoscaler_exists", ["deployments"])],
+    indirect=["resources"],
+)
+def test_check_vertical_pod_autoscaler_exists(resources):
     rule = check_vertical_pod_autoscaler_exists()
-    rule.check(namespaced_resources)
+    rule.check(resources)
 
     assert not rule.result.status
 
@@ -135,8 +107,8 @@ def test_check_liveness_probes(namespaced_resources):
 
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -149,5 +121,5 @@ def test_check_readiness_probes(namespaced_resources):
 
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)

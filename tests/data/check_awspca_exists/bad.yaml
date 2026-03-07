@@ -1,0 +1,12 @@
+# Deploys a single service so no service starting with aws-privateca-issuer is found.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nothing
+  namespace: test-namespace
+spec:
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80

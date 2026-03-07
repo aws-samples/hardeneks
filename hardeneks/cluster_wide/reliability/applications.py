@@ -1,5 +1,3 @@
-from kubernetes import client
-
 from hardeneks.rules import Rule, Result
 from hardeneks.resources import Resources
 
@@ -12,10 +10,7 @@ class check_metrics_server_is_running(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
 
     def check(self, resources: Resources):
-        services = [
-            i.metadata.name
-            for i in client.CoreV1Api().list_service_for_all_namespaces().items
-        ]
+        services = [i.metadata.name for i in resources.services]
 
         if "metrics-server" in services:
             self.result = Result(status=True, resource_type="Service")
@@ -31,13 +26,7 @@ class check_vertical_pod_autoscaler_exists(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
 
     def check(self, resources: Resources):
-
-        deployments = [
-            i.metadata.name
-            for i in client.AppsV1Api()
-            .list_deployment_for_all_namespaces()
-            .items
-        ]
+        deployments = [i.metadata.name for i in resources.deployments]
 
         if "vpa-recommender" in deployments:
             self.result = Result(status=True, resource_type="Deployment")

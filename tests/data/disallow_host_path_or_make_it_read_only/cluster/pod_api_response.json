@@ -5,20 +5,20 @@
       "kind": "Pod",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}],\"volumeMounts\":[{\"mountPath\":\"/mnt/sample\",\"name\":\"task-pv-storage\"}]}],\"volumes\":[{\"hostPath\":{\"path\":\"/home/\",\"type\":\"Directory\"},\"name\":\"task-pv-storage\"}]}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}],\"volumeMounts\":[{\"mountPath\":\"/mnt/sample\",\"name\":\"task-pv-storage\"}]}],\"volumes\":[{\"hostPath\":{\"path\":\"/home/\",\"type\":\"Directory\"},\"name\":\"task-pv-storage\"}]}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:53:12Z",
+        "creationTimestamp": "2026-03-07T04:23:48Z",
         "generation": 1,
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686383199",
-        "uid": "561a1481-b573-40b3-a9db-ebb78ba126c1"
+        "resourceVersion": "687999358",
+        "uid": "3e774b95-e635-4f11-b5ac-971f877a0276"
       },
       "spec": {
         "containers": [
           {
-            "image": "nginx:1.14.2",
-            "imagePullPolicy": "IfNotPresent",
+            "image": "nginx",
+            "imagePullPolicy": "Always",
             "name": "nginx",
             "ports": [
               {
@@ -36,7 +36,7 @@
               },
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-w2zp2",
+                "name": "kube-api-access-k66g8",
                 "readOnly": true
               }
             ]
@@ -75,7 +75,7 @@
             "name": "task-pv-storage"
           },
           {
-            "name": "kube-api-access-w2zp2",
+            "name": "kube-api-access-k66g8",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -118,7 +118,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:53:12Z",
+            "lastTransitionTime": "2026-03-07T04:23:48Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",

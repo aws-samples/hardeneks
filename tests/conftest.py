@@ -37,7 +37,7 @@ def resources(request):
         "some_region",
         "some_context",
         "some_cluster",
-        ["good", "bad", "default"],
+        ["good", "bad"],
     )
     
     # Resource loaders mapping
@@ -46,6 +46,10 @@ def resources(request):
         "network_policies": lambda: get_response(client.NetworkingV1Api, os.path.join(data_directory, "networkpolicy_api_response.json"), "V1NetworkPolicyList").items,
         "storage_classes": lambda: get_response(client.StorageV1Api, os.path.join(data_directory, "storageclass_api_response.json"), "V1StorageClassList").items,
         "persistent_volumes": lambda: get_response(client.CoreV1Api, os.path.join(data_directory, "persistentvolume_api_response.json"), "V1PersistentVolumeList").items,
+        "services": lambda: get_response(client.CoreV1Api, os.path.join(data_directory, "service_api_response.json"), "V1ServiceList").items,
+        "deployments": lambda: get_response(client.AppsV1Api, os.path.join(data_directory, "deployment_api_response.json"), "V1DeploymentList").items,
+        "nodes": lambda: get_response(client.CoreV1Api, os.path.join(data_directory, "nodes_api_response.json"), "V1NodeList").items,
+        "namespace_list": lambda: get_response(client.CoreV1Api, os.path.join(data_directory, "namespace_api_response.json"), "V1NamespaceList").items,
     }
     
     # If required_resources is None, load all (backward compatibility)

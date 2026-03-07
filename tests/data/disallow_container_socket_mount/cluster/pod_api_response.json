@@ -5,21 +5,21 @@
       "kind": "Pod",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"automountServiceAccountToken\":true,\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}],\"volumeMounts\":[{\"mountPath\":\"/var/run/docker.sock\",\"name\":\"docker-socket-volume\"}]}],\"volumes\":[{\"hostPath\":{\"path\":\"/var/run/docker.sock\",\"type\":\"File\"},\"name\":\"docker-socket-volume\"}]}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"automountServiceAccountToken\":true,\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}],\"volumeMounts\":[{\"mountPath\":\"/var/run/docker.sock\",\"name\":\"docker-socket-volume\"}]}],\"volumes\":[{\"hostPath\":{\"path\":\"/var/run/docker.sock\",\"type\":\"File\"},\"name\":\"docker-socket-volume\"}]}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:53:02Z",
+        "creationTimestamp": "2026-03-07T04:23:43Z",
         "generation": 1,
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686383146",
-        "uid": "8c27080e-ed10-4e6f-be87-e22ecc214cf3"
+        "resourceVersion": "687999329",
+        "uid": "4da4e6bb-4b9b-4318-8cea-a914ca2de32e"
       },
       "spec": {
         "automountServiceAccountToken": true,
         "containers": [
           {
-            "image": "nginx:1.14.2",
-            "imagePullPolicy": "IfNotPresent",
+            "image": "nginx",
+            "imagePullPolicy": "Always",
             "name": "nginx",
             "ports": [
               {
@@ -37,7 +37,7 @@
               },
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-4x59z",
+                "name": "kube-api-access-qjrvz",
                 "readOnly": true
               }
             ]
@@ -76,7 +76,7 @@
             "name": "docker-socket-volume"
           },
           {
-            "name": "kube-api-access-4x59z",
+            "name": "kube-api-access-qjrvz",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -119,7 +119,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:53:02Z",
+            "lastTransitionTime": "2026-03-07T04:23:43Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",

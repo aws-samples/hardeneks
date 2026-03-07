@@ -2,7 +2,9 @@
 NAMESPACE=test-namespace
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 TESTS_DATA_DIRECTORY="$SCRIPT_DIR/../tests/data"
-SINGLE_DIR=$1
+
+# If a test name is passed in, just create that one test.
+[ -n "$1" ] && SINGLE_DIR="$SCRIPT_DIR/../tests/data/$1"
 
 process_directory() {
   DIR=$1
@@ -29,6 +31,7 @@ process_directory() {
 kubectl create namespace $NAMESPACE
 
 if [ -n "$SINGLE_DIR" ] && [ -d "$SINGLE_DIR" ]; then
+  echo "Test: $1"
   process_directory "$SINGLE_DIR"
 else
   for TEST_DIR in "$TESTS_DATA_DIRECTORY"/*; do

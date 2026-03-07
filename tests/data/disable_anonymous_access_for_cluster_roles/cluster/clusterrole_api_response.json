@@ -5,12 +5,12 @@
       "kind": "ClusterRole",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"ClusterRole\",\"metadata\":{\"annotations\":{},\"name\":\"good\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"pods\"],\"verbs\":[\"get\",\"watch\",\"list\"]}]}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"ClusterRole\",\"metadata\":{\"annotations\":{},\"name\":\"good\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"\"],\"verbs\":[\"\"]}]}\n"
         },
-        "creationTimestamp": "2026-03-03T01:52:18Z",
+        "creationTimestamp": "2026-03-07T04:23:16Z",
         "name": "good",
-        "resourceVersion": "686382907",
-        "uid": "43b984b4-332e-407e-b229-e014af3a3f8a"
+        "resourceVersion": "687999166",
+        "uid": "24b97cbb-b20a-49df-89aa-a20382c6ed96"
       },
       "rules": [
         {
@@ -18,12 +18,10 @@
             ""
           ],
           "resources": [
-            "pods"
+            ""
           ],
           "verbs": [
-            "get",
-            "watch",
-            "list"
+            ""
           ]
         }
       ]
@@ -33,12 +31,12 @@
       "kind": "ClusterRole",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"ClusterRole\",\"metadata\":{\"annotations\":{},\"name\":\"bad\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"pods\"],\"verbs\":[\"get\",\"watch\",\"list\"]}]}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"ClusterRole\",\"metadata\":{\"annotations\":{},\"name\":\"bad\"},\"rules\":[{\"apiGroups\":[\"\"],\"resources\":[\"\"],\"verbs\":[\"\"]}]}\n"
         },
-        "creationTimestamp": "2026-03-03T01:52:18Z",
+        "creationTimestamp": "2026-03-07T04:23:16Z",
         "name": "bad",
-        "resourceVersion": "686382910",
-        "uid": "a10ae078-d1d5-46aa-8ee9-0966a65f5288"
+        "resourceVersion": "687999168",
+        "uid": "405a0e55-6fe9-468f-ab07-b57136f41a9d"
       },
       "rules": [
         {
@@ -46,12 +44,10 @@
             ""
           ],
           "resources": [
-            "pods"
+            ""
           ],
           "verbs": [
-            "get",
-            "watch",
-            "list"
+            ""
           ]
         }
       ]

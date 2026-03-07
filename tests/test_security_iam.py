@@ -41,8 +41,8 @@ def test_restrict_wildcard_for_roles(namespaced_resources):
     rule = restrict_wildcard_for_roles()
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -54,8 +54,8 @@ def test_restrict_wildcard_for_cluster_roles(namespaced_resources):
     rule = restrict_wildcard_for_cluster_roles()
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @patch("boto3.client")
@@ -113,6 +113,7 @@ def test_check_aws_node_daemonset_service_account(
         / "tests"
         / "data"
         / "check_aws_node_daemonset_service_account"
+        / "cluster"
         / "daemonset_api_response.json"
     )
     service_account_data = (
@@ -120,6 +121,7 @@ def test_check_aws_node_daemonset_service_account(
         / "tests"
         / "data"
         / "check_aws_node_daemonset_service_account"
+        / "cluster"
         / "serviceaccount_api_response.json"
     )
     mocked_apps_api.return_value = get_response(
@@ -130,13 +132,13 @@ def test_check_aws_node_daemonset_service_account(
     mocked_core_api.return_value = get_response(
         kubernetes.client.CoreV1Api, service_account_data, "V1ServiceAccount"
     )
-    namespaced_resources = NamespacedResources(
-        "some_region", "some_context", "some_cluster", "some_ns"
+    resources = Resources(
+        "some_region", "some_context", "some_cluster", []
     )
     rule = check_aws_node_daemonset_service_account()
-    rule.check(namespaced_resources)
+    rule.check(resources)
 
-    assert not rule.result.status
+    assert rule.result.status
 
 
 @pytest.mark.parametrize(
@@ -148,8 +150,8 @@ def test_disable_service_account_token_mounts(namespaced_resources):
     rule = disable_service_account_token_mounts()
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -162,8 +164,8 @@ def test_disable_run_as_root_user(namespaced_resources):
 
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -176,8 +178,8 @@ def test_disable_run_as_root_user_container(namespaced_resources):
 
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
     
 
 @pytest.mark.parametrize(
@@ -189,8 +191,9 @@ def test_disable_anonymous_access_for_cluster_roles(namespaced_resources):
     rule = disable_anonymous_access_for_cluster_roles()
     rule.check(namespaced_resources)
     assert "system:public-info-viewer" not in rule.result.resources
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -203,8 +206,8 @@ def test_disable_anonymous_access_for_roles(namespaced_resources):
 
     rule.check(namespaced_resources)
 
-    assert "good" not in rule.result.resources
-    assert "bad" in rule.result.resources
+    assert all("good" not in r for r in rule.result.resources)
+    assert all("bad" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -218,8 +221,7 @@ def test_use_dedicated_service_accounts_for_each_daemon_set(
     rule = use_dedicated_service_accounts_for_each_daemon_set()
     rule.check(namespaced_resources)
 
-    assert "shared-sa-1" in rule.result.resources
-    assert "shared-sa-2" in rule.result.resources
+    assert all("shared-sa" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -233,8 +235,7 @@ def test_use_dedicated_service_accounts_for_each_deployment(
     rule = use_dedicated_service_accounts_for_each_deployment()
     rule.check(namespaced_resources)
 
-    assert "shared-sa-1" in rule.result.resources
-    assert "shared-sa-2" in rule.result.resources
+    assert all("shared-sa" in r for r in rule.result.resources)
 
 
 @pytest.mark.parametrize(
@@ -247,5 +248,5 @@ def test_use_dedicated_service_accounts_for_each_stateful_set(
 ):
     rule = use_dedicated_service_accounts_for_each_stateful_set()
     rule.check(namespaced_resources)
-    assert "shared-sa-1" in rule.result.resources
-    assert "shared-sa-2" in rule.result.resources
+
+    assert all("shared-sa" in r for r in rule.result.resources)

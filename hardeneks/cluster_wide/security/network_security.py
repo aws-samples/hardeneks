@@ -38,8 +38,7 @@ class check_awspca_exists(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#acm-private-ca-with-cert-manager"
 
     def check(self, resources: Resources):
-        services = client.CoreV1Api().list_service_for_all_namespaces().items
-        for service in services:
+        for service in resources.services:
             if service.metadata.name.startswith("aws-privateca-issuer"):
                 self.result = Result(status=True, resource_type="Service")
 

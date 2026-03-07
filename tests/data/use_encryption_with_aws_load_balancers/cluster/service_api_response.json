@@ -11,7 +11,7 @@
           "service.beta.kubernetes.io/aws-load-balancer-ssl-ports": "443",
           "service.beta.kubernetes.io/aws-load-balancer-type": "nlb"
         },
-        "creationTimestamp": "2026-03-03T01:55:05Z",
+        "creationTimestamp": "2026-03-07T04:25:16Z",
         "finalizers": [
           "service.kubernetes.io/load-balancer-cleanup"
         ],
@@ -20,14 +20,14 @@
         },
         "name": "good",
         "namespace": "test-namespace",
-        "resourceVersion": "686384027",
-        "uid": "2245f9ab-4308-49d5-805a-d3d2d2a35bb9"
+        "resourceVersion": "688000041",
+        "uid": "66471f4c-8c6c-497d-b9f1-e6b726fa6a22"
       },
       "spec": {
         "allocateLoadBalancerNodePorts": true,
-        "clusterIP": "10.100.142.19",
+        "clusterIP": "10.100.227.241",
         "clusterIPs": [
-          "10.100.142.19"
+          "10.100.227.241"
         ],
         "externalTrafficPolicy": "Cluster",
         "internalTrafficPolicy": "Cluster",
@@ -37,7 +37,7 @@
         "ipFamilyPolicy": "SingleStack",
         "ports": [
           {
-            "nodePort": 32302,
+            "nodePort": 30781,
             "port": 443,
             "protocol": "TCP",
             "targetPort": 80
@@ -60,7 +60,7 @@
         "annotations": {
           "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"bad\"},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"ports\":[{\"port\":443,\"protocol\":\"TCP\",\"targetPort\":80}],\"selector\":{\"app\":\"bad\"},\"type\":\"LoadBalancer\"}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:55:05Z",
+        "creationTimestamp": "2026-03-07T04:25:16Z",
         "finalizers": [
           "service.kubernetes.io/load-balancer-cleanup"
         ],
@@ -69,14 +69,14 @@
         },
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686384082",
-        "uid": "7c90647c-811b-4d9a-80be-e80acd62767b"
+        "resourceVersion": "688000096",
+        "uid": "e64c2d8f-ca03-4707-a068-d885ed95d8cd"
       },
       "spec": {
         "allocateLoadBalancerNodePorts": true,
-        "clusterIP": "10.100.16.144",
+        "clusterIP": "10.100.49.26",
         "clusterIPs": [
-          "10.100.16.144"
+          "10.100.49.26"
         ],
         "externalTrafficPolicy": "Cluster",
         "internalTrafficPolicy": "Cluster",
@@ -86,7 +86,7 @@
         "ipFamilyPolicy": "SingleStack",
         "ports": [
           {
-            "nodePort": 32149,
+            "nodePort": 32383,
             "port": 443,
             "protocol": "TCP",
             "targetPort": 80
@@ -102,7 +102,7 @@
         "loadBalancer": {
           "ingress": [
             {
-              "hostname": "a7c90647c811b4d9a80bee80acd62767-254836806.ap-southeast-2.elb.amazonaws.com"
+              "hostname": "ae64c2d8fca034707a068d885ed95d8c-994742986.ap-southeast-2.elb.amazonaws.com"
             }
           ]
         }

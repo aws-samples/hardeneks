@@ -5,20 +5,20 @@
       "kind": "Pod",
       "metadata": {
         "annotations": {
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:51:38Z",
+        "creationTimestamp": "2026-03-07T04:22:18Z",
         "generation": 1,
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686382609",
-        "uid": "f853be99-c402-4e67-a22b-55bcaa470666"
+        "resourceVersion": "687998695",
+        "uid": "09cdba67-c86b-405f-9d48-7360a89e468c"
       },
       "spec": {
         "containers": [
           {
-            "image": "nginx:1.14.2",
-            "imagePullPolicy": "IfNotPresent",
+            "image": "nginx",
+            "imagePullPolicy": "Always",
             "name": "nginx",
             "ports": [
               {
@@ -32,7 +32,7 @@
             "volumeMounts": [
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-zkb6k",
+                "name": "kube-api-access-8xjbg",
                 "readOnly": true
               }
             ]
@@ -64,7 +64,7 @@
         ],
         "volumes": [
           {
-            "name": "kube-api-access-zkb6k",
+            "name": "kube-api-access-8xjbg",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -107,7 +107,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:51:38Z",
+            "lastTransitionTime": "2026-03-07T04:22:18Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",

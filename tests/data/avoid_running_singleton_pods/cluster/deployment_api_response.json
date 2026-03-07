@@ -6,17 +6,17 @@
       "metadata": {
         "annotations": {
           "deployment.kubernetes.io/revision": "1",
-          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"good\"},\"name\":\"good-deployment\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":3,\"selector\":{\"matchLabels\":{\"app\":\"good\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"good\"}},\"spec\":{\"containers\":[{\"image\":\"nginx:1.14.2\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}}}\n"
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"good\"},\"name\":\"good-deployment\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":3,\"selector\":{\"matchLabels\":{\"app\":\"good\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"good\"}},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:51:38Z",
+        "creationTimestamp": "2026-03-07T04:22:17Z",
         "generation": 1,
         "labels": {
           "app": "good"
         },
         "name": "good-deployment",
         "namespace": "test-namespace",
-        "resourceVersion": "686382617",
-        "uid": "74fbe1e0-220d-40a3-a38d-fd690d012788"
+        "resourceVersion": "687998692",
+        "uid": "7742e1d2-47d2-46bc-b66e-3fe711bcf4a7"
       },
       "spec": {
         "progressDeadlineSeconds": 600,
@@ -44,8 +44,8 @@
           "spec": {
             "containers": [
               {
-                "image": "nginx:1.14.2",
-                "imagePullPolicy": "IfNotPresent",
+                "image": "nginx",
+                "imagePullPolicy": "Always",
                 "name": "nginx",
                 "ports": [
                   {
@@ -69,17 +69,17 @@
       "status": {
         "conditions": [
           {
-            "lastTransitionTime": "2026-03-03T01:51:38Z",
-            "lastUpdateTime": "2026-03-03T01:51:38Z",
+            "lastTransitionTime": "2026-03-07T04:22:17Z",
+            "lastUpdateTime": "2026-03-07T04:22:17Z",
             "message": "Deployment does not have minimum availability.",
             "reason": "MinimumReplicasUnavailable",
             "status": "False",
             "type": "Available"
           },
           {
-            "lastTransitionTime": "2026-03-03T01:51:38Z",
-            "lastUpdateTime": "2026-03-03T01:51:38Z",
-            "message": "ReplicaSet \"good-deployment-59cb947d67\" is progressing.",
+            "lastTransitionTime": "2026-03-07T04:22:17Z",
+            "lastUpdateTime": "2026-03-07T04:22:17Z",
+            "message": "ReplicaSet \"good-deployment-f8654cd59\" is progressing.",
             "reason": "ReplicaSetUpdated",
             "status": "True",
             "type": "Progressing"

@@ -7,12 +7,12 @@
         "annotations": {
           "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"registry.k8s.io/goproxy:0.1\",\"livenessProbe\":{\"initialDelaySeconds\":15,\"periodSeconds\":20,\"tcpSocket\":{\"port\":8080}},\"name\":\"goproxy\",\"ports\":[{\"containerPort\":8080}],\"readinessProbe\":{\"initialDelaySeconds\":5,\"periodSeconds\":10,\"tcpSocket\":{\"port\":8080}}}]}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:52:12Z",
+        "creationTimestamp": "2026-03-07T04:23:06Z",
         "generation": 1,
         "name": "good",
         "namespace": "test-namespace",
-        "resourceVersion": "686382873",
-        "uid": "a9247498-f248-41c7-a09f-572da1604a89"
+        "resourceVersion": "687999084",
+        "uid": "4bb5d4fb-ea42-4b72-8f70-a74b07ba5311"
       },
       "spec": {
         "containers": [
@@ -52,7 +52,7 @@
             "volumeMounts": [
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-s98ml",
+                "name": "kube-api-access-5rwbx",
                 "readOnly": true
               }
             ]
@@ -84,7 +84,7 @@
         ],
         "volumes": [
           {
-            "name": "kube-api-access-s98ml",
+            "name": "kube-api-access-5rwbx",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -127,7 +127,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:52:12Z",
+            "lastTransitionTime": "2026-03-07T04:23:07Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",
@@ -145,12 +145,12 @@
         "annotations": {
           "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"registry.k8s.io/goproxy:0.1\",\"name\":\"goproxy\",\"ports\":[{\"containerPort\":8080}]}]}}\n"
         },
-        "creationTimestamp": "2026-03-03T01:52:12Z",
+        "creationTimestamp": "2026-03-07T04:23:07Z",
         "generation": 1,
         "name": "bad",
         "namespace": "test-namespace",
-        "resourceVersion": "686382878",
-        "uid": "c4abd456-d51b-48d4-86ad-95bb2c9aa7d8"
+        "resourceVersion": "687999088",
+        "uid": "18491acc-91e4-4ccc-94fe-d3a35befc5d2"
       },
       "spec": {
         "containers": [
@@ -170,7 +170,7 @@
             "volumeMounts": [
               {
                 "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
-                "name": "kube-api-access-jf47m",
+                "name": "kube-api-access-qj8h8",
                 "readOnly": true
               }
             ]
@@ -202,7 +202,7 @@
         ],
         "volumes": [
           {
-            "name": "kube-api-access-jf47m",
+            "name": "kube-api-access-qj8h8",
             "projected": {
               "defaultMode": 420,
               "sources": [
@@ -245,7 +245,7 @@
         "conditions": [
           {
             "lastProbeTime": null,
-            "lastTransitionTime": "2026-03-03T01:52:12Z",
+            "lastTransitionTime": "2026-03-07T04:23:07Z",
             "message": "no nodes available to schedule pods",
             "reason": "Unschedulable",
             "status": "False",
