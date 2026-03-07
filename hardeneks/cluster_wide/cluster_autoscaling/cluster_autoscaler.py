@@ -211,13 +211,13 @@ class use_managed_nodegroups(Rule):
             if "eks.amazonaws.com/nodegroup" in labels.keys():
                 pass
             elif "alpha.eksctl.io/nodegroup-name" in labels.keys():
-                offenders.append(node)
+                offenders.append(node.metadata.name)
             elif "karpenter.sh/provisioner-name" in labels.keys():
                 pass
             elif "karpenter.sh/nodepool" in labels.keys():
                 pass
             else:
-                offenders.append(node)
+                offenders.append(node.metadata.name)
 
         self.result = Result(status=True, resource_type="Node")
 
@@ -225,5 +225,5 @@ class use_managed_nodegroups(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Node",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
             )
