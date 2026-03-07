@@ -41,6 +41,7 @@ class check_awspca_exists(Rule):
         for service in resources.services:
             if service.metadata.name.startswith("aws-privateca-issuer"):
                 self.result = Result(status=True, resource_type="Service")
+                return
 
         self.result = Result(
             status=False,
