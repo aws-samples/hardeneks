@@ -174,6 +174,7 @@ In order to run hardeneks we need to have some permissions both on AWS side and 
                 "eks:ListClusters",
                 "eks:DescribeCluster",
                 "eks:ListPodIdentityAssociations",
+                "eks:DescribePodIdentityAssociation",
                 "eks:DescribeClusterVersions",
                 "ecr:DescribeRepositories",
                 "inspector2:BatchGetAccountStatus",

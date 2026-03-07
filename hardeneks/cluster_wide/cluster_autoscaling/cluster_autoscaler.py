@@ -5,6 +5,29 @@ from hardeneks.rules import Rule, Result
 from ...resources import Resources
 
 
+def _get_role_arn_for_service_account(cluster, region, namespace, service_account_name):
+    try:
+        eks_client = boto3.client("eks", region_name=region)
+        pod_identity_associations = eks_client.list_pod_identity_associations(clusterName=cluster)
+        for association in pod_identity_associations.get("associations", []):
+            if (
+                association.get("namespace") == namespace
+                and association.get("serviceAccount") == service_account_name
+            ):
+                described = eks_client.describe_pod_identity_association(
+                    clusterName=cluster, associationId=association.get("associationId")
+                )
+                return described.get("association", {}).get("roleArn")
+    except Exception:
+        pass
+
+    sa = client.CoreV1Api().read_namespaced_service_account(name=service_account_name, namespace=namespace)
+    if sa.metadata.annotations:
+        return sa.metadata.annotations.get("eks.amazonaws.com/role-arn")
+
+    return None
+
+
 def _get_policy_documents_for_role(role_name, iam_client):
     attached_policies = iam_client.list_attached_role_policies(
         RoleName=role_name
@@ -21,19 +44,23 @@ def _get_policy_documents_for_role(role_name, iam_client):
             PolicyArn=policy_arn, VersionId=version_id
         )["PolicyVersion"]["Document"]["Statement"]
         for statement in response:
-            if type(statement["Action"]) == str:
-                actions.append(statement["Action"])
-            elif type(statement["Action"]) == list:
-                actions.extend(statement["Action"])
+            if statement.get("Effect") == "Allow":
+                action = statement.get("Action")
+                if isinstance(action, str):
+                    actions.append(action)
+                elif isinstance(action, list):
+                    actions.extend(action)
     for policy_name in inline_policies:
         response = iam_client.get_role_policy(
             RoleName=role_name, PolicyName=policy_name
         )["PolicyDocument"]["Statement"]
         for statement in response:
-            if type(statement["Action"]) == str:
-                actions.append(statement["Action"])
-            elif type(statement["Action"]) == list:
-                actions.extend(statement["Action"])
+            if statement.get("Effect") == "Allow":
+                action = statement.get("Action")
+                if isinstance(action, str):
+                    actions.append(action)
+                elif isinstance(action, list):
+                    actions.extend(action)
     return actions
 
 
@@ -111,35 +138,12 @@ class use_separate_iam_role_for_cluster_autoscaler(Rule):
             if "cluster-autoscaler" in deployment.metadata.name:
                 service_account_name = deployment.spec.template.spec.service_account_name
                 sa_namespace = deployment.metadata.namespace
-                service_account = client.CoreV1Api().read_namespaced_service_account(
-                    name=service_account_name,
-                    namespace=sa_namespace,
-                )
 
                 self.result = Result(status=False, resources=[deployment.metadata.name], resource_type="Deployment")
 
-                # Check for Pod Identity
-                try:
-                    eks_client = boto3.client("eks", region_name=resources.region)
-                    pod_identity_associations = eks_client.list_pod_identity_associations(
-                        clusterName=resources.cluster
-                    )
-                    
-                    for association in pod_identity_associations.get("associations", []):
-                        if (
-                            association.get("namespace") == sa_namespace
-                            and association.get("serviceAccount") == service_account_name
-                        ):
-                            self.result = Result(status=True, resource_type="Deployment")
-                            return
-                except Exception:
-                    # If Pod Identity API fails, fall back to IRSA-only check
-                    pass
-
-                # Check for IRSA
-                if service_account.metadata.annotations:
-                    if "eks.amazonaws.com/role-arn" in service_account.metadata.annotations:
-                        self.result = Result(status=True, resource_type="Deployment")
+                role_arn = _get_role_arn_for_service_account(resources.cluster, resources.region, sa_namespace, service_account_name)
+                if role_arn:
+                    self.result = Result(status=True, resource_type="Deployment")
                 return
 
 
@@ -158,7 +162,6 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
             "autoscaling:DescribeAutoScalingInstances",
             "autoscaling:DescribeLaunchConfigurations",
             "autoscaling:DescribeScalingActivities",
-            "autoscaling:DescribeTags",
             "ec2:DescribeImages",
             "ec2:DescribeInstanceTypes",
             "ec2:DescribeLaunchTemplateVersions",
@@ -169,32 +172,28 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
         }
         self.result = Result(status=True, resource_type="IAM Role Action")
 
+        role_arn = None
         for deployment in resources.deployments:
-            if deployment.metadata.name == "cluster-autoscaler":
-                sa_name = deployment.spec.template.spec.service_account_name
-                namespace = deployment.metadata.namespace
-                sa_data = client.CoreV1Api().read_namespaced_service_account(name=sa_name, namespace=namespace)
-                if sa_data is None or "eks.amazonaws.com/role-arn" not in sa_data.metadata.annotations.keys():
-                    break
-                else:
-                    sa_iam_role_arn = sa_data.metadata.annotations[
-                        "eks.amazonaws.com/role-arn"
-                    ]
-                    sa_iam_role = sa_iam_role_arn.split("/")[-1]
-                    actions = _get_policy_documents_for_role(
-                        sa_iam_role, iam_client
-                    )
+            if "cluster-autoscaler" in deployment.metadata.name:
+                service_account_name = deployment.spec.template.spec.service_account_name
+                sa_namespace = deployment.metadata.namespace
 
-                    if len(set(actions) - ACTIONS) > 0:
-                        self.result = Result(
-                            status=False,
-                            resource_type="IAM Role Action",
-                            resources=(set(actions) - ACTIONS),
-                        )
-                    else:
-                        self.result = Result(
-                            status=True, resource_type="IAM Role Action"
-                        )
+                role_arn = _get_role_arn_for_service_account(resources.cluster, resources.region, sa_namespace, service_account_name)
+                break
+
+        # If we found a role (either Pod Identity or IRSA), check permissions
+        if role_arn:
+            role_name = role_arn.split("/")[-1]
+            actions = _get_policy_documents_for_role(role_name, iam_client)
+
+            if len(set(actions) - ACTIONS) > 0:
+                self.result = Result(
+                    status=False,
+                    resource_type="IAM Role Action",
+                    resources=list(set(actions) - ACTIONS),
+                )
+        else:
+            self.result = Result(status=False, resources=["cluster-autoscaler"], resource_type="IAM Role Action")
 
 
 class use_managed_nodegroups(Rule):
