@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 import kubernetes
 import pytest
@@ -69,26 +69,45 @@ def test_ensure_cluster_autoscaler_has_autodiscovery_mode(resources):
 
 
 @pytest.mark.parametrize(
-    "resources",
-    [(("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]))],
+    "resources,service_account_file,pod_identity_associations,expected_status",
+    [
+        # No IRSA, No Pod Identity - should fail
+        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_api_response.json", {"associations": []}, False),
+        # Has IRSA, No Pod Identity - should pass
+        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_irsa_api_response.json", {"associations": []}, True),
+        # No IRSA, Has Pod Identity - should pass
+        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_api_response.json", {"associations": [{"namespace": "kube-system", "serviceAccount": "cluster-autoscaler"}]}, True),
+    ],
     indirect=["resources"],
 )
+@patch("boto3.client")
 @patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
-def test_use_separate_iam_role_for_cluster_autoscaler(mock_read_sa, resources):
-    sa_data = (
+def test_use_separate_iam_role_for_cluster_autoscaler(
+    mocked_core_api, mocked_boto_client,
+    resources, service_account_file, pod_identity_associations, expected_status
+):
+    service_account_data = (
         Path.cwd()
         / "tests"
         / "data"
         / "use_separate_iam_role_for_cluster_autoscaler"
         / "cluster"
-        / "serviceaccount_api_response.json"
+        / service_account_file
     )
-    mock_read_sa.return_value = get_response(
-        kubernetes.client.CoreV1Api, sa_data, "V1ServiceAccount"
+
+    mocked_core_api.return_value = get_response(
+        kubernetes.client.CoreV1Api, service_account_data, "V1ServiceAccount"
     )
+    mocked_boto_client.return_value.list_pod_identity_associations.return_value = pod_identity_associations
+
     rule = use_separate_iam_role_for_cluster_autoscaler()
     rule.check(resources)
-    assert not rule.result.status
+
+    assert rule.result.status == expected_status
+    if not expected_status:
+        assert "cluster-autoscaler" in rule.result.resources
+    else:
+        assert rule.result.resources == [""]
 
 
 @pytest.mark.parametrize(

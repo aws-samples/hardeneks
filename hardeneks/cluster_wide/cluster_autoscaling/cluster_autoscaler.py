@@ -108,16 +108,39 @@ class use_separate_iam_role_for_cluster_autoscaler(Rule):
         self.result = Result(status=True, resource_type="Deployment")
 
         for deployment in resources.deployments:
-            if deployment.metadata.name == "cluster-autoscaler":
-                sa_name = deployment.spec.template.spec.service_account_name
-                namespace = deployment.metadata.namespace
-                sa_data = client.CoreV1Api().read_namespaced_service_account(name=sa_name, namespace=namespace)
-                if sa_data is None or "eks.amazonaws.com/role-arn" not in sa_data.metadata.annotations.keys():
-                    self.result = Result(
-                        status=False, resource_type="Deployment"
+            if "cluster-autoscaler" in deployment.metadata.name:
+                service_account_name = deployment.spec.template.spec.service_account_name
+                sa_namespace = deployment.metadata.namespace
+                service_account = client.CoreV1Api().read_namespaced_service_account(
+                    name=service_account_name,
+                    namespace=sa_namespace,
+                )
+
+                self.result = Result(status=False, resources=[deployment.metadata.name], resource_type="Deployment")
+
+                # Check for Pod Identity
+                try:
+                    eks_client = boto3.client("eks", region_name=resources.region)
+                    pod_identity_associations = eks_client.list_pod_identity_associations(
+                        clusterName=resources.cluster
                     )
-                else:
-                    break
+                    
+                    for association in pod_identity_associations.get("associations", []):
+                        if (
+                            association.get("namespace") == sa_namespace
+                            and association.get("serviceAccount") == service_account_name
+                        ):
+                            self.result = Result(status=True, resource_type="Deployment")
+                            return
+                except Exception:
+                    # If Pod Identity API fails, fall back to IRSA-only check
+                    pass
+
+                # Check for IRSA
+                if service_account.metadata.annotations:
+                    if "eks.amazonaws.com/role-arn" in service_account.metadata.annotations:
+                        self.result = Result(status=True, resource_type="Deployment")
+                return
 
 
 class employ_least_privileged_access_cluster_autoscaler_role(Rule):
