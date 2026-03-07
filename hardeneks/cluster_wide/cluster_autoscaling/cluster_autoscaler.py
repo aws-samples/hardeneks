@@ -57,7 +57,7 @@ class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = ("Cross version compatibility between CA and k8s is not recommended.")
+    message = "Cross version compatibility between CA and k8s is not recommended."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
 
     def check(self, resources):
@@ -89,17 +89,12 @@ class ensure_cluster_autoscaler_has_autodiscovery_mode(Rule):
         self.result = Result(status=True, resource_type="Deployment")
 
         for deployment in resources.deployments:
-            if deployment.metadata.name == "cluster-autoscaler":
+            if "cluster-autoscaler" in deployment.metadata.name:
                 ca_containers = deployment.spec.template.spec.containers
                 ca_command = ca_containers[0].command
-                if not any(
-                    "node-group-auto-discover" in item for item in ca_command
-                ):
-                    self.result = Result(
-                        status=False, resource_type="Deployment"
-                    )
-                else:
-                    break
+                if not any("node-group-auto-discovery" in item for item in ca_command):
+                    self.result = Result(status=False, resources=[deployment.metadata.name], resource_type="Deployment")
+                return
 
 
 class use_separate_iam_role_for_cluster_autoscaler(Rule):
