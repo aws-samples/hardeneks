@@ -22,16 +22,20 @@ class restrict_wildcard_for_cluster_roles(Rule):
             "cluster-admin",
             "eks:addon-manager",
             "eks:cloud-controller-manager",
+            "eks:service-operations"
         ]
 
         for role in resources.cluster_roles:
             role_name = role.metadata.name
-            if not (role_name.startswith("system") or role_name in allow_list):
-                for rule in role.rules:
-                    if "*" in rule.verbs:
-                        offenders.append(role_name)
-                    if rule.resources and "*" in rule.resources:
-                        offenders.append(role_name)
+            if not (role_name.startswith("system:") or role_name in allow_list):
+                if role.rules:
+                    for rule in role.rules:
+                        if rule.verbs and "*" in rule.verbs:
+                            offenders.append(role_name)
+                            break
+                        if rule.resources and "*" in rule.resources:
+                            offenders.append(role_name)
+                            break
 
         if offenders:
             self.result = Result(
