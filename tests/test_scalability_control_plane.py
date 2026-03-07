@@ -14,19 +14,35 @@ class Version:
         self.minor = minor
 
 
-@patch("kubernetes.client.VersionApi.get_code")
-def test_check_EKS_version(mocked_client):
+@patch("boto3.client")
+def test_check_EKS_version(mocked_boto_client):
     namespaced_resources = Resources(
         "some_region", "some_context", "some_cluster", []
     )
     rule = check_EKS_version()
-    mocked_client.return_value = Version("23+")
+    
+    # Mock EKS client
+    mocked_eks = mocked_boto_client.return_value
+    
+    # Test: Cluster in extended support (should fail)
+    mocked_eks.describe_cluster.return_value = {
+        "cluster": {"version": "1.29"}
+    }
+    mocked_eks.describe_cluster_versions.return_value = {
+        "clusterVersions": [
+            {"clusterVersion": "1.32", "versionStatus": "STANDARD_SUPPORT"},
+            {"clusterVersion": "1.31", "versionStatus": "STANDARD_SUPPORT"},
+            {"clusterVersion": "1.30", "versionStatus": "EXTENDED_SUPPORT"},
+            {"clusterVersion": "1.29", "versionStatus": "EXTENDED_SUPPORT"},
+        ]
+    }
     rule.check(namespaced_resources)
     assert not rule.result.status
-    mocked_client.return_value = Version("24+")
-    rule.check(namespaced_resources)
-    assert rule.result.status
-    mocked_client.return_value = Version("24")
+    
+    # Test: Cluster in standard support (should pass)
+    mocked_eks.describe_cluster.return_value = {
+        "cluster": {"version": "1.32"}
+    }
     rule.check(namespaced_resources)
     assert rule.result.status
 
