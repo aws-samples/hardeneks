@@ -15,7 +15,7 @@ class check_metrics_server_is_running(Rule):
         if "metrics-server" in services:
             self.result = Result(status=True, resource_type="Service")
         else:
-            self.result = Result(status=False, resource_type="Service")
+            self.result = Result(status=False, resources=["metrics-server"], resource_type="Service")
 
 
 class check_vertical_pod_autoscaler_exists(Rule):
@@ -31,4 +31,4 @@ class check_vertical_pod_autoscaler_exists(Rule):
         if "vpa-recommender" in deployments:
             self.result = Result(status=True, resource_type="Deployment")
         else:
-            self.result = Result(status=False, resource_type="Deployment")
+            self.result = Result(status=False, resources=["vpa-recommender"], resource_type="Deployment")
