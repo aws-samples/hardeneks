@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 import kubernetes
 import pytest
@@ -94,9 +94,10 @@ def test_check_access_to_instance_profile(mocked_client):
         / "instance_metadata.json"
     )
 
-    mocked_client.return_value.describe_instances.return_value = read_json(
-        test_data
-    )
+    mock_paginator = MagicMock()
+    mock_paginator.paginate.return_value = [read_json(test_data)]
+    mocked_client.return_value.get_paginator.return_value = mock_paginator
+
     rule = check_access_to_instance_profile()
     rule.check(namespaced_resources)
     resources = rule.result.resources
