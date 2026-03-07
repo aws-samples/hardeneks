@@ -46,14 +46,11 @@ class check_any_cluster_autoscaler_exists(Rule):
 
     def check(self, resources: Resources):
         deployments = [i.metadata.name for i in resources.deployments]
-        if not (
-            "cluster-autoscaler" in deployments or "karpenter" in deployments
-        ):
-            self.result = Result(status=False, resource_type="Deployment")
+
+        if not any(keyword in d for d in deployments for keyword in ["cluster-autoscaler", "karpenter"]):
+            self.result = Result(status=False, resources=["cluster-autoscaler,karpenter"], resource_type="Deployment")
         else:
             self.result = Result(status=True, resource_type="Deployment")
-
-        return self.result
 
 
 class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
