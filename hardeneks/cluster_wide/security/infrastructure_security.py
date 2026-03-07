@@ -45,7 +45,7 @@ class make_sure_inspector_is_enabled(Rule):
     pillar = "security"
     section = "infrastructure_security"
     message = "Enable Amazon Inspector for ec2 and ecr."
-    url = "https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#deploy-workers-onto-private-subnets"
+    url = "https://aws.github.io/aws-eks-best-practices/security/docs/hosts/#run-amazon-inspector-to-assess-hosts-for-exposure-vulnerabilities-and-deviations-from-best-practices"
 
     def check(self, resources: Resources):
         client = boto3.client("inspector2", region_name=resources.region)
@@ -67,7 +67,8 @@ class make_sure_inspector_is_enabled(Rule):
             status=True, resource_type="Inspector Configuration"
         )
 
-        if ec2_status != "ENABLED" and ecr_status != "ENABLED":
+        if ec2_status != "ENABLED" or ecr_status != "ENABLED":
             self.result = Result(
                 status=False, resource_type="Inspector Configuration"
             )
+
