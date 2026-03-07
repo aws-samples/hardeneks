@@ -103,10 +103,23 @@ def test_check_access_to_instance_profile(mocked_client):
     assert len(resources) == 2
 
 
+@pytest.mark.parametrize(
+    "service_account_file,pod_identity_associations,expected_status",
+    [
+        # No IRSA, No Pod Identity - should fail
+        ("serviceaccount_api_response.json", {"associations": []}, False),
+        # Has IRSA, No Pod Identity - should pass
+        ("serviceaccount_irsa_api_response.json", {"associations": []}, True),
+        # No IRSA, Has Pod Identity - should pass
+        ("serviceaccount_api_response.json", {"associations": [{"namespace": "kube-system", "serviceAccount": "aws-node"}]}, True),
+    ],
+)
+@patch("boto3.client")
 @patch("kubernetes.client.AppsV1Api.read_namespaced_daemon_set")
 @patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
 def test_check_aws_node_daemonset_service_account(
-    mocked_core_api, mocked_apps_api
+    mocked_core_api, mocked_apps_api, mocked_boto_client,
+    service_account_file, pod_identity_associations, expected_status
 ):
     daemon_set_data = (
         Path.cwd()
@@ -122,7 +135,7 @@ def test_check_aws_node_daemonset_service_account(
         / "data"
         / "check_aws_node_daemonset_service_account"
         / "cluster"
-        / "serviceaccount_api_response.json"
+        / service_account_file
     )
     mocked_apps_api.return_value = get_response(
         kubernetes.client.AppsV1Api,
@@ -132,13 +145,19 @@ def test_check_aws_node_daemonset_service_account(
     mocked_core_api.return_value = get_response(
         kubernetes.client.CoreV1Api, service_account_data, "V1ServiceAccount"
     )
-    resources = Resources(
-        "some_region", "some_context", "some_cluster", []
+    mocked_boto_client.return_value.list_pod_identity_associations.return_value = pod_identity_associations
+    
+    namespaced_resources = NamespacedResources(
+        "some_region", "some_context", "some_cluster", "some_ns"
     )
     rule = check_aws_node_daemonset_service_account()
-    rule.check(resources)
+    rule.check(namespaced_resources)
 
-    assert rule.result.status
+    assert rule.result.status == expected_status
+    if not expected_status:
+        assert "aws-node" in rule.result.resources
+    else:
+        assert rule.result.resources == [""]
 
 
 @pytest.mark.parametrize(

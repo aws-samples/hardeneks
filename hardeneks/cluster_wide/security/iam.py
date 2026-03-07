@@ -70,20 +70,45 @@ class check_aws_node_daemonset_service_account(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "Update the aws-node daemonset to use IRSA."
+    message = "aws-node daemonset should use IRSA or EKS Pod Identity."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa"
 
     def check(self, resources: Resources):
+
         daemonset = client.AppsV1Api().read_namespaced_daemon_set(
             name="aws-node", namespace="kube-system"
         )
-        self.result = Result(status=True, resource_type="Daemonset")
-        sa = client.CoreV1Api().read_namespaced_service_account(
-            name=daemonset.spec.template.spec.service_account_name,
+
+        service_account_name = daemonset.spec.template.spec.service_account_name
+        service_account = client.CoreV1Api().read_namespaced_service_account(
+            name=service_account_name,
             namespace="kube-system",
         )
-        if "eks.amazonaws.com/role-arn" not in (sa.metadata.annotations or {}):
-            self.result = Result(status=False, resources=["aws-node"], resource_type="Daemonset")
+
+        self.result = Result(status=False, resources=["aws-node"], resource_type="Daemonset")
+
+        # Check for Pod Identity
+        try:
+            eks_client = boto3.client("eks", region_name=resources.region)
+            pod_identity_associations = eks_client.list_pod_identity_associations(
+                clusterName=resources.cluster
+            )
+            
+            for association in pod_identity_associations.get("associations", []):
+                if (
+                    association.get("namespace") == "kube-system"
+                    and association.get("serviceAccount") == service_account_name
+                ):
+                    self.result = Result(status=True, resource_type="Daemonset")
+                    return
+        except Exception:
+            # If Pod Identity API fails, fall back to IRSA-only check
+            pass
+
+        # Check for IRSA
+        if service_account.metadata.annotations:
+            if "eks.amazonaws.com/role-arn" in service_account.metadata.annotations:
+                self.result = Result(status=True, resource_type="Daemonset")
 
 
 class check_access_to_instance_profile(Rule):
