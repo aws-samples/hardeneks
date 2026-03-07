@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from hardeneks.cluster_wide.security.infrastructure_security import (
     deploy_workers_onto_private_subnets,
@@ -33,9 +33,10 @@ def test_deploy_workers_onto_private_subnets(mocked_client):
         / "instance_metadata.json"
     )
 
-    mocked_client.return_value.describe_instances.return_value = read_json(
-        test_data
-    )
+    mock_paginator = MagicMock()
+    mock_paginator.paginate.return_value = [read_json(test_data)]
+    mocked_client.return_value.get_paginator.return_value = mock_paginator
+
     rule = deploy_workers_onto_private_subnets()
     rule.check(namespaced_resources)
 

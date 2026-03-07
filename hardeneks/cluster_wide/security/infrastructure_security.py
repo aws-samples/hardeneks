@@ -4,7 +4,7 @@ from ...resources import Resources
 from hardeneks.rules import Rule, Result
 
 
-class deploy_workers_onto_private_subnets(Result):
+class deploy_workers_onto_private_subnets(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "infrastructure_security"
@@ -13,10 +13,10 @@ class deploy_workers_onto_private_subnets(Result):
 
     def check(self, resources: Resources):
         client = boto3.client("ec2", region_name=resources.region)
-
         offenders = []
-
-        instance_metadata = client.describe_instances(
+        
+        paginator = client.get_paginator('describe_instances')
+        page_iterator = paginator.paginate(PaginationConfig={'PageSize': 1000},
             Filters=[
                 {
                     "Name": "tag:aws:eks:cluster-name",
@@ -27,9 +27,10 @@ class deploy_workers_onto_private_subnets(Result):
             ]
         )
 
-        for instance in instance_metadata["Reservations"]:
-            if instance["Instances"][0]["PublicDnsName"]:
-                offenders.append(instance["Instances"][0]["InstanceId"])
+        for page in page_iterator:
+            for reservation in page["Reservations"]:
+                if reservation["Instances"][0]["PublicDnsName"]:
+                    offenders.append(reservation["Instances"][0]["InstanceId"])
 
         self.result = Result(status=True, resource_type="Node")
 
