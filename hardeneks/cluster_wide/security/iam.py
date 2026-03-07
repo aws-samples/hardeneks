@@ -49,7 +49,7 @@ class check_endpoint_public_access(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "EKS Cluster Endpoint is not Private."
+    message = "EKS Cluster Endpoint is Public."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private"
 
     def check(self, resources: Resources):
