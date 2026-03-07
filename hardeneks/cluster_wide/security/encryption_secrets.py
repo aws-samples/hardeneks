@@ -38,21 +38,19 @@ class use_encryption_with_efs(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "encryption_secrets"
-    message = "EFS Persistent volumes should have tls mount option."
+    message = "EFS Persistent volumes should have encryptInTransit enabled."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/data/#encryption-at-rest"
 
     def check(self, resources: Resources):
-
         offenders = []
 
         for persistent_volume in resources.persistent_volumes:
             csi = persistent_volume.spec.csi
             if csi and csi.driver == "efs.csi.aws.com":
-                mount_options = persistent_volume.spec.mount_options
-                if not mount_options:
-                    offenders.append(persistent_volume)
-                else:
-                    if "tls" not in mount_options:
+                volume_attributes = getattr(csi, 'volume_attributes', None)
+                if volume_attributes:
+                    encrypt_in_transit = volume_attributes.get("encryptInTransit")
+                    if encrypt_in_transit == "false":
                         offenders.append(persistent_volume)
 
         self.result = Result(status=True, resource_type="PersistentVolume")
