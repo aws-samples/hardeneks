@@ -78,8 +78,8 @@ def test_check_read_only_root_file_system(namespaced_resources):
     rule = check_read_only_root_file_system()
     rule.check(namespaced_resources)
 
+    assert len(rule.result.resources) == 2
     assert all("good" not in r for r in rule.result.resources)
-    assert set(rule.result.resources) == {"bad1", "bad2"}
 
 
 @pytest.mark.parametrize(

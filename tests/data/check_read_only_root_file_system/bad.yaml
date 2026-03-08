@@ -12,6 +12,7 @@ spec:
     ports:
     - containerPort: 80
 ---
+# Default readOnlyRootFilesystem is false so this should fail
 apiVersion: v1
 kind: Pod
 metadata:
