@@ -162,7 +162,7 @@ rules:
  
 In order to run hardeneks we need to have some permissions both on AWS side and k8s side.
 
-### Minimal IAM role policy
+### Minimal IAM role policy for all checks
 
 ```json
 {
@@ -179,7 +179,12 @@ In order to run hardeneks we need to have some permissions both on AWS side and 
                 "ecr:DescribeRepositories",
                 "inspector2:BatchGetAccountStatus",
                 "ec2:DescribeFlowLogs",
-                "ec2:DescribeInstances"
+                "ec2:DescribeInstances",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListRolePolicies",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetRolePolicy"
             ],
             "Resource": "*"
         }
@@ -187,7 +192,7 @@ In order to run hardeneks we need to have some permissions both on AWS side and 
 }
 ```
 
-### Minimal ClusterRole
+### Minimal ClusterRole for all checks
 
 ```yaml
 kind: ClusterRole
@@ -198,6 +203,9 @@ rules:
 - apiGroups: [""]
   resources: ["namespaces", "resourcequotas", "persistentvolumes", "pods", "services", "nodes"]
   verbs: ["list"]
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["get"]
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
   verbs: ["list"]
