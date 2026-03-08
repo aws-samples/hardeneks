@@ -17,11 +17,10 @@ class use_encryption_with_ebs(Rule):
                 if storage_class.parameters:
                     encrypted = storage_class.parameters.get("encrypted")
                     if not encrypted or encrypted == "false":
-                        offenders.append(storage_class)
-
+                        offenders.append(storage_class.metadata.name)
                 else:
                     # No parameters means no encryption specified
-                    offenders.append(storage_class)
+                    offenders.append(storage_class.metadata.name)
 
         self.result = Result(status=True, resource_type="StorageClass")
 
@@ -29,7 +28,7 @@ class use_encryption_with_ebs(Rule):
             self.result = Result(
                 status=False,
                 resource_type="StorageClass",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
             )
 
 
@@ -50,7 +49,7 @@ class use_encryption_with_efs(Rule):
                 if volume_attributes:
                     encrypt_in_transit = volume_attributes.get("encryptInTransit")
                     if encrypt_in_transit == "false":
-                        offenders.append(persistent_volume)
+                        offenders.append(persistent_volume.metadata.name)
 
         self.result = Result(status=True, resource_type="PersistentVolume")
 
@@ -58,7 +57,7 @@ class use_encryption_with_efs(Rule):
             self.result = Result(
                 status=False,
                 resource_type="PersistentVolume",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
             )
 
 
@@ -77,7 +76,7 @@ class use_efs_access_points(Rule):
             csi = persistent_volume.spec.csi
             if csi and csi.driver == "efs.csi.aws.com":
                 if "::" not in csi.volume_handle:
-                    offenders.append(persistent_volume)
+                    offenders.append(persistent_volume.metadata.name)
 
         self.result = Result(status=True, resource_type="PersistentVolume")
 
@@ -85,5 +84,5 @@ class use_efs_access_points(Rule):
             self.result = Result(
                 status=False,
                 resource_type="PersistentVolume",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
             )

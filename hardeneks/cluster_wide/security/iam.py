@@ -141,7 +141,7 @@ class check_access_to_instance_profile(Rule):
                 http_tokens = metadata_options.get("HttpTokens", "optional")
                 
                 if hop_limit != 1 or http_tokens != "required":
-                    offenders.append(reservation)
+                    offenders.append(reservation["Instances"][0]["InstanceId"])
 
         self.result = Result(status=True, resource_type="Node")
 
@@ -149,7 +149,7 @@ class check_access_to_instance_profile(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Node",
-                resources=[i["Instances"][0]["InstanceId"] for i in offenders],
+                resources=offenders,
             )
 
 

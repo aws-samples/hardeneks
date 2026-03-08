@@ -165,7 +165,7 @@ class use_dedicated_service_accounts_for_each_deployment(Rule):
         for k, _ in repeated_service_accounts.items():
             for deployment in namespaced_resources.deployments:
                 if k == deployment.spec.template.spec.service_account_name:
-                    offenders.append(deployment)
+                    offenders.append(deployment.metadata.name)
 
         self.result = Result(
             status=True,
@@ -176,7 +176,7 @@ class use_dedicated_service_accounts_for_each_deployment(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Deployment",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -205,7 +205,7 @@ class use_dedicated_service_accounts_for_each_stateful_set(Rule):
         for k, _ in repeated_service_accounts.items():
             for stateful_set in namespaced_resources.stateful_sets:
                 if k == stateful_set.spec.template.spec.service_account_name:
-                    offenders.append(stateful_set)
+                    offenders.append(stateful_set.metadata.name)
 
         self.result = Result(
             status=True,
@@ -216,7 +216,7 @@ class use_dedicated_service_accounts_for_each_stateful_set(Rule):
             self.result = Result(
                 status=False,
                 resource_type="StatefulSet",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -245,7 +245,7 @@ class use_dedicated_service_accounts_for_each_daemon_set(Rule):
         for k, _ in repeated_service_accounts.items():
             for daemon_set in namespaced_resources.daemon_sets:
                 if k == daemon_set.spec.template.spec.service_account_name:
-                    offenders.append(daemon_set)
+                    offenders.append(daemon_set.metadata.name)
 
         self.result = Result(
             status=True, 
@@ -256,6 +256,6 @@ class use_dedicated_service_accounts_for_each_daemon_set(Rule):
             self.result = Result(
                 status=False,
                 resource_type="DaemonSet",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
