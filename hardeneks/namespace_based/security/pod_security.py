@@ -51,9 +51,20 @@ class disallow_host_path_or_make_it_read_only(Rule):
         offenders = []
 
         for pod in namespaced_resources.pods:
-            for volume in pod.spec.volumes:
-                if volume.host_path:
-                    offenders.append(pod)
+            is_offender = False
+            if pod.spec.volumes:
+                for volume in pod.spec.volumes:
+                    if volume.host_path:
+                        volume_name = volume.name
+                        for container in pod.spec.containers:
+                            for volume_mount in container.volume_mounts:
+                                if volume_mount.name == volume_name:
+                                    if not volume_mount.read_only:
+                                        is_offender = True
+                                        offenders.append(pod.metadata.name)
+                                        break
+                        if is_offender:
+                            break
 
         self.result = Result(
             status=True, 
@@ -64,7 +75,7 @@ class disallow_host_path_or_make_it_read_only(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 

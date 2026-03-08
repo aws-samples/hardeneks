@@ -36,8 +36,8 @@ def test_disallow_container_socket_mount(namespaced_resources):
 def test_disallow_host_path_or_make_it_read_only(namespaced_resources):
     rule = disallow_host_path_or_make_it_read_only()
     rule.check(namespaced_resources)
-    rule.check(namespaced_resources)
 
+    assert len(rule.result.resources) == 1
     assert all("good" not in r for r in rule.result.resources)
     assert all("bad" in r for r in rule.result.resources)
 
