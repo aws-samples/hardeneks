@@ -161,17 +161,34 @@ def test_check_aws_node_daemonset_service_account(
         assert rule.result.resources == [""]
 
 
-@pytest.mark.parametrize(
-    "namespaced_resources",
-    [(("disable_service_account_token_mounts", ["pods"]))],
-    indirect=["namespaced_resources"],
-)
-def test_disable_service_account_token_mounts(namespaced_resources):
-    rule = disable_service_account_token_mounts()
-    rule.check(namespaced_resources)
+@patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
+def test_disable_service_account_token_mounts(mock_read_sa):
+    sa_list_data = (
+        Path.cwd()
+        / "tests"
+        / "data"
+        / "disable_service_account_token_mounts"
+        / "cluster"
+        / "serviceaccount_api_response.json"
+    )
+    sa_list = get_response(
+        kubernetes.client.CoreV1Api, sa_list_data, "V1ServiceAccountList"
+    ).items
+    sa_by_namespace = {sa.metadata.namespace: sa for sa in sa_list}
+    mock_read_sa.side_effect = lambda *args, **kwargs: sa_by_namespace[kwargs["namespace"]]
 
-    assert all("good" not in r for r in rule.result.resources)
-    assert all("bad" in r for r in rule.result.resources)
+    offending_namespaces = []
+    for namespace in ["good", "bad1", "bad2"]:
+        namespaced_resources = NamespacedResources(
+            "some_region", "some_context", "some_cluster", namespace
+        )
+        rule = disable_service_account_token_mounts()
+        rule.check(namespaced_resources)
+        if not rule.result.status:
+            offending_namespaces.extend(rule.result.resources)
+
+    assert len(offending_namespaces) == 2
+    assert all("good" not in r for r in offending_namespaces)
 
 
 @pytest.mark.parametrize(

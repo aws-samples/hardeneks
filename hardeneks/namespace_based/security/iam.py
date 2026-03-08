@@ -1,5 +1,7 @@
 from collections import Counter
 
+from kubernetes import client
+
 from ...resources import NamespacedResources
 from hardeneks.rules import Rule, Result
 
@@ -41,27 +43,24 @@ class disable_service_account_token_mounts(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Auto-mounting of Service Account tokens is not allowed."
+    message = "Default service account should have automountServiceAccountToken set to false."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens"
 
     def check(self, namespaced_resources: NamespacedResources):
-
-        offenders = []
-
-        for pod in namespaced_resources.pods:
-            if pod.spec.automount_service_account_token:
-                offenders.append(pod)
+        sa = client.CoreV1Api().read_namespaced_service_account(
+            name="default", namespace=namespaced_resources.namespace
+        )
 
         self.result = Result(
-            status=True, 
-            resource_type="Pod",
+            status=True,
+            resource_type="ServiceAccount",
             namespace=namespaced_resources.namespace,
-            )
-        if offenders:
+        )
+        if sa.automount_service_account_token != False:
             self.result = Result(
                 status=False,
-                resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resource_type="ServiceAccount",
+                resources=["default"],
                 namespace=namespaced_resources.namespace,
             )
 
