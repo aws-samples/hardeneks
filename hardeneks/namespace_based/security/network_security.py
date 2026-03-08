@@ -13,16 +13,14 @@ class use_encryption_with_aws_load_balancers(Rule):
         offenders = []
         for service in namespaced_resources.services:
             annotations = service.metadata.annotations
-            if service.spec.type == 'LoadBalancer' and annotations:
-                ssl_cert = (
-                    "service.beta.kubernetes.io/aws-load-balancer-ssl-cert"
-                    in annotations
-                )
-                ssl_cert_port = annotations.get(
-                    "service.beta.kubernetes.io/aws-load-balancer-ssl-ports"
-                )
-                if not (ssl_cert and ssl_cert_port == "443"):
-                    offenders.append(service)
+            if service.spec.type == 'LoadBalancer':
+                if annotations:
+                    ssl_cert = annotations.get("service.beta.kubernetes.io/aws-load-balancer-ssl-cert")
+                    ssl_cert_port = annotations.get("service.beta.kubernetes.io/aws-load-balancer-ssl-ports")
+                    if not (ssl_cert and ssl_cert_port):
+                        offenders.append(service.metadata.name)
+                else:
+                    offenders.append(service.metadata.name)
 
         self.result = Result(
             status=True, 
@@ -33,6 +31,9 @@ class use_encryption_with_aws_load_balancers(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Service",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
+
+
+# TODO: Should add a check of ingresses for TLS enabled.
