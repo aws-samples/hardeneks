@@ -51,6 +51,7 @@ def test_set_requests_limits_for_containers(namespaced_resources):
     rule = set_requests_limits_for_containers()
     rule.check(namespaced_resources)
 
+    assert len(rule.result.resources) == 2
     assert all("good" not in r for r in rule.result.resources)
     assert all("bad" in r for r in rule.result.resources)
 

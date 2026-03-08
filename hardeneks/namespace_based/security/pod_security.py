@@ -96,7 +96,8 @@ class set_requests_limits_for_containers(Rule):
                 if not (
                     container.resources.limits and container.resources.requests
                 ):
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
+                    break
 
         self.result = Result(
             status=True, 
@@ -107,7 +108,7 @@ class set_requests_limits_for_containers(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
