@@ -19,9 +19,11 @@ class disallow_container_socket_mount(Rule):
         ]
 
         for pod in namespaced_resources.pods:
-            for volume in pod.spec.volumes:
-                if volume.host_path and volume.host_path.path in sockets:
-                    offenders.append(pod)
+            if pod.spec.volumes:
+                for volume in pod.spec.volumes:
+                    if volume.host_path and volume.host_path.path in sockets:
+                        offenders.append(pod.metadata.name)
+                        break
 
         self.result = Result(
             status=True, 
@@ -32,7 +34,7 @@ class disallow_container_socket_mount(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
