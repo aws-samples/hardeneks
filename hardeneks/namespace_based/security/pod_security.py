@@ -130,7 +130,8 @@ class disallow_privilege_escalation(Rule):
                     container.security_context
                     and container.security_context.allow_privilege_escalation
                 ):
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
+                    break
 
         self.result = Result(
             status=True, 
@@ -141,7 +142,7 @@ class disallow_privilege_escalation(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
