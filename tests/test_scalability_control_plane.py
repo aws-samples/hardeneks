@@ -3,7 +3,7 @@ from unittest.mock import patch
 from hardeneks import helpers
 
 from hardeneks.cluster_wide.scalability.control_plane import (
-    check_EKS_version,
+    check_eks_version,
     check_kubectl_compression,
 )
 
@@ -15,11 +15,11 @@ class Version:
 
 
 @patch("boto3.client")
-def test_check_EKS_version(mocked_boto_client):
+def test_check_eks_version(mocked_boto_client):
     namespaced_resources = Resources(
         "some_region", "some_context", "some_cluster", []
     )
-    rule = check_EKS_version()
+    rule = check_eks_version()
     
     # Mock EKS client
     mocked_eks = mocked_boto_client.return_value

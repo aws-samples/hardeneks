@@ -6,7 +6,7 @@ from hardeneks.rules import Rule, Result
 from hardeneks import Resources
 
 
-class check_EKS_version(Rule):
+class check_eks_version(Rule):
     _type = "cluster_wide"
     pillar = "scalability"
     section = "control_plane"

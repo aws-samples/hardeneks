@@ -53,7 +53,7 @@ rules:
         - use_managed_nodegroups
     scalability:
       control_plane:
-        - check_EKS_version
+        - check_eks_version
         - check_kubectl_compression
   namespace_based:
     security: 
