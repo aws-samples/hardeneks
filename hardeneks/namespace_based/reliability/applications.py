@@ -12,9 +12,8 @@ class avoid_running_singleton_pods(Rule):
     def check(self, namespaced_resources: NamespacedResources):
         offenders = []
         for pod in namespaced_resources.pods:
-            owner = pod.metadata.owner_references
-            if not owner:
-                offenders.append(pod)
+            if not pod.metadata.owner_references:
+                offenders.append(pod.metadata.name)
 
         self.result = Result(
             status=True, 
@@ -25,7 +24,7 @@ class avoid_running_singleton_pods(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -43,7 +42,7 @@ class run_multiple_replicas(Rule):
 
         for deployment in namespaced_resources.deployments:
             if deployment.spec.replicas < 2:
-                offenders.append(deployment)
+                offenders.append(deployment.metadata.name)
 
         self.result = Result(
             status=True, 
@@ -54,7 +53,7 @@ class run_multiple_replicas(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Deployment",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -73,13 +72,11 @@ class schedule_replicas_across_nodes(Rule):
         for deployment in namespaced_resources.deployments:
             spread = deployment.spec.template.spec.topology_spread_constraints
             if not spread:
-                offenders.append(deployment)
+                offenders.append(deployment.metadata.name)
             else:
                 topology_keys = set([i.topology_key for i in spread])
-                if not set(["topology.kubernetes.io/zone"]).issubset(
-                    topology_keys
-                ):
-                    offenders.append(deployment)
+                if not set(["topology.kubernetes.io/zone"]).issubset(topology_keys):
+                    offenders.append(deployment.metadata.name)
 
         self.result = Result(
             status=True, 
@@ -90,7 +87,7 @@ class schedule_replicas_across_nodes(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Deployment",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -106,13 +103,11 @@ class check_horizontal_pod_autoscaling_exists(Rule):
 
         offenders = []
 
-        hpas = [
-            i.spec.scale_target_ref.name for i in namespaced_resources.hpas
-        ]
+        hpas = [i.spec.scale_target_ref.name for i in namespaced_resources.hpas]
 
         for deployment in namespaced_resources.deployments:
             if deployment.metadata.name not in hpas:
-                offenders.append(deployment)
+                offenders.append(deployment.metadata.name)
 
         self.result = Result(
             status=True, 
@@ -123,7 +118,7 @@ class check_horizontal_pod_autoscaling_exists(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Deployment",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -142,7 +137,8 @@ class check_readiness_probes(Rule):
         for pod in namespaced_resources.pods:
             for container in pod.spec.containers:
                 if not container.readiness_probe:
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
+                    break
 
         self.result = Result(
             status=True,
@@ -153,7 +149,7 @@ class check_readiness_probes(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -172,7 +168,8 @@ class check_liveness_probes(Rule):
         for pod in namespaced_resources.pods:
             for container in pod.spec.containers:
                 if not container.liveness_probe:
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
+                    break
 
         self.result = Result(
             status=True,
@@ -183,6 +180,6 @@ class check_liveness_probes(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
