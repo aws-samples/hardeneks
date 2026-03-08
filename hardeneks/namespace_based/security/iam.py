@@ -124,7 +124,8 @@ class disable_anonymous_access_for_roles(Rule):
                         subject.name == "system:unauthenticated"
                         or subject.name == "system:anonymous"
                     ):
-                        offenders.append(role_binding)
+                        offenders.append(role_binding.metadata.name)
+                        break
 
         self.result = Result(
             status=True,
@@ -135,7 +136,7 @@ class disable_anonymous_access_for_roles(Rule):
             self.result = Result(
                 status=False,
                 resource_type="RoleBinding",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
