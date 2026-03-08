@@ -16,10 +16,12 @@ class restrict_wildcard_for_roles(Rule):
 
         for role in namespaced_resources.roles:
             for rule in role.rules:
-                if "*" in rule.verbs:
-                    offenders.append(role)
-                if "*" in rule.resources:
-                    offenders.append(role)
+                if rule.verbs and "*" in rule.verbs:
+                    offenders.append(role.metadata.name)
+                    break
+                if rule.resources and "*" in rule.resources:
+                    offenders.append(role.metadata.name)
+                    break
 
         self.result = Result(
             status=True,
@@ -30,7 +32,7 @@ class restrict_wildcard_for_roles(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Role",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
