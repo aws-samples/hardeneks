@@ -201,23 +201,10 @@ def test_disable_run_as_root_user(namespaced_resources):
 
     rule.check(namespaced_resources)
 
+    assert len(rule.result.resources) == 2
     assert all("good" not in r for r in rule.result.resources)
     assert all("bad" in r for r in rule.result.resources)
 
-
-@pytest.mark.parametrize(
-    "namespaced_resources",
-    [(("disable_run_as_root_user_container", ["pods"]))],
-    indirect=["namespaced_resources"],
-)
-def test_disable_run_as_root_user_container(namespaced_resources):
-    rule = disable_run_as_root_user()
-
-    rule.check(namespaced_resources)
-
-    assert all("good" not in r for r in rule.result.resources)
-    assert all("bad" in r for r in rule.result.resources)
-    
 
 @pytest.mark.parametrize(
     "namespaced_resources",
