@@ -6,7 +6,7 @@ class use_encryption_with_ebs(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "encryption_secrets"
-    message = "EBS Storage Classes should have encryption parameter."
+    message = "Enable encryption on EBS Storage Classes."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/data/#encryption-at-rest"
 
     def check(self, resources: Resources):
@@ -36,7 +36,7 @@ class use_encryption_with_efs(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "encryption_secrets"
-    message = "EFS Persistent volumes should have encryptInTransit enabled."
+    message = "Enable encryptInTransit on EFS Persistent Volumes."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/data/#encryption-at-rest"
 
     def check(self, resources: Resources):
@@ -65,7 +65,7 @@ class use_efs_access_points(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "encryption_secrets"
-    message = "EFS Persistent volumes should leverage access points."
+    message = "Use access points for EFS Persistent Volumes."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/data/#use-efs-access-points-to-simplify-access-to-shared-datasets"
 
     def check(self, resources: Resources):

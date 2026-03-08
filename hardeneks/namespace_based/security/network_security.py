@@ -6,7 +6,7 @@ class use_encryption_with_aws_load_balancers(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "network_security"
-    message = "Make sure you specify an ssl cert."
+    message = "Specify an SSL cert on Load Balancers."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#use-encryption-with-aws-load-balancers"
 
     def check(self, namespaced_resources: NamespacedResources):

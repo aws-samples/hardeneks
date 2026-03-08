@@ -8,7 +8,7 @@ class ensure_namespace_psa_exist(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "pod_security"
-    message = "Namespaces should have psa modes."
+    message = "Configure Pod Security Admission modes for namespaces."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/pods/#pod-security-standards-pss-and-pod-security-admission-psa"
 
     def check(self, resources: Resources):

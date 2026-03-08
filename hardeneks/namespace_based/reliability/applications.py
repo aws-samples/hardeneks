@@ -6,7 +6,7 @@ class avoid_running_singleton_pods(Rule):
     _type = "namespace_based"
     pillar = "reliability"
     section = "applications"
-    message = "Avoid running pods without deployments."
+    message = "Run pods via Deployments, not as singletons."
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#avoid-running-singleton-pods"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -33,7 +33,7 @@ class run_multiple_replicas(Rule):
     _type = "namespace_based"
     pillar = "reliability"
     section = "applications"
-    message = "Avoid running single replica deployments."
+    message = "Run multiple replicas for each Deployment."
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-multiple-replicas"
 
     def check(self, namespaced_resources: NamespacedResources):

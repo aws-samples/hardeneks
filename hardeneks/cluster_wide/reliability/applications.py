@@ -6,7 +6,7 @@ class check_metrics_server_is_running(Rule):
     _type = "cluster_wide"
     pillar = "reliability"
     section = "applications"
-    message = "Metrics server is not deployed."
+    message = "Deploy Metrics Server."
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
 
     def check(self, resources: Resources):
@@ -22,7 +22,7 @@ class check_vertical_pod_autoscaler_exists(Rule):
     _type = "cluster_wide"
     pillar = "reliability"
     section = "applications"
-    message = "Vertical pod autoscaler is not deployed."
+    message = "Deploy Vertical Pod Autoscaler."
     url = "https://aws.github.io/aws-eks-best-practices/reliability/docs/application/#run-kubernetes-metrics-server"
 
     def check(self, resources: Resources):

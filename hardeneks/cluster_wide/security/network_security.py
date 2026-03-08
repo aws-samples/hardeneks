@@ -54,7 +54,7 @@ class check_default_deny_policy_exists(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "network_security"
-    message = "Namespaces that does not have default network deny policies."
+    message = "Configure default network deny policies for namespaces."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#create-a-default-deny-policy"
 
     def check(self, resources: Resources):

@@ -68,7 +68,7 @@ class check_any_cluster_autoscaler_exists(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Cluster Autoscaler or Karpenter is not deployed."
+    message = "Deploy Cluster Autoscaler or Karpenter."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/"
 
     def check(self, resources: Resources):
@@ -84,7 +84,7 @@ class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Cross version compatibility between CA and k8s is not recommended."
+    message = "Match Cluster Autoscaler version to cluster version."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
 
     def check(self, resources):
@@ -109,7 +109,7 @@ class ensure_cluster_autoscaler_has_autodiscovery_mode(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Auto discovery is not enabled for Cluster Autoscaler."
+    message = "Enable auto discovery for Cluster Autoscaler."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#operating-the-cluster-autoscaler"
 
     def check(self, resources):
@@ -128,7 +128,7 @@ class use_separate_iam_role_for_cluster_autoscaler(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Cluster-autoscaler deployment does not use a dedicated IAM Role (IRSA)."
+    message = "Use a dedicated IAM Role (IRSA/Pod Identities) for Cluster Autoscaler."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role"
 
     def check(self, resources):
@@ -151,7 +151,7 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Cluster autoscaler role has unnecessary actions assigned."
+    message = "Use least privilege IAM actions for Cluster Autoscaler role."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#employ-least-privileged-access-to-the-iam-role"
 
     def check(self, resources):
@@ -200,7 +200,7 @@ class use_managed_nodegroups(Rule):
     _type = "cluster_wide"
     pillar = "cluster_autoscaling"
     section = "cluster_autoscaler"
-    message = "Nodes are recommended to be part of a managed node group."
+    message = "Use managed node groups for worker nodes."
     url = "https://aws.github.io/aws-eks-best-practices/cluster-autoscaling/#configuring-your-node-groups"
 
     def check(self, resources):

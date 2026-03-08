@@ -9,7 +9,7 @@ class restrict_wildcard_for_cluster_roles(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "ClusterRoles should not have '*' in Verbs or Resources."
+    message = "Restrict wildcard usage in ClusterRole Verbs and Resources."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
 
     def check(self, resources: Resources):
@@ -49,7 +49,7 @@ class check_endpoint_public_access(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "EKS Cluster Endpoint is Public."
+    message = "Restrict EKS Cluster Endpoint to private access."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#make-the-eks-cluster-endpoint-private"
 
     def check(self, resources: Resources):
@@ -62,7 +62,7 @@ class check_endpoint_public_access(Rule):
 
         if endpoint_access:
             self.result = Result(
-                status=False, resource_type="Cluster Endpoint"
+                status=False, resources=[resources.cluster], resource_type="Cluster Endpoint"
             )
 
 
@@ -70,7 +70,7 @@ class check_aws_node_daemonset_service_account(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "aws-node daemonset should use IRSA or EKS Pod Identity."
+    message = "Use IRSA or EKS Pod Identity for the aws-node daemonset."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#update-the-aws-node-daemonset-to-use-irsa"
 
     def check(self, resources: Resources):
@@ -115,7 +115,7 @@ class check_access_to_instance_profile(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "Restrict access to the instance profile assigned to nodes."
+    message = "Restrict access to the instance profile assigned to worker nodes."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#restrict-access-to-the-instance-profile-assigned-to-the-worker-node"
 
     def check(self, resources: Resources):
@@ -157,7 +157,7 @@ class disable_anonymous_access_for_cluster_roles(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "Don't bind clusterroles to anonymous/unauthenticated groups."
+    message = "Restrict ClusterRole bindings of anonymous or unauthenticated groups."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
 
     def check(self, resources: Resources):

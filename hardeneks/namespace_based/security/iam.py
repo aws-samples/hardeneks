@@ -10,7 +10,7 @@ class restrict_wildcard_for_roles(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Roles should not have '*' in Verbs or Resources."
+    message = "Restrict wildcard usage in Role Verbs and Resources."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#employ-least-privileged-access-when-creating-rolebindings-and-clusterrolebindings"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -43,7 +43,7 @@ class disable_service_account_token_mounts(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Default service account should have automountServiceAccountToken set to false."
+    message = "Disable automountServiceAccountToken on the default service account."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -69,7 +69,7 @@ class disable_run_as_root_user(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Running as root is not allowed."
+    message = "Run pods as non-root user."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#run-the-application-as-a-non-root-user"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -110,7 +110,7 @@ class disable_anonymous_access_for_roles(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Don't bind roles to anonymous or unauthenticated groups."
+    message = "Restrict Role bindings of anonymous or unauthenticated groups."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -145,7 +145,7 @@ class use_dedicated_service_accounts_for_each_deployment(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Don't share service accounts between Deployments."
+    message = "Use dedicated service accounts for each Deployment."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -185,7 +185,7 @@ class use_dedicated_service_accounts_for_each_stateful_set(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Don't share service accounts between StatefulSets."
+    message = "Use dedicated service accounts for each StatefulSet."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -225,7 +225,7 @@ class use_dedicated_service_accounts_for_each_daemon_set(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Don't share service accounts between DaemonSets."
+    message = "Use dedicated service accounts for each DaemonSet."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#use-dedicated-service-accounts-for-each-application"
 
     def check(self, namespaced_resources: NamespacedResources):

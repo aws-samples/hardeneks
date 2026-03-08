@@ -10,7 +10,7 @@ class check_EKS_version(Rule):
     _type = "cluster_wide"
     pillar = "scalability"
     section = "control_plane"
-    message = "EKS Version should be in standard support."
+    message = "Use an EKS version in standard support."
     url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/"
 
     def check(self, resources: Resources):
@@ -43,7 +43,7 @@ class check_kubectl_compression(Rule):
     _type = "cluster_wide"
     pillar = "scalability"
     section = "control_plane"
-    message = "`disable-compression` in kubeconfig should equal True"
+    message = "Enable `disable-compression` in kubeconfig."
     url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression"
 
     def check(self, resources: Resources):
