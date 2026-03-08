@@ -16,10 +16,9 @@ class use_encryption_with_ebs(Rule):
             if storage_class.provisioner in ["ebs.csi.aws.com", "ebs.csi.eks.amazonaws.com"]:
                 if storage_class.parameters:
                     encrypted = storage_class.parameters.get("encrypted")
-                    if not encrypted:
+                    if not encrypted or encrypted == "false":
                         offenders.append(storage_class)
-                    elif encrypted == "false":
-                        offenders.append(storage_class)
+
                 else:
                     # No parameters means no encryption specified
                     offenders.append(storage_class)
