@@ -51,16 +51,12 @@ class check_kubectl_compression(Rule):
         for cluster in kubeconfig.get("clusters", []):
             clusterName = cluster.get("name", "")
             if resources.cluster in clusterName:
-                if not (
-                    cluster.get("cluster", {}).get(
-                        "disable-compression", False
-                    )
-                ):
+                if not (cluster.get("cluster", {}).get("disable-compression", False)):
                     self.result = Result(
-                        status=False, resource_type="Compression Setting"
+                        status=False, 
+                        resources=[resources.cluster],  
+                        resource_type="Compression Setting"
                     )
                 else:
-                    self.result = Result(
-                        status=True, resource_type="Compression Setting"
-                    )
+                    self.result = Result(status=True, resource_type="Compression Setting")
                 break
