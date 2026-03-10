@@ -68,8 +68,6 @@ Default behavior is to run all the checks. If you want to provide your own confi
 Following is a sample config file:
 
 ```yaml
----
----
 ignore-namespaces:
   - kube-node-lease
   - kube-public
