@@ -1,10 +1,12 @@
 import json
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 import kubernetes
+import pytest
 
 from hardeneks.resources import Resources
+from .conftest import get_response
 from hardeneks.cluster_wide.cluster_autoscaling.cluster_autoscaler import (
     check_any_cluster_autoscaler_exists,
     ensure_cluster_autoscaler_and_cluster_versions_match,
@@ -13,7 +15,6 @@ from hardeneks.cluster_wide.cluster_autoscaling.cluster_autoscaler import (
     employ_least_privileged_access_cluster_autoscaler_role,
     use_managed_nodegroups,
 )
-from .conftest import get_response
 
 
 def _read_json(file_path):
@@ -26,153 +27,110 @@ def _get_sample_data_path(directory, json_file):
     return Path.cwd() / "tests" / "data" / directory / json_file
 
 
-@patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
-def test_check_any_cluster_autoscaler_exists(mocked_client):
-
-    test_data = (
-        Path.cwd()
-        / "tests"
-        / "data"
-        / "check_any_cluster_autoscaler_exists"
-        / "cluster"
-        / "deployments_api_response.json"
-    )
-    mocked_client.return_value = get_response(
-        kubernetes.client.AppsV1Api,
-        test_data,
-        "V1DeploymentList",
-    )
-    resources = Resources("some_region", "some_context", "some_cluster", [])
-
+@pytest.mark.parametrize(
+    "resources",
+    [(("check_any_cluster_autoscaler_exists", ["deployments"]))],
+    indirect=["resources"],
+)
+def test_check_any_cluster_autoscaler_exists(resources):
     rule = check_any_cluster_autoscaler_exists()
     rule.check(resources)
 
     assert not rule.result.status
 
 
+@pytest.mark.parametrize(
+    "resources",
+    [(("ensure_cluster_autoscaler_and_cluster_versions_match", ["deployments"]))],
+    indirect=["resources"],
+)
 @patch("boto3.client")
-@patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
 def test_ensure_cluster_autoscaler_and_cluster_versions_match(
-    mocked_k8s_client, mocked_boto_client
+    mocked_boto_client, resources
 ):
-
-    test_data = (
-        Path.cwd()
-        / "tests"
-        / "data"
-        / "ensure_cluster_autoscaler_and_cluster_versions_match"
-        / "cluster"
-        / "deployments_api_response.json"
-    )
-    mocked_k8s_client.return_value = get_response(
-        kubernetes.client.AppsV1Api,
-        test_data,
-        "V1DeploymentList",
-    )
-
     mocked_boto_client.return_value.describe_cluster.return_value = {
         "cluster": {"version": "1.23"}
     }
-    resources = Resources("some_region", "some_context", "some_cluster", [])
     rule = ensure_cluster_autoscaler_and_cluster_versions_match()
     rule.check(resources)
 
     assert not rule.result.status
 
 
-@patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
-def test_ensure_cluster_autoscaler_has_autodiscovery_mode(mocked_client):
-
-    test_data = (
-        Path.cwd()
-        / "tests"
-        / "data"
-        / "ensure_cluster_autoscaler_has_autodiscovery_mode"
-        / "cluster"
-        / "deployments_api_response.json"
-    )
-    mocked_client.return_value = get_response(
-        kubernetes.client.AppsV1Api,
-        test_data,
-        "V1DeploymentList",
-    )
-    resources = Resources("some_region", "some_context", "some_cluster", [])
+@pytest.mark.parametrize(
+    "resources",
+    [(("ensure_cluster_autoscaler_has_autodiscovery_mode", ["deployments"]))],
+    indirect=["resources"],
+)
+def test_ensure_cluster_autoscaler_has_autodiscovery_mode(resources):
     rule = ensure_cluster_autoscaler_has_autodiscovery_mode()
     rule.check(resources)
     assert not rule.result.status
 
 
-@patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
+@pytest.mark.parametrize(
+    "resources,service_account_file,pod_identity_associations,expected_status",
+    [
+        # No IRSA, No Pod Identity - should fail
+        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_api_response.json", {"associations": []}, False),
+        # Has IRSA, No Pod Identity - should pass
+        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_irsa_api_response.json", {"associations": []}, True),
+        # No IRSA, Has Pod Identity - should pass
+        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_api_response.json", {"associations": [{"namespace": "kube-system", "serviceAccount": "cluster-autoscaler"}]}, True),
+    ],
+    indirect=["resources"],
+)
+@patch("boto3.client")
 @patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
 def test_use_separate_iam_role_for_cluster_autoscaler(
-    sa_client, deployment_client
+    mocked_core_api, mocked_boto_client,
+    resources, service_account_file, pod_identity_associations, expected_status
 ):
-
-    deployment_data = (
+    service_account_data = (
         Path.cwd()
         / "tests"
         / "data"
         / "use_separate_iam_role_for_cluster_autoscaler"
         / "cluster"
-        / "deployments_api_response.json"
+        / service_account_file
     )
-    sa_data = (
-        Path.cwd()
-        / "tests"
-        / "data"
-        / "use_separate_iam_role_for_cluster_autoscaler"
-        / "cluster"
-        / "service_accounts_api_response.json"
-    )
-    deployment_client.return_value = get_response(
-        kubernetes.client.AppsV1Api,
-        deployment_data,
-        "V1DeploymentList",
-    )
-    sa_return_value = get_response(
-        kubernetes.client.CoreV1Api, sa_data, "V1ServiceAccount"
-    )
-    sa_client.return_value = sa_return_value
 
-    resources = Resources("some_region", "some_context", "some_cluster", [])
+    mocked_core_api.return_value = get_response(
+        kubernetes.client.CoreV1Api, service_account_data, "V1ServiceAccount"
+    )
+    mocked_boto_client.return_value.list_pod_identity_associations.return_value = pod_identity_associations
+
     rule = use_separate_iam_role_for_cluster_autoscaler()
     rule.check(resources)
-    assert not rule.result.status
+
+    assert rule.result.status == expected_status
+    if not expected_status:
+        assert "cluster-autoscaler" in rule.result.resources
+    else:
+        assert rule.result.resources == [""]
 
 
-@patch("boto3.client")
-@patch("kubernetes.client.AppsV1Api.list_deployment_for_all_namespaces")
+@pytest.mark.parametrize(
+    "resources",
+    [(("employ_least_privileged_access_cluster_autoscaler_role", ["deployments"]))],
+    indirect=["resources"],
+)
 @patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
+@patch("boto3.client")
 def test_employ_least_privileged_access_cluster_autoscaler_role(
-    mocked_sa_client, mocked_deployment_client, mocked_boto_client
+    mocked_boto_client, mock_read_sa, resources
 ):
-
-    deployment_data = (
-        Path.cwd()
-        / "tests"
-        / "data"
-        / "employ_least_privileged_access_cluster_autoscaler_role"
-        / "cluster"
-        / "deployments_api_response.json"
-    )
-    mocked_deployment_client.return_value = get_response(
-        kubernetes.client.AppsV1Api,
-        deployment_data,
-        "V1DeploymentList",
-    )
     sa_data = (
         Path.cwd()
         / "tests"
         / "data"
         / "employ_least_privileged_access_cluster_autoscaler_role"
         / "cluster"
-        / "service_accounts_api_response.json"
+        / "serviceaccount_api_response.json"
     )
-    sa_return_value = get_response(
+    mock_read_sa.return_value = get_response(
         kubernetes.client.CoreV1Api, sa_data, "V1ServiceAccount"
     )
-    mocked_sa_client.return_value = sa_return_value
-
     mocked_boto_client.return_value.get_policy_version.return_value = (
         _read_json(
             _get_sample_data_path(
@@ -212,32 +170,18 @@ def test_employ_least_privileged_access_cluster_autoscaler_role(
         )
     )
 
-    resources = Resources("some_region", "some_context", "some_cluster", [])
-
     rule = employ_least_privileged_access_cluster_autoscaler_role()
     rule.check(resources)
 
     assert not rule.result.status
 
 
-@patch("kubernetes.client.CoreV1Api.list_node")
-def test_use_managed_nodegroups(mocked_client):
-
-    test_data = (
-        Path.cwd()
-        / "tests"
-        / "data"
-        / "use_managed_nodegroups"
-        / "cluster"
-        / "nodes_api_response.json"
-    )
-    mocked_client.return_value = get_response(
-        kubernetes.client.CoreV1Api,
-        test_data,
-        "V1NodeList",
-    )
-    resources = Resources("some_region", "some_context", "some_cluster", [])
-
+@pytest.mark.parametrize(
+    "resources",
+    [(("use_managed_nodegroups", ["nodes"]))],
+    indirect=["resources"],
+)
+def test_use_managed_nodegroups(resources):
     rule = use_managed_nodegroups()
     rule.check(resources)
 

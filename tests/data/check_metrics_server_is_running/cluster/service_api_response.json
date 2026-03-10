@@ -1,0 +1,45 @@
+{
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"name\":\"nothing\",\"namespace\":\"test-namespace\"},\"spec\":{\"ports\":[{\"port\":80,\"targetPort\":80}],\"selector\":{\"app\":\"nginx\"}}}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:22:57Z",
+        "name": "nothing",
+        "namespace": "test-namespace",
+        "resourceVersion": "687999013",
+        "uid": "7d96d16b-47ea-4444-be3d-6f7cf62d25e1"
+      },
+      "spec": {
+        "clusterIP": "10.100.52.28",
+        "clusterIPs": [
+          "10.100.52.28"
+        ],
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+          "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+          {
+            "port": 80,
+            "protocol": "TCP",
+            "targetPort": 80
+          }
+        ],
+        "selector": {
+          "app": "nginx"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ],
+  "kind": "ServiceList"
+}

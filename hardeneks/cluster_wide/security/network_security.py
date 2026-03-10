@@ -38,10 +38,10 @@ class check_awspca_exists(Rule):
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#acm-private-ca-with-cert-manager"
 
     def check(self, resources: Resources):
-        services = client.CoreV1Api().list_service_for_all_namespaces().items
-        for service in services:
+        for service in resources.services:
             if service.metadata.name.startswith("aws-privateca-issuer"):
                 self.result = Result(status=True, resource_type="Service")
+                return
 
         self.result = Result(
             status=False,
@@ -54,18 +54,29 @@ class check_default_deny_policy_exists(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "network_security"
-    message = "Namespaces that does not have default network deny policies."
+    message = "Configure default network deny policies for namespaces."
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/network/#create-a-default-deny-policy"
 
     def check(self, resources: Resources):
-        offenders = resources.namespaces
+        offenders = set(resources.namespaces)
+        namespaces_with_ingress_deny = set()
+        namespaces_with_egress_deny = set()
 
         for policy in resources.network_policies:
-            offenders.remove(policy.metadata.namespace)
+            spec = policy.spec
+            pod_selector = spec.pod_selector
+            if (not pod_selector.match_expressions and not pod_selector.match_labels and spec.policy_types):
+                if not spec.ingress and "Ingress" in spec.policy_types:
+                    namespaces_with_ingress_deny.add(policy.metadata.namespace)
+                if not spec.egress and "Egress" in spec.policy_types:
+                    namespaces_with_egress_deny.add(policy.metadata.namespace)
+
+        # Checks for policies with both default deny ingress and egress.
+        compliant = namespaces_with_ingress_deny & namespaces_with_egress_deny
+        offenders -= compliant
 
         self.result = Result(status=True, resource_type="Namespace")
-
         if offenders:
             self.result = Result(
-                status=False, resource_type="Service", resources=offenders
+                status=False, resource_type="Namespace", resources=list(offenders)
             )

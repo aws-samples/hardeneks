@@ -1,13 +1,48 @@
+# Security context at pod level and none at container level
 apiVersion: v1
 kind: Pod
 metadata:
   namespace: test-namespace
-  name: good
+  name: good1
 spec:
   securityContext:
     runAsUser: 1000
     runAsGroup: 3000
   containers:
-  - name: sec-ctx-demo
-    image: busybox
+  - name: nginx
+    image: nginx
     command: [ "sh", "-c", "sleep 1h" ]
+---
+# Security context at container level.
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: test-namespace
+  name: good2
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    command: [ "sh", "-c", "sleep 1h" ]
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 3000
+---
+# Security context at pod level and one of the containers. Will fall back to pod level.
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: test-namespace
+  name: good3
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+  containers:
+  - name: nginx1
+    image: nginx
+  - name: nginx2
+    image: nginx
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 3000

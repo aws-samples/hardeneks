@@ -1,26 +1,45 @@
 #!/bin/sh
 NAMESPACE=test-namespace
-TEST_DATA_DIRECTORY=$1
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+TESTS_DATA_DIRECTORY="$SCRIPT_DIR/../tests/data"
 
-mkdir "$TEST_DATA_DIRECTORY/cluster"
+# If a test name is passed in, just create that one test.
+[ -n "$1" ] && SINGLE_DIR="$SCRIPT_DIR/../tests/data/$1"
+
+process_directory() {
+  DIR=$1
+  mkdir -p "$DIR/cluster"
+
+  if [ -f "$DIR/good.yaml" ] || [ -f "$DIR/bad.yaml" ]; then
+    FILES=""
+    [ -f "$DIR/good.yaml" ] && FILES="$FILES -f $DIR/good.yaml"
+    [ -f "$DIR/bad.yaml" ] && FILES="$FILES -f $DIR/bad.yaml"
+
+    kubectl apply $FILES
+    
+    kubectl get $FILES -o json | \
+      jq -r '(.items // [.]) | .[].kind' | sort -u | while read kind; do
+        filename=$(echo "${kind}" | tr '[:upper:]' '[:lower:]')_api_response.json
+        kubectl get $FILES -o json | \
+          jq --arg kind "$kind" '{items: [(.items // [.]) | .[] | select(.kind == $kind)]} | .kind = ($kind + "List")' > "$DIR/cluster/$filename"
+      done
+    
+    kubectl delete $FILES
+  fi
+}
+
 kubectl create namespace $NAMESPACE
-kubectl apply -f "$TEST_DATA_DIRECTORY/good.yaml"
-kubectl apply -f "$TEST_DATA_DIRECTORY/bad.yaml"
-kubectl get namespace -o json > "$TEST_DATA_DIRECTORY/cluster/namespaces_api_response.json"
-kubectl get resourcequota -A -o json > "$TEST_DATA_DIRECTORY/cluster/resource_quotas_api_response.json"
-kubectl get pv -o json > "$TEST_DATA_DIRECTORY/cluster/persistent_volumes_api_response.json"
-kubectl get pod -o json -n $NAMESPACE > "$TEST_DATA_DIRECTORY/cluster/pods_api_response.json"
-kubectl get service -o json -n $NAMESPACE > "$TEST_DATA_DIRECTORY/cluster/services_api_response.json" 
-kubectl get role -o json -n $NAMESPACE > "$TEST_DATA_DIRECTORY/cluster/roles_api_response.json" 
-kubectl get clusterrole -o json > "$TEST_DATA_DIRECTORY/cluster/cluster_roles_api_response.json"
-kubectl get rolebinding -o json -n $NAMESPACE > "$TEST_DATA_DIRECTORY/cluster/role_bindings_api_response.json" 
-kubectl get clusterrolebinding -o json > "$TEST_DATA_DIRECTORY/cluster/cluster_role_bindings_api_response.json" 
-kubectl get daemonset -o json -n "$NAMESPACE" > "$TEST_DATA_DIRECTORY/cluster/daemon_sets_api_response.json" 
-kubectl get statefulset -o json -n "$NAMESPACE" > "$TEST_DATA_DIRECTORY/cluster/stateful_sets_api_response.json"
-kubectl get deployment -o json -n "$NAMESPACE" > "$TEST_DATA_DIRECTORY/cluster/deployments_api_response.json"
-kubectl get networkpolicy -o json -n "$NAMESPACE" > "$TEST_DATA_DIRECTORY/cluster/network_policies_api_response.json"
-kubectl get hpa -o json -n "$NAMESPACE" > "$TEST_DATA_DIRECTORY/cluster/horizontal_pod_autoscaler_api_response.json"
-kubectl get storageclass -o json > "$TEST_DATA_DIRECTORY/cluster/storage_classes_api_response.json"
+
+if [ -n "$SINGLE_DIR" ] && [ -d "$SINGLE_DIR" ]; then
+  echo "Test: $1"
+  process_directory "$SINGLE_DIR"
+else
+  for TEST_DIR in "$TESTS_DATA_DIRECTORY"/*; do
+    echo "\nTest: $(basename "$TEST_DIR")"
+    if [ -d "$TEST_DIR" ]; then
+      process_directory "$TEST_DIR"
+    fi
+  done
+fi
 
 kubectl delete namespace $NAMESPACE --force
-kubectl get namespace $NAMESPACE -o json | jq 'del(.spec.finalizers[0])' | kubectl replace --raw "/api/v1/namespaces/$NAMESPACE/finalize" -f -

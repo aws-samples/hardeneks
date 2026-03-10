@@ -1,0 +1,33 @@
+{
+  "items": [
+    {
+      "apiVersion": "autoscaling/v1",
+      "kind": "HorizontalPodAutoscaler",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"autoscaling/v1\",\"kind\":\"HorizontalPodAutoscaler\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"maxReplicas\":10,\"minReplicas\":1,\"scaleTargetRef\":{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"name\":\"good\"},\"targetCPUUtilizationPercentage\":50}}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:22:46Z",
+        "name": "good",
+        "namespace": "test-namespace",
+        "resourceVersion": "687998911",
+        "uid": "a475447d-4f0c-4815-a583-64959161f824"
+      },
+      "spec": {
+        "maxReplicas": 10,
+        "minReplicas": 1,
+        "scaleTargetRef": {
+          "apiVersion": "apps/v1",
+          "kind": "Deployment",
+          "name": "good"
+        },
+        "targetCPUUtilizationPercentage": 50
+      },
+      "status": {
+        "currentReplicas": 0,
+        "desiredReplicas": 0
+      }
+    }
+  ],
+  "kind": "HorizontalPodAutoscalerList"
+}

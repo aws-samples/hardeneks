@@ -1,4 +1,7 @@
 from importlib import import_module
+from rich.console import Console
+
+console = Console()
 
 
 def harden(resources, config, _type):
@@ -11,12 +14,13 @@ def harden(resources, config, _type):
                 try:
                     cls = getattr(module, rule)
                 except AttributeError as exc:
-                    print(f"[bold][red]{exc}")
+                    console.print(f"[bold red]Error loading rule '{rule}': {exc}")
+                    continue
                 try:
-                    rule = cls()
-                    rule.check(resources)
-                    results.append(rule)
+                    rule_instance = cls()
+                    rule_instance.check(resources)
+                    results.append(rule_instance)
                 except Exception as exc:
-                    print(f"[bold][red]{exc}")
+                    console.print(f"[bold red]Error in rule '{rule}': {exc}")
 
     return results

@@ -1,0 +1,261 @@
+{
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"registry.k8s.io/goproxy:0.1\",\"livenessProbe\":{\"initialDelaySeconds\":15,\"periodSeconds\":20,\"tcpSocket\":{\"port\":8080}},\"name\":\"goproxy\",\"ports\":[{\"containerPort\":8080}],\"readinessProbe\":{\"initialDelaySeconds\":5,\"periodSeconds\":10,\"tcpSocket\":{\"port\":8080}}}]}}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:23:06Z",
+        "generation": 1,
+        "name": "good",
+        "namespace": "test-namespace",
+        "resourceVersion": "687999084",
+        "uid": "4bb5d4fb-ea42-4b72-8f70-a74b07ba5311"
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "registry.k8s.io/goproxy:0.1",
+            "imagePullPolicy": "IfNotPresent",
+            "livenessProbe": {
+              "failureThreshold": 3,
+              "initialDelaySeconds": 15,
+              "periodSeconds": 20,
+              "successThreshold": 1,
+              "tcpSocket": {
+                "port": 8080
+              },
+              "timeoutSeconds": 1
+            },
+            "name": "goproxy",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ],
+            "readinessProbe": {
+              "failureThreshold": 3,
+              "initialDelaySeconds": 5,
+              "periodSeconds": 10,
+              "successThreshold": 1,
+              "tcpSocket": {
+                "port": 8080
+              },
+              "timeoutSeconds": 1
+            },
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-5rwbx",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "name": "kube-api-access-5rwbx",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-03-07T04:23:07Z",
+            "message": "no nodes available to schedule pods",
+            "reason": "Unschedulable",
+            "status": "False",
+            "type": "PodScheduled"
+          }
+        ],
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"registry.k8s.io/goproxy:0.1\",\"name\":\"goproxy\",\"ports\":[{\"containerPort\":8080}]}]}}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:23:07Z",
+        "generation": 1,
+        "name": "bad",
+        "namespace": "test-namespace",
+        "resourceVersion": "687999088",
+        "uid": "18491acc-91e4-4ccc-94fe-d3a35befc5d2"
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "registry.k8s.io/goproxy:0.1",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "goproxy",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-qj8h8",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "name": "kube-api-access-qj8h8",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-03-07T04:23:07Z",
+            "message": "no nodes available to schedule pods",
+            "reason": "Unschedulable",
+            "status": "False",
+            "type": "PodScheduled"
+          }
+        ],
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    }
+  ],
+  "kind": "PodList"
+}

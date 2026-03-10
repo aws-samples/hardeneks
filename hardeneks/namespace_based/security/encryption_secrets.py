@@ -14,14 +14,21 @@ class disallow_secrets_from_env_vars(Rule):
 
         for pod in namespaced_resources.pods:
             for container in pod.spec.containers:
+                is_offender = False
                 if container.env:
                     for env in container.env:
                         if env.value_from and env.value_from.secret_key_ref:
-                            offenders.append(pod)
-                if container.env_from:
+                            offenders.append(pod.metadata.name)
+                            is_offender = True
+                            break
+                if not is_offender and container.env_from:
                     for env_from in container.env_from:
                         if env_from.secret_ref:
-                            offenders.append(pod)
+                            offenders.append(pod.metadata.name)
+                            is_offender = True
+                            break
+                if is_offender:
+                    break
 
         self.result = Result(
             status=True, 
@@ -32,6 +39,6 @@ class disallow_secrets_from_env_vars(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )

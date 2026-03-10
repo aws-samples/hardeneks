@@ -19,9 +19,11 @@ class disallow_container_socket_mount(Rule):
         ]
 
         for pod in namespaced_resources.pods:
-            for volume in pod.spec.volumes:
-                if volume.host_path and volume.host_path.path in sockets:
-                    offenders.append(pod)
+            if pod.spec.volumes:
+                for volume in pod.spec.volumes:
+                    if volume.host_path and volume.host_path.path in sockets:
+                        offenders.append(pod.metadata.name)
+                        break
 
         self.result = Result(
             status=True, 
@@ -32,7 +34,7 @@ class disallow_container_socket_mount(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -49,9 +51,20 @@ class disallow_host_path_or_make_it_read_only(Rule):
         offenders = []
 
         for pod in namespaced_resources.pods:
-            for volume in pod.spec.volumes:
-                if volume.host_path:
-                    offenders.append(pod)
+            is_offender = False
+            if pod.spec.volumes:
+                for volume in pod.spec.volumes:
+                    if volume.host_path:
+                        volume_name = volume.name
+                        for container in pod.spec.containers:
+                            for volume_mount in container.volume_mounts:
+                                if volume_mount.name == volume_name:
+                                    if not volume_mount.read_only:
+                                        is_offender = True
+                                        offenders.append(pod.metadata.name)
+                                        break
+                        if is_offender:
+                            break
 
         self.result = Result(
             status=True, 
@@ -62,7 +75,7 @@ class disallow_host_path_or_make_it_read_only(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -83,7 +96,8 @@ class set_requests_limits_for_containers(Rule):
                 if not (
                     container.resources.limits and container.resources.requests
                 ):
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
+                    break
 
         self.result = Result(
             status=True, 
@@ -94,7 +108,7 @@ class set_requests_limits_for_containers(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -116,7 +130,8 @@ class disallow_privilege_escalation(Rule):
                     container.security_context
                     and container.security_context.allow_privilege_escalation
                 ):
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
+                    break
 
         self.result = Result(
             status=True, 
@@ -127,7 +142,7 @@ class disallow_privilege_escalation(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )
 
@@ -144,13 +159,12 @@ class check_read_only_root_file_system(Rule):
         offenders = []
         for pod in namespaced_resources.pods:
             for container in pod.spec.containers:
-                if container.security_context is None:
-                    offenders.append(pod)
                 if (
-                    container.security_context
-                    and not container.security_context.read_only_root_filesystem
+                    container.security_context is None
+                    or not container.security_context.read_only_root_filesystem
                 ):
-                    offenders.append(pod)
+                    offenders.append(pod.metadata.name)
+                    break
         self.result = Result(
             status=True, 
             resource_type="Pod",
@@ -160,6 +174,6 @@ class check_read_only_root_file_system(Rule):
             self.result = Result(
                 status=False,
                 resource_type="Pod",
-                resources=[i.metadata.name for i in offenders],
+                resources=offenders,
                 namespace=namespaced_resources.namespace,
             )

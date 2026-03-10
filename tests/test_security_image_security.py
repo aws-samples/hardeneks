@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from hardeneks.resources import Resources
 from hardeneks.cluster_wide.security.image_security import (
@@ -28,9 +28,9 @@ def test_use_immutable_tags_with_ecr(mocked_client):
         / "repositories.json"
     )
 
-    mocked_client.return_value.describe_repositories.return_value = read_json(
-        test_data
-    )
+    mock_paginator = MagicMock()
+    mock_paginator.paginate.return_value = [read_json(test_data)]
+    mocked_client.return_value.get_paginator.return_value = mock_paginator
 
     rule = use_immutable_tags_with_ecr()
     rule.check(namespaced_resources)

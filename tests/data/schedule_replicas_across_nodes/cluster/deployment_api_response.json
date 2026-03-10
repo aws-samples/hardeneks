@@ -1,0 +1,194 @@
+{
+  "items": [
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/revision": "1",
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":3,\"selector\":{\"matchLabels\":{\"app\":\"good\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"good\"}},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"web-app\",\"resources\":{\"requests\":{\"cpu\":1}}}],\"topologySpreadConstraints\":[{\"labelSelector\":{\"matchLabels\":{\"app\":\"good\"}},\"maxSkew\":1,\"topologyKey\":\"topology.kubernetes.io/zone\",\"whenUnsatisfiable\":\"ScheduleAnyway\"}]}}}}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:24:47Z",
+        "generation": 1,
+        "name": "good",
+        "namespace": "test-namespace",
+        "resourceVersion": "687999748",
+        "uid": "30cd863d-b7de-42b3-a28d-c5badb2bccf4"
+      },
+      "spec": {
+        "progressDeadlineSeconds": 600,
+        "replicas": 3,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app": "good"
+          }
+        },
+        "strategy": {
+          "rollingUpdate": {
+            "maxSurge": "25%",
+            "maxUnavailable": "25%"
+          },
+          "type": "RollingUpdate"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "good"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "image": "nginx",
+                "imagePullPolicy": "Always",
+                "name": "web-app",
+                "resources": {
+                  "requests": {
+                    "cpu": "1"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File"
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30,
+            "topologySpreadConstraints": [
+              {
+                "labelSelector": {
+                  "matchLabels": {
+                    "app": "good"
+                  }
+                },
+                "maxSkew": 1,
+                "topologyKey": "topology.kubernetes.io/zone",
+                "whenUnsatisfiable": "ScheduleAnyway"
+              }
+            ]
+          }
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-03-07T04:24:47Z",
+            "lastUpdateTime": "2026-03-07T04:24:47Z",
+            "message": "Deployment does not have minimum availability.",
+            "reason": "MinimumReplicasUnavailable",
+            "status": "False",
+            "type": "Available"
+          },
+          {
+            "lastTransitionTime": "2026-03-07T04:24:47Z",
+            "lastUpdateTime": "2026-03-07T04:24:47Z",
+            "message": "ReplicaSet \"good-748c876c6\" is progressing.",
+            "reason": "ReplicaSetUpdated",
+            "status": "True",
+            "type": "Progressing"
+          }
+        ],
+        "observedGeneration": 1,
+        "replicas": 3,
+        "unavailableReplicas": 3,
+        "updatedReplicas": 3
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "annotations": {
+          "deployment.kubernetes.io/revision": "1",
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"nginx\"},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"spec\":{\"replicas\":3,\"selector\":{\"matchLabels\":{\"app\":\"nginx\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"nginx\"}},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\",\"ports\":[{\"containerPort\":80}]}]}}}}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:24:47Z",
+        "generation": 1,
+        "labels": {
+          "app": "nginx"
+        },
+        "name": "bad",
+        "namespace": "test-namespace",
+        "resourceVersion": "687999768",
+        "uid": "efe7c729-0256-449c-be06-d93b0807a6ad"
+      },
+      "spec": {
+        "progressDeadlineSeconds": 600,
+        "replicas": 3,
+        "revisionHistoryLimit": 10,
+        "selector": {
+          "matchLabels": {
+            "app": "nginx"
+          }
+        },
+        "strategy": {
+          "rollingUpdate": {
+            "maxSurge": "25%",
+            "maxUnavailable": "25%"
+          },
+          "type": "RollingUpdate"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "nginx"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "image": "nginx",
+                "imagePullPolicy": "Always",
+                "name": "nginx",
+                "ports": [
+                  {
+                    "containerPort": 80,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File"
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "schedulerName": "default-scheduler",
+            "securityContext": {},
+            "terminationGracePeriodSeconds": 30
+          }
+        }
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-03-07T04:24:47Z",
+            "lastUpdateTime": "2026-03-07T04:24:47Z",
+            "message": "Deployment does not have minimum availability.",
+            "reason": "MinimumReplicasUnavailable",
+            "status": "False",
+            "type": "Available"
+          },
+          {
+            "lastTransitionTime": "2026-03-07T04:24:47Z",
+            "lastUpdateTime": "2026-03-07T04:24:47Z",
+            "message": "ReplicaSet \"bad-86c57bc6b8\" is progressing.",
+            "reason": "ReplicaSetUpdated",
+            "status": "True",
+            "type": "Progressing"
+          }
+        ],
+        "observedGeneration": 1,
+        "replicas": 3,
+        "unavailableReplicas": 3,
+        "updatedReplicas": 3
+      }
+    }
+  ],
+  "kind": "DeploymentList"
+}

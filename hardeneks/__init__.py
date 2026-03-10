@@ -235,22 +235,26 @@ def print_consolidated_results(rules: list):
 
     for pillar in pillars:
         table = Table()
+        table.add_column("Status")
         table.add_column("Section")
         table.add_column("Namespace")
         table.add_column("Rule")
-        table.add_column("Resource")
+        table.add_column("Resource", overflow="fold")
         table.add_column("Resource Type")
         table.add_column("Resolution")
         filtered_rules = [i for i in rules if i.pillar == pillar]
         for rule in filtered_rules:
             color = "red"
+            status_icon = "FAIL"
             namespace = "Cluster Wide"
             if rule.result.status:
                 color = "green"
+                status_icon = "PASS"
             if rule.result.namespace:
                 namespace = rule.result.namespace
             for resource in rule.result.resources:
                 table.add_row(
+                    status_icon,
                     rule.section,
                     namespace,
                     rule.message,

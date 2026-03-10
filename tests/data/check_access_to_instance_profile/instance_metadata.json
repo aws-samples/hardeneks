@@ -4,10 +4,26 @@
         "Groups": [],
         "Instances": [
           {
-            "InstanceId": "foo",
+            "InstanceId": "i-fail-1",
             "MetadataOptions": {
               "State": "applied",
               "HttpTokens": "optional",
+              "HttpPutResponseHopLimit": 1,
+              "HttpEndpoint": "enabled",
+              "HttpProtocolIpv6": "disabled",
+              "InstanceMetadataTags": "disabled"
+            }
+          }
+        ]
+      },
+      {
+        "Groups": [],
+        "Instances": [
+          {
+            "InstanceId": "i-fail-2",
+            "MetadataOptions": {
+              "State": "applied",
+              "HttpTokens": "required",
               "HttpPutResponseHopLimit": 2,
               "HttpEndpoint": "enabled",
               "HttpProtocolIpv6": "disabled",
@@ -20,11 +36,11 @@
         "Groups": [],
         "Instances": [
           {
-            "InstanceId": "baz",
+            "InstanceId": "i-pass-1",
             "MetadataOptions": {
               "State": "applied",
-              "HttpTokens": "optional",
-              "HttpPutResponseHopLimit": 2,
+              "HttpTokens": "required",
+              "HttpPutResponseHopLimit": 1,
               "HttpEndpoint": "enabled",
               "HttpProtocolIpv6": "disabled",
               "InstanceMetadataTags": "disabled"

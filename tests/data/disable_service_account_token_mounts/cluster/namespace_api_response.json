@@ -1,0 +1,77 @@
+{
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"good\"}}\n"
+        },
+        "creationTimestamp": "2026-03-08T00:30:38Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "good"
+        },
+        "name": "good",
+        "resourceVersion": "688303644",
+        "uid": "6a0d1d49-b1e3-468e-930e-6c9c2bd259d4"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"bad1\"}}\n"
+        },
+        "creationTimestamp": "2026-03-08T00:30:38Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "bad1"
+        },
+        "name": "bad1",
+        "resourceVersion": "688303649",
+        "uid": "5da94aab-0d01-4502-90b1-4a60dc39edd1"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{},\"name\":\"bad2\"}}\n"
+        },
+        "creationTimestamp": "2026-03-08T00:30:38Z",
+        "labels": {
+          "kubernetes.io/metadata.name": "bad2"
+        },
+        "name": "bad2",
+        "resourceVersion": "688303654",
+        "uid": "320d687d-9238-4ab3-adeb-9f5301bbf0ac"
+      },
+      "spec": {
+        "finalizers": [
+          "kubernetes"
+        ]
+      },
+      "status": {
+        "phase": "Active"
+      }
+    }
+  ],
+  "kind": "NamespaceList"
+}

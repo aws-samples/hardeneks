@@ -2,12 +2,25 @@ apiVersion: v1
 kind: Pod
 metadata:
   namespace: test-namespace
-  name: bad
+  name: bad1
 spec:
   containers:
   - name: nginx
     securityContext:
       readOnlyRootFilesystem: false
-    image: nginx:1.14.2
+    image: nginx
+    ports:
+    - containerPort: 80
+---
+# Default readOnlyRootFilesystem is false so this should fail
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: test-namespace
+  name: bad2
+spec:
+  containers:
+  - name: nginx
+    image: nginx
     ports:
     - containerPort: 80

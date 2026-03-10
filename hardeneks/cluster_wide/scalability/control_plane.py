@@ -1,30 +1,38 @@
 import re
 import kubernetes
+import boto3
 from hardeneks import helpers
 from hardeneks.rules import Rule, Result
 from hardeneks import Resources
 
 
-class check_EKS_version(Rule):
+class check_eks_version(Rule):
     _type = "cluster_wide"
     pillar = "scalability"
     section = "control_plane"
-    message = "EKS Version Should be greater or equal to 1.24."
-    url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#use-eks-124-or-above"
+    message = "Use an EKS version in standard support."
+    url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/"
 
     def check(self, resources: Resources):
-        client = kubernetes.client.VersionApi()
-        version = client.get_code()
-        minor = version.minor
+        eks_client = boto3.client("eks", region_name=resources.region)
 
-        if int(re.sub("[^0-9]", "", minor)) < 24:
+        cluster_version = eks_client.describe_cluster(name=resources.cluster)["cluster"]["version"]
+        # Get versions in standard support
+        cluster_versions_response = eks_client.describe_cluster_versions()
+        standard_support_versions = [
+            v["clusterVersion"] 
+            for v in cluster_versions_response.get("clusterVersions", [])
+            if v.get("versionStatus") == "STANDARD_SUPPORT"
+        ]
+
+        self.result = Result(status=True, resource_type="Cluster Version")
+
+        if cluster_version not in standard_support_versions:
             self.result = Result(
                 status=False,
-                resources=f"{version.major}.{minor}",
+                resources=[cluster_version],
                 resource_type="Cluster Version",
             )
-        else:
-            self.result = Result(status=True, resource_type="Cluster Version")
 
 
 #
@@ -35,7 +43,7 @@ class check_kubectl_compression(Rule):
     _type = "cluster_wide"
     pillar = "scalability"
     section = "control_plane"
-    message = "`disable-compression` in kubeconfig should equal True"
+    message = "Enable `disable-compression` in kubeconfig."
     url = "https://aws.github.io/aws-eks-best-practices/scalability/docs/control-plane/#disable-kubectl-compression"
 
     def check(self, resources: Resources):
@@ -43,16 +51,12 @@ class check_kubectl_compression(Rule):
         for cluster in kubeconfig.get("clusters", []):
             clusterName = cluster.get("name", "")
             if resources.cluster in clusterName:
-                if not (
-                    cluster.get("cluster", {}).get(
-                        "disable-compression", False
-                    )
-                ):
+                if not (cluster.get("cluster", {}).get("disable-compression", False)):
                     self.result = Result(
-                        status=False, resource_type="Compression Setting"
+                        status=False, 
+                        resources=[resources.cluster],  
+                        resource_type="Compression Setting"
                     )
                 else:
-                    self.result = Result(
-                        status=True, resource_type="Compression Setting"
-                    )
+                    self.result = Result(status=True, resource_type="Compression Setting")
                 break

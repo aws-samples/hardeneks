@@ -13,3 +13,5 @@ spec:
   csi:
     driver: efs.csi.aws.com
     volumeHandle: some_id
+    volumeAttributes:
+      encryptInTransit: "false"

@@ -1,0 +1,623 @@
+{
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"good1\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"command\":[\"sh\",\"-c\",\"sleep 1h\"],\"image\":\"nginx\",\"name\":\"nginx\"}],\"securityContext\":{\"runAsGroup\":3000,\"runAsUser\":1000}}}\n"
+        },
+        "creationTimestamp": "2026-03-08T00:51:10Z",
+        "generation": 1,
+        "name": "good1",
+        "namespace": "test-namespace",
+        "resourceVersion": "688308859",
+        "uid": "8ce6b330-8d89-43dd-a597-227ee5908b34"
+      },
+      "spec": {
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "sleep 1h"
+            ],
+            "image": "nginx",
+            "imagePullPolicy": "Always",
+            "name": "nginx",
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-4gws7",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {
+          "runAsGroup": 3000,
+          "runAsUser": 1000
+        },
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "name": "kube-api-access-4gws7",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-03-08T00:51:10Z",
+            "message": "no nodes available to schedule pods",
+            "reason": "Unschedulable",
+            "status": "False",
+            "type": "PodScheduled"
+          }
+        ],
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"good2\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"command\":[\"sh\",\"-c\",\"sleep 1h\"],\"image\":\"nginx\",\"name\":\"nginx\",\"securityContext\":{\"runAsGroup\":3000,\"runAsUser\":1000}}]}}\n"
+        },
+        "creationTimestamp": "2026-03-08T00:51:10Z",
+        "generation": 1,
+        "name": "good2",
+        "namespace": "test-namespace",
+        "resourceVersion": "688308862",
+        "uid": "5be0d86a-4394-47b1-862a-ffa8fce8fe98"
+      },
+      "spec": {
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "sleep 1h"
+            ],
+            "image": "nginx",
+            "imagePullPolicy": "Always",
+            "name": "nginx",
+            "resources": {},
+            "securityContext": {
+              "runAsGroup": 3000,
+              "runAsUser": 1000
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-cw68s",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "name": "kube-api-access-cw68s",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-03-08T00:51:10Z",
+            "message": "no nodes available to schedule pods",
+            "reason": "Unschedulable",
+            "status": "False",
+            "type": "PodScheduled"
+          }
+        ],
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"good3\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx1\"},{\"image\":\"nginx\",\"name\":\"nginx2\",\"securityContext\":{\"runAsGroup\":3000,\"runAsUser\":1000}}],\"securityContext\":{\"runAsGroup\":3000,\"runAsUser\":1000}}}\n"
+        },
+        "creationTimestamp": "2026-03-08T00:51:10Z",
+        "generation": 1,
+        "name": "good3",
+        "namespace": "test-namespace",
+        "resourceVersion": "688308865",
+        "uid": "6e87914e-10dc-476f-be13-8ec8fe8d3bdc"
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "nginx",
+            "imagePullPolicy": "Always",
+            "name": "nginx1",
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-49m5t",
+                "readOnly": true
+              }
+            ]
+          },
+          {
+            "image": "nginx",
+            "imagePullPolicy": "Always",
+            "name": "nginx2",
+            "resources": {},
+            "securityContext": {
+              "runAsGroup": 3000,
+              "runAsUser": 1000
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-49m5t",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {
+          "runAsGroup": 3000,
+          "runAsUser": 1000
+        },
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "name": "kube-api-access-49m5t",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-03-08T00:51:11Z",
+            "message": "no nodes available to schedule pods",
+            "reason": "Unschedulable",
+            "status": "False",
+            "type": "PodScheduled"
+          }
+        ],
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad1\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx\"}]}}\n"
+        },
+        "creationTimestamp": "2026-03-08T00:51:11Z",
+        "generation": 1,
+        "name": "bad1",
+        "namespace": "test-namespace",
+        "resourceVersion": "688308869",
+        "uid": "01d72a54-cbdf-4e5e-a203-e00ede022c08"
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "nginx",
+            "imagePullPolicy": "Always",
+            "name": "nginx",
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-hqhfx",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "name": "kube-api-access-hqhfx",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-03-08T00:51:11Z",
+            "message": "no nodes available to schedule pods",
+            "reason": "Unschedulable",
+            "status": "False",
+            "type": "PodScheduled"
+          }
+        ],
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bad2\",\"namespace\":\"test-namespace\"},\"spec\":{\"containers\":[{\"image\":\"nginx\",\"name\":\"nginx1\"},{\"image\":\"nginx\",\"name\":\"nginx2\",\"securityContext\":{\"runAsGroup\":3000,\"runAsUser\":1000}}]}}\n"
+        },
+        "creationTimestamp": "2026-03-08T00:51:11Z",
+        "generation": 1,
+        "name": "bad2",
+        "namespace": "test-namespace",
+        "resourceVersion": "688308874",
+        "uid": "e0fc95ce-edb8-401b-afc4-87438fe980ee"
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "nginx",
+            "imagePullPolicy": "Always",
+            "name": "nginx1",
+            "resources": {},
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-mcncj",
+                "readOnly": true
+              }
+            ]
+          },
+          {
+            "image": "nginx",
+            "imagePullPolicy": "Always",
+            "name": "nginx2",
+            "resources": {},
+            "securityContext": {
+              "runAsGroup": 3000,
+              "runAsUser": 1000
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File",
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-mcncj",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/not-ready",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          },
+          {
+            "effect": "NoExecute",
+            "key": "node.kubernetes.io/unreachable",
+            "operator": "Exists",
+            "tolerationSeconds": 300
+          }
+        ],
+        "volumes": [
+          {
+            "name": "kube-api-access-mcncj",
+            "projected": {
+              "defaultMode": 420,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-03-08T00:51:11Z",
+            "message": "no nodes available to schedule pods",
+            "reason": "Unschedulable",
+            "status": "False",
+            "type": "PodScheduled"
+          }
+        ],
+        "phase": "Pending",
+        "qosClass": "BestEffort"
+      }
+    }
+  ],
+  "kind": "PodList"
+}

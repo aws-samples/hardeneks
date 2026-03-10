@@ -1,0 +1,53 @@
+{
+  "items": [
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRoleBinding",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"ClusterRoleBinding\",\"metadata\":{\"annotations\":{},\"name\":\"good\"},\"roleRef\":{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"ClusterRole\",\"name\":\"good\"}}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:23:16Z",
+        "name": "good",
+        "resourceVersion": "687999167",
+        "uid": "8293c69d-8c5f-45e2-a65b-bbaded5cec9d"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "ClusterRole",
+        "name": "good"
+      }
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "ClusterRoleBinding",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"ClusterRoleBinding\",\"metadata\":{\"annotations\":{},\"name\":\"bad\"},\"roleRef\":{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"ClusterRole\",\"name\":\"bad\"},\"subjects\":[{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"Group\",\"name\":\"system:unauthenticated\"},{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"Group\",\"name\":\"system:anonymous\"}]}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:23:16Z",
+        "name": "bad",
+        "resourceVersion": "687999169",
+        "uid": "94ffcf0a-6187-4323-97cf-f218cba448e8"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "ClusterRole",
+        "name": "bad"
+      },
+      "subjects": [
+        {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "Group",
+          "name": "system:unauthenticated"
+        },
+        {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "Group",
+          "name": "system:anonymous"
+        }
+      ]
+    }
+  ],
+  "kind": "ClusterRoleBindingList"
+}

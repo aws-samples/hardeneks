@@ -69,6 +69,7 @@ Following is a sample config file:
 
 ```yaml
 ---
+---
 ignore-namespaces:
   - kube-node-lease
   - kube-public
@@ -113,6 +114,18 @@ rules:
       applications:
         - check_metrics_server_is_running
         - check_vertical_pod_autoscaler_exists
+    cluster_autoscaling:
+      cluster_autoscaler:
+        - check_any_cluster_autoscaler_exists
+        - ensure_cluster_autoscaler_and_cluster_versions_match
+        - ensure_cluster_autoscaler_has_autodiscovery_mode
+        - use_separate_iam_role_for_cluster_autoscaler
+        - employ_least_privileged_access_cluster_autoscaler_role
+        - use_managed_nodegroups
+    scalability:
+      control_plane:
+        - check_eks_version
+        - check_kubectl_compression
   namespace_based:
     security: 
       iam:
@@ -141,13 +154,15 @@ rules:
         - schedule_replicas_across_nodes
         - run_multiple_replicas
         - avoid_running_singleton_pods
+        - check_readiness_probes
+        - check_liveness_probes
 ```
 
 ## RBAC
  
 In order to run hardeneks we need to have some permissions both on AWS side and k8s side.
 
-### Minimal IAM role policy
+### Minimal IAM role policy for all checks
 
 ```json
 {
@@ -155,39 +170,29 @@ In order to run hardeneks we need to have some permissions both on AWS side and 
     "Statement": [
         {
             "Effect": "Allow",
-            "Action": "eks:ListClusters",
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "eks:DescribeCluster",
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "ecr:DescribeRepositories",
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "inspector2:BatchGetAccountStatus",
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "ec2:DescribeFlowLogs",
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "ec2:DescribeInstances",
+            "Action": [
+                "eks:ListClusters",
+                "eks:DescribeCluster",
+                "eks:ListPodIdentityAssociations",
+                "eks:DescribePodIdentityAssociation",
+                "eks:DescribeClusterVersions",
+                "ecr:DescribeRepositories",
+                "inspector2:BatchGetAccountStatus",
+                "ec2:DescribeFlowLogs",
+                "ec2:DescribeInstances",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListRolePolicies",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetRolePolicy"
+            ],
             "Resource": "*"
         }
     ]
 }
 ```
 
-### Minimal ClusterRole
+### Minimal ClusterRole for all checks
 
 ```yaml
 kind: ClusterRole
@@ -198,6 +203,9 @@ rules:
 - apiGroups: [""]
   resources: ["namespaces", "resourcequotas", "persistentvolumes", "pods", "services", "nodes"]
   verbs: ["list"]
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["get"]
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
   verbs: ["list"]

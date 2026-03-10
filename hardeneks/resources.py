@@ -27,6 +27,14 @@ class Resources:
         self.persistent_volumes = (
             client.CoreV1Api().list_persistent_volume().items
         )
+        self.services = (
+            client.CoreV1Api().list_service_for_all_namespaces().items
+        )
+        self.namespace_list = client.CoreV1Api().list_namespace().items
+        self.deployments = (
+            client.AppsV1Api().list_deployment_for_all_namespaces().items
+        )
+        self.nodes = client.CoreV1Api().list_node().items
 
 
 class NamespacedResources:

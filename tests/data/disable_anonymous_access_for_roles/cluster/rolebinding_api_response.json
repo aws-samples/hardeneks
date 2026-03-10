@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "RoleBinding",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"RoleBinding\",\"metadata\":{\"annotations\":{},\"name\":\"good\",\"namespace\":\"test-namespace\"},\"roleRef\":{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"Role\",\"name\":\"good\"},\"subjects\":null}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:23:22Z",
+        "name": "good",
+        "namespace": "test-namespace",
+        "resourceVersion": "687999200",
+        "uid": "baeefe46-a813-4371-b19d-314d36cbe128"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "Role",
+        "name": "good"
+      }
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "RoleBinding",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"rbac.authorization.k8s.io/v1\",\"kind\":\"RoleBinding\",\"metadata\":{\"annotations\":{},\"name\":\"bad\",\"namespace\":\"test-namespace\"},\"roleRef\":{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"Role\",\"name\":\"bad\"},\"subjects\":[{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"Group\",\"name\":\"system:unauthenticated\"},{\"apiGroup\":\"rbac.authorization.k8s.io\",\"kind\":\"Group\",\"name\":\"system:anonymous\"}]}\n"
+        },
+        "creationTimestamp": "2026-03-07T04:23:22Z",
+        "name": "bad",
+        "namespace": "test-namespace",
+        "resourceVersion": "687999203",
+        "uid": "17fbea36-eca2-4609-8825-a2e638211bfd"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "Role",
+        "name": "bad"
+      },
+      "subjects": [
+        {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "Group",
+          "name": "system:unauthenticated"
+        },
+        {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "Group",
+          "name": "system:anonymous"
+        }
+      ]
+    }
+  ],
+  "kind": "RoleBindingList"
+}

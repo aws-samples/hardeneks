@@ -1,0 +1,122 @@
+{
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"PersistentVolume\",\"metadata\":{\"annotations\":{},\"name\":\"good1\"},\"spec\":{\"accessModes\":[\"ReadWriteOnce\"],\"capacity\":{\"storage\":\"5Gi\"},\"csi\":{\"driver\":\"efs.csi.aws.com\",\"volumeAttributes\":{\"encryptInTransit\":\"true\"},\"volumeHandle\":\"some_id\"},\"mountOptions\":[\"tls\"],\"persistentVolumeReclaimPolicy\":\"Retain\",\"storageClassName\":\"efs-sc\",\"volumeMode\":\"Filesystem\"}}\n"
+        },
+        "creationTimestamp": "2026-03-07T05:33:33Z",
+        "finalizers": [
+          "kubernetes.io/pv-protection"
+        ],
+        "name": "good1",
+        "resourceVersion": "688017438",
+        "uid": "cd1e3959-a8fe-453f-955a-7211d05b5290"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "5Gi"
+        },
+        "csi": {
+          "driver": "efs.csi.aws.com",
+          "volumeAttributes": {
+            "encryptInTransit": "true"
+          },
+          "volumeHandle": "some_id"
+        },
+        "mountOptions": [
+          "tls"
+        ],
+        "persistentVolumeReclaimPolicy": "Retain",
+        "storageClassName": "efs-sc",
+        "volumeMode": "Filesystem"
+      },
+      "status": {
+        "lastPhaseTransitionTime": "2026-03-07T05:33:33Z",
+        "phase": "Available"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"PersistentVolume\",\"metadata\":{\"annotations\":{},\"name\":\"good2\"},\"spec\":{\"accessModes\":[\"ReadWriteOnce\"],\"capacity\":{\"storage\":\"5Gi\"},\"csi\":{\"driver\":\"efs.csi.aws.com\",\"volumeHandle\":\"some_id\"},\"mountOptions\":[\"tls\"],\"persistentVolumeReclaimPolicy\":\"Retain\",\"storageClassName\":\"efs-sc\",\"volumeMode\":\"Filesystem\"}}\n"
+        },
+        "creationTimestamp": "2026-03-07T05:33:33Z",
+        "finalizers": [
+          "kubernetes.io/pv-protection"
+        ],
+        "name": "good2",
+        "resourceVersion": "688017440",
+        "uid": "22e417a4-945b-4215-8986-45e4550e29b0"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "5Gi"
+        },
+        "csi": {
+          "driver": "efs.csi.aws.com",
+          "volumeHandle": "some_id"
+        },
+        "mountOptions": [
+          "tls"
+        ],
+        "persistentVolumeReclaimPolicy": "Retain",
+        "storageClassName": "efs-sc",
+        "volumeMode": "Filesystem"
+      },
+      "status": {
+        "lastPhaseTransitionTime": "2026-03-07T05:33:33Z",
+        "phase": "Available"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "metadata": {
+        "annotations": {
+          "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"PersistentVolume\",\"metadata\":{\"annotations\":{},\"name\":\"bad\"},\"spec\":{\"accessModes\":[\"ReadWriteOnce\"],\"capacity\":{\"storage\":\"5Gi\"},\"csi\":{\"driver\":\"efs.csi.aws.com\",\"volumeAttributes\":{\"encryptInTransit\":\"false\"},\"volumeHandle\":\"some_id\"},\"persistentVolumeReclaimPolicy\":\"Retain\",\"storageClassName\":\"efs-sc\",\"volumeMode\":\"Filesystem\"}}\n"
+        },
+        "creationTimestamp": "2026-03-07T05:33:33Z",
+        "finalizers": [
+          "kubernetes.io/pv-protection"
+        ],
+        "name": "bad",
+        "resourceVersion": "688017442",
+        "uid": "4e0c5b50-d06f-4648-ae3d-9c671d4d9e9b"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "5Gi"
+        },
+        "csi": {
+          "driver": "efs.csi.aws.com",
+          "volumeAttributes": {
+            "encryptInTransit": "false"
+          },
+          "volumeHandle": "some_id"
+        },
+        "persistentVolumeReclaimPolicy": "Retain",
+        "storageClassName": "efs-sc",
+        "volumeMode": "Filesystem"
+      },
+      "status": {
+        "lastPhaseTransitionTime": "2026-03-07T05:33:33Z",
+        "phase": "Available"
+      }
+    }
+  ],
+  "kind": "PersistentVolumeList"
+}

@@ -1,0 +1,23 @@
+# Deploys a single deployment so cluster-autoscaler is not found and therefore the test passes.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: test-namespace
+  name: bad-deployment
+  labels:
+    app: bad
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bad
+  template:
+    metadata:
+      labels:
+        app: bad
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
