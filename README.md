@@ -156,7 +156,7 @@ rules:
         - check_liveness_probes
 ```
 
-## RBAC
+## Permissions
  
 In order to run hardeneks we need to have some permissions both on AWS side and k8s side.
 
@@ -242,3 +242,4 @@ poetry install
 poetry shell
 pytest --cov=hardeneks tests/ --cov-report term-missing
 ```
+
