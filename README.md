@@ -11,7 +11,7 @@ Runs checks to see if an EKS cluster follows [EKS Best Practices](https://aws.gi
 **Quick Start**:
 
 ```
-python3 -m venv /tmp/.venv
+python3.10 -m venv /tmp/.venv
 source /tmp/.venv/bin/activate
 pip install hardeneks
 hardeneks
@@ -242,4 +242,5 @@ poetry install
 poetry shell
 pytest --cov=hardeneks tests/ --cov-report term-missing
 ```
+
 
