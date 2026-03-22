@@ -363,6 +363,7 @@ def run_hardeneks(
         region = _get_region()
 
     console.rule("[b]HARDENEKS", characters="*  ")
+    console.print(f"Run started at {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC")
     console.print(f"You are operating at {region}")
     console.print(f"You context is {context}")
     console.print(f"Your cluster name is {cluster}")
