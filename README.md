@@ -11,7 +11,7 @@ Runs checks to see if an EKS cluster follows [EKS Best Practices](https://aws.gi
 **Quick Start**:
 
 ```
-python3 -m venv /tmp/.venv
+python3.10 -m venv /tmp/.venv   # Or any other supported Python version listed above.
 source /tmp/.venv/bin/activate
 pip install hardeneks
 hardeneks
@@ -156,7 +156,7 @@ rules:
         - check_liveness_probes
 ```
 
-## RBAC
+## Permissions
  
 In order to run hardeneks we need to have some permissions both on AWS side and k8s side.
 
@@ -242,3 +242,7 @@ poetry install
 poetry shell
 pytest --cov=hardeneks tests/ --cov-report term-missing
 ```
+
+
+
+
