@@ -101,7 +101,10 @@ def _export_json(rules: list, json_path=str):
             "namespace": rule.result.namespace,
             "resolution": rule.url,
         }
-        json_blob[rule._type][rule.pillar][rule.section][rule.message] = result
+        entry = json_blob[rule._type][rule.pillar][rule.section][rule.message]
+        if not isinstance(entry, list):
+            json_blob[rule._type][rule.pillar][rule.section][rule.message] = []
+        json_blob[rule._type][rule.pillar][rule.section][rule.message].append(result)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_blob, f, ensure_ascii=False, indent=4)
 
@@ -360,6 +363,7 @@ def run_hardeneks(
         region = _get_region()
 
     console.rule("[b]HARDENEKS", characters="*  ")
+    console.print(f"Run started at {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC")
     console.print(f"You are operating at {region}")
     console.print(f"You context is {context}")
     console.print(f"Your cluster name is {cluster}")

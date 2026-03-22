@@ -10,14 +10,16 @@ python = "^3.10"
 typer = "^0.24.0"
 kubernetes = "^32.0.1"
 boto3 = "^1.35.9"
+
+[tool.poetry.group.dev.dependencies]
 pre-commit = "^4.5.0"
-tox-gh-actions = "^3.5.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^9.0.2"
 pytest-cov = "^6.3.0"
 pytest-datadir = "^1.8.0"
 tox = "^4.46.3"
+tox-gh-actions = "^3.5.0"
 
 [tool.poetry.scripts]
 hardeneks = "hardeneks:app"
