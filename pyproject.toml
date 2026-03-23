@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hardeneks"
-version = "1.0.0"
+version = "1.1.0"
 description = ""
 authors = ["Doruk Ozturk <dozturk@amazon.com>, Andrew Jarrett <asjarre@amazon.com>"]
 readme = "README.md"
@@ -43,7 +43,7 @@ exclude = '''
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.0.0"
+version = "1.1.0"
 version_files = [
   "pyproject.toml:^version = "
 ]
