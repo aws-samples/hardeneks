@@ -1,3 +1,13 @@
+## v1.1.0 (2026-03-23)
+
+### Feat
+
+- **__init__.py**: Added time in UTC that HardenEKS was run against the cluster
+
+### Fix
+
+- **__init__.py**: Fixed json output so it prints all namespaces
+
 ## v1.0.0 (2026-03-10)
 
 ### Fix
