@@ -45,9 +45,7 @@ exclude = '''
 name = "cz_conventional_commits"
 version = "1.0.0"
 version_files = [
-  "pyproject.toml:[tool.commitizen]\nversion",
-  "pyproject.toml:[tool.poetry]\nname = \"commitizen\"\nversion",
-  "pyproject.toml:^version"
+  "pyproject.toml:^version = "
 ]
 tag_format = "v$version"
 legacy_tag_formats = [
