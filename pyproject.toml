@@ -15,7 +15,7 @@ boto3 = "^1.35.9"
 pre-commit = "^4.5.0"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^9.0.2"
+pytest = "^9.0.3"
 pytest-cov = "^6.3.0"
 pytest-datadir = "^1.8.0"
 tox = "^4.46.3"
