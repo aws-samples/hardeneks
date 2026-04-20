@@ -81,4 +81,3 @@ def test_check_awspca_exists(resources):
     rule.check(resources)
 
     assert not rule.result.status
-

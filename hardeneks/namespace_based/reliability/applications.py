@@ -16,9 +16,9 @@ class avoid_running_singleton_pods(Rule):
                 offenders.append(pod.metadata.name)
 
         self.result = Result(
-            status=True, 
-            resource_type="Pod", 
-            namespace=namespaced_resources.namespace
+            status=True,
+            resource_type="Pod",
+            namespace=namespaced_resources.namespace,
         )
         if offenders:
             self.result = Result(
@@ -45,9 +45,9 @@ class run_multiple_replicas(Rule):
                 offenders.append(deployment.metadata.name)
 
         self.result = Result(
-            status=True, 
-            resource_type="Deployment", 
-            namespace=namespaced_resources.namespace
+            status=True,
+            resource_type="Deployment",
+            namespace=namespaced_resources.namespace,
         )
         if offenders:
             self.result = Result(
@@ -75,13 +75,15 @@ class schedule_replicas_across_nodes(Rule):
                 offenders.append(deployment.metadata.name)
             else:
                 topology_keys = set([i.topology_key for i in spread])
-                if not set(["topology.kubernetes.io/zone"]).issubset(topology_keys):
+                if not set(["topology.kubernetes.io/zone"]).issubset(
+                    topology_keys
+                ):
                     offenders.append(deployment.metadata.name)
 
         self.result = Result(
-            status=True, 
-            resource_type="Deployment", 
-            namespace=namespaced_resources.namespace
+            status=True,
+            resource_type="Deployment",
+            namespace=namespaced_resources.namespace,
         )
         if offenders:
             self.result = Result(
@@ -103,14 +105,16 @@ class check_horizontal_pod_autoscaling_exists(Rule):
 
         offenders = []
 
-        hpas = [i.spec.scale_target_ref.name for i in namespaced_resources.hpas]
+        hpas = [
+            i.spec.scale_target_ref.name for i in namespaced_resources.hpas
+        ]
 
         for deployment in namespaced_resources.deployments:
             if deployment.metadata.name not in hpas:
                 offenders.append(deployment.metadata.name)
 
         self.result = Result(
-            status=True, 
+            status=True,
             resource_type="Deployment",
             namespace=namespaced_resources.namespace,
         )
@@ -175,7 +179,7 @@ class check_liveness_probes(Rule):
             status=True,
             resource_type="Pod",
             namespace=namespaced_resources.namespace,
-            )
+        )
         if offenders:
             self.result = Result(
                 status=False,

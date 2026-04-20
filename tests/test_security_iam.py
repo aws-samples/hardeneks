@@ -112,15 +112,27 @@ def test_check_access_to_instance_profile(mocked_client):
         # Has IRSA, No Pod Identity - should pass
         ("serviceaccount_irsa_api_response.json", {"associations": []}, True),
         # No IRSA, Has Pod Identity - should pass
-        ("serviceaccount_api_response.json", {"associations": [{"namespace": "kube-system", "serviceAccount": "aws-node"}]}, True),
+        (
+            "serviceaccount_api_response.json",
+            {
+                "associations": [
+                    {"namespace": "kube-system", "serviceAccount": "aws-node"}
+                ]
+            },
+            True,
+        ),
     ],
 )
 @patch("boto3.client")
 @patch("kubernetes.client.AppsV1Api.read_namespaced_daemon_set")
 @patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
 def test_check_aws_node_daemonset_service_account(
-    mocked_core_api, mocked_apps_api, mocked_boto_client,
-    service_account_file, pod_identity_associations, expected_status
+    mocked_core_api,
+    mocked_apps_api,
+    mocked_boto_client,
+    service_account_file,
+    pod_identity_associations,
+    expected_status,
 ):
     daemon_set_data = (
         Path.cwd()
@@ -146,8 +158,10 @@ def test_check_aws_node_daemonset_service_account(
     mocked_core_api.return_value = get_response(
         kubernetes.client.CoreV1Api, service_account_data, "V1ServiceAccount"
     )
-    mocked_boto_client.return_value.list_pod_identity_associations.return_value = pod_identity_associations
-    
+    mocked_boto_client.return_value.list_pod_identity_associations.return_value = (
+        pod_identity_associations
+    )
+
     namespaced_resources = NamespacedResources(
         "some_region", "some_context", "some_cluster", "some_ns"
     )
@@ -175,7 +189,9 @@ def test_disable_service_account_token_mounts(mock_read_sa):
         kubernetes.client.CoreV1Api, sa_list_data, "V1ServiceAccountList"
     ).items
     sa_by_namespace = {sa.metadata.namespace: sa for sa in sa_list}
-    mock_read_sa.side_effect = lambda *args, **kwargs: sa_by_namespace[kwargs["namespace"]]
+    mock_read_sa.side_effect = lambda *args, **kwargs: sa_by_namespace[
+        kwargs["namespace"]
+    ]
 
     offending_namespaces = []
     for namespace in ["good", "bad1", "bad2"]:
@@ -208,7 +224,14 @@ def test_disable_run_as_root_user(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [(("disable_anonymous_access_for_cluster_roles", ["cluster_role_bindings"]))],
+    [
+        (
+            (
+                "disable_anonymous_access_for_cluster_roles",
+                ["cluster_role_bindings"],
+            )
+        )
+    ],
     indirect=["namespaced_resources"],
 )
 def test_disable_anonymous_access_for_cluster_roles(namespaced_resources):
@@ -236,7 +259,14 @@ def test_disable_anonymous_access_for_roles(namespaced_resources):
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [(("use_dedicated_service_accounts_for_each_daemon_set", ["daemon_sets"]))],
+    [
+        (
+            (
+                "use_dedicated_service_accounts_for_each_daemon_set",
+                ["daemon_sets"],
+            )
+        )
+    ],
     indirect=["namespaced_resources"],
 )
 def test_use_dedicated_service_accounts_for_each_daemon_set(
@@ -250,7 +280,14 @@ def test_use_dedicated_service_accounts_for_each_daemon_set(
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [(("use_dedicated_service_accounts_for_each_deployment", ["deployments"]))],
+    [
+        (
+            (
+                "use_dedicated_service_accounts_for_each_deployment",
+                ["deployments"],
+            )
+        )
+    ],
     indirect=["namespaced_resources"],
 )
 def test_use_dedicated_service_accounts_for_each_deployment(
@@ -264,7 +301,14 @@ def test_use_dedicated_service_accounts_for_each_deployment(
 
 @pytest.mark.parametrize(
     "namespaced_resources",
-    [(("use_dedicated_service_accounts_for_each_stateful_set", ["stateful_sets"]))],
+    [
+        (
+            (
+                "use_dedicated_service_accounts_for_each_stateful_set",
+                ["stateful_sets"],
+            )
+        )
+    ],
     indirect=["namespaced_resources"],
 )
 def test_use_dedicated_service_accounts_for_each_stateful_set(
