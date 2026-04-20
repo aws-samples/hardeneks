@@ -1,11 +1,9 @@
 import json
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import kubernetes
 import pytest
-
-from hardeneks.resources import Resources
 from .conftest import get_response
 from hardeneks.cluster_wide.cluster_autoscaling.cluster_autoscaler import (
     check_any_cluster_autoscaler_exists,

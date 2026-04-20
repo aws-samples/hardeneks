@@ -1,7 +1,5 @@
 import hashlib
 
-import pytest
-
 from hardeneks.masking import (
     MaskingConfig,
     Masker,

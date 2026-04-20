@@ -58,7 +58,7 @@ class disable_service_account_token_mounts(Rule):
             resource_type="ServiceAccount",
             namespace=namespaced_resources.namespace,
         )
-        if sa.automount_service_account_token != False:
+        if sa.automount_service_account_token is not False:
             self.result = Result(
                 status=False,
                 resource_type="ServiceAccount",

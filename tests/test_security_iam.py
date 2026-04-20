@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock
 import kubernetes
 import pytest
 
-from hardeneks.resources import NamespacedResources, Resources
+from hardeneks.resources import NamespacedResources
 
 from hardeneks.cluster_wide.security.iam import (
     restrict_wildcard_for_cluster_roles,

@@ -1,5 +1,3 @@
-import re
-import kubernetes
 import boto3
 from hardeneks import helpers
 from hardeneks.rules import Rule, Result

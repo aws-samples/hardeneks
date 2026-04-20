@@ -1,5 +1,4 @@
 import boto3
-from kubernetes import client
 
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
