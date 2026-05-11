@@ -13,7 +13,10 @@ class use_encryption_with_ebs(Rule):
         offenders = []
 
         for storage_class in resources.storage_classes:
-            if storage_class.provisioner in ["ebs.csi.aws.com", "ebs.csi.eks.amazonaws.com"]:
+            if storage_class.provisioner in [
+                "ebs.csi.aws.com",
+                "ebs.csi.eks.amazonaws.com",
+            ]:
                 if storage_class.parameters:
                     encrypted = storage_class.parameters.get("encrypted")
                     if not encrypted or encrypted == "false":
@@ -45,9 +48,11 @@ class use_encryption_with_efs(Rule):
         for persistent_volume in resources.persistent_volumes:
             csi = persistent_volume.spec.csi
             if csi and csi.driver == "efs.csi.aws.com":
-                volume_attributes = getattr(csi, 'volume_attributes', None)
+                volume_attributes = getattr(csi, "volume_attributes", None)
                 if volume_attributes:
-                    encrypt_in_transit = volume_attributes.get("encryptInTransit")
+                    encrypt_in_transit = volume_attributes.get(
+                        "encryptInTransit"
+                    )
                     if encrypt_in_transit == "false":
                         offenders.append(persistent_volume.metadata.name)
 

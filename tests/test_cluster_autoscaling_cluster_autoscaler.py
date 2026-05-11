@@ -1,11 +1,9 @@
 import json
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import kubernetes
 import pytest
-
-from hardeneks.resources import Resources
 from .conftest import get_response
 from hardeneks.cluster_wide.cluster_autoscaling.cluster_autoscaler import (
     check_any_cluster_autoscaler_exists,
@@ -41,7 +39,14 @@ def test_check_any_cluster_autoscaler_exists(resources):
 
 @pytest.mark.parametrize(
     "resources",
-    [(("ensure_cluster_autoscaler_and_cluster_versions_match", ["deployments"]))],
+    [
+        (
+            (
+                "ensure_cluster_autoscaler_and_cluster_versions_match",
+                ["deployments"],
+            )
+        )
+    ],
     indirect=["resources"],
 )
 @patch("boto3.client")
@@ -72,19 +77,45 @@ def test_ensure_cluster_autoscaler_has_autodiscovery_mode(resources):
     "resources,service_account_file,pod_identity_associations,expected_status",
     [
         # No IRSA, No Pod Identity - should fail
-        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_api_response.json", {"associations": []}, False),
+        (
+            ("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]),
+            "serviceaccount_api_response.json",
+            {"associations": []},
+            False,
+        ),
         # Has IRSA, No Pod Identity - should pass
-        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_irsa_api_response.json", {"associations": []}, True),
+        (
+            ("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]),
+            "serviceaccount_irsa_api_response.json",
+            {"associations": []},
+            True,
+        ),
         # No IRSA, Has Pod Identity - should pass
-        (("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]), "serviceaccount_api_response.json", {"associations": [{"namespace": "kube-system", "serviceAccount": "cluster-autoscaler"}]}, True),
+        (
+            ("use_separate_iam_role_for_cluster_autoscaler", ["deployments"]),
+            "serviceaccount_api_response.json",
+            {
+                "associations": [
+                    {
+                        "namespace": "kube-system",
+                        "serviceAccount": "cluster-autoscaler",
+                    }
+                ]
+            },
+            True,
+        ),
     ],
     indirect=["resources"],
 )
 @patch("boto3.client")
 @patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")
 def test_use_separate_iam_role_for_cluster_autoscaler(
-    mocked_core_api, mocked_boto_client,
-    resources, service_account_file, pod_identity_associations, expected_status
+    mocked_core_api,
+    mocked_boto_client,
+    resources,
+    service_account_file,
+    pod_identity_associations,
+    expected_status,
 ):
     service_account_data = (
         Path.cwd()
@@ -98,7 +129,9 @@ def test_use_separate_iam_role_for_cluster_autoscaler(
     mocked_core_api.return_value = get_response(
         kubernetes.client.CoreV1Api, service_account_data, "V1ServiceAccount"
     )
-    mocked_boto_client.return_value.list_pod_identity_associations.return_value = pod_identity_associations
+    mocked_boto_client.return_value.list_pod_identity_associations.return_value = (
+        pod_identity_associations
+    )
 
     rule = use_separate_iam_role_for_cluster_autoscaler()
     rule.check(resources)
@@ -112,7 +145,14 @@ def test_use_separate_iam_role_for_cluster_autoscaler(
 
 @pytest.mark.parametrize(
     "resources",
-    [(("employ_least_privileged_access_cluster_autoscaler_role", ["deployments"]))],
+    [
+        (
+            (
+                "employ_least_privileged_access_cluster_autoscaler_role",
+                ["deployments"],
+            )
+        )
+    ],
     indirect=["resources"],
 )
 @patch("kubernetes.client.CoreV1Api.read_namespaced_service_account")

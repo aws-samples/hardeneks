@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import pytest
 
 from hardeneks.namespace_based.security.pod_security import (
@@ -12,7 +10,6 @@ from hardeneks.namespace_based.security.pod_security import (
 from hardeneks.cluster_wide.security.pod_security import (
     ensure_namespace_psa_exist,
 )
-from hardeneks.resources import Resources
 
 
 @pytest.mark.parametrize(

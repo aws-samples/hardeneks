@@ -14,9 +14,10 @@ class deploy_workers_onto_private_subnets(Rule):
     def check(self, resources: Resources):
         client = boto3.client("ec2", region_name=resources.region)
         offenders = []
-        
-        paginator = client.get_paginator('describe_instances')
-        page_iterator = paginator.paginate(PaginationConfig={'PageSize': 1000},
+
+        paginator = client.get_paginator("describe_instances")
+        page_iterator = paginator.paginate(
+            PaginationConfig={"PageSize": 1000},
             Filters=[
                 {
                     "Name": "tag:aws:eks:cluster-name",
@@ -24,7 +25,7 @@ class deploy_workers_onto_private_subnets(Rule):
                         resources.cluster,
                     ],
                 },
-            ]
+            ],
         )
 
         for page in page_iterator:
@@ -71,4 +72,3 @@ class make_sure_inspector_is_enabled(Rule):
             self.result = Result(
                 status=False, resource_type="Inspector Configuration"
             )
-

@@ -31,10 +31,10 @@ class disallow_secrets_from_env_vars(Rule):
                     break
 
         self.result = Result(
-            status=True, 
+            status=True,
             resource_type="Pod",
-            namespace=namespaced_resources.namespace
-            )
+            namespace=namespaced_resources.namespace,
+        )
         if offenders:
             self.result = Result(
                 status=False,

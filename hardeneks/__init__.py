@@ -20,6 +20,7 @@ from .resources import (
     Resources,
 )
 from .harden import harden
+from .masking import build_masker
 from hardeneks import helpers
 
 import datetime
@@ -104,21 +105,26 @@ def _export_json(rules: list, json_path=str):
         entry = json_blob[rule._type][rule.pillar][rule.section][rule.message]
         if not isinstance(entry, list):
             json_blob[rule._type][rule.pillar][rule.section][rule.message] = []
-        json_blob[rule._type][rule.pillar][rule.section][rule.message].append(result)
+        json_blob[rule._type][rule.pillar][rule.section][rule.message].append(
+            result
+        )
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_blob, f, ensure_ascii=False, indent=4)
+
 
 def _export_csv(rules: list, csv_path=str):
     csv_data = []
 
     for rule in rules:
         csv_row = {
-           "Type": rule._type,
+            "Type": rule._type,
             "Pillar": rule.pillar,
             "Section": rule.section,
             "Message": rule.message,
             "Status": rule.result.status,
-            "Resources": ', '.join(rule.result.resources) if rule.result.resources else '',
+            "Resources": ", ".join(rule.result.resources)
+            if rule.result.resources
+            else "",
             "Resource Type": rule.result.resource_type,
             "Namespace": rule.result.namespace,
             "Resolution": rule.url,
@@ -130,102 +136,116 @@ def _export_csv(rules: list, csv_path=str):
         writer.writeheader()
         writer.writerows(csv_data)
 
-def _export_security_hub(rules: list,region,context):
+
+def _export_security_hub(rules: list, region, context):
     """
     Export failed checks to AWS Security Hub as custom findings
     """
     try:
-        security_hub = boto3.client('securityhub', region_name=region)
-        account_id = boto3.client('sts').get_caller_identity()['Account']
-        
+        security_hub = boto3.client("securityhub", region_name=region)
+        account_id = boto3.client("sts").get_caller_identity()["Account"]
+
         findings = []
-        current_time = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
-        
+        current_time = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+
         for rule in rules:
             if not rule.result.status:  # Only process failed checks
                 # Process each failed resource as a separate finding
-                resources = rule.result.resources if rule.result.resources else ['NoSpecificResource']
-                
+                resources = (
+                    rule.result.resources
+                    if rule.result.resources
+                    else ["NoSpecificResource"]
+                )
+
                 for resource in resources:
                     finding = {
-                        'SchemaVersion': '2018-10-08',
-                        'Id': f"hardeneks/{rule.pillar}/{rule.section}/{hashlib.md5(resource.encode()).hexdigest()}",
-                        'ProductArn': f"arn:aws:securityhub:{region}:{account_id}:product/{account_id}/default",
-                        'GeneratorId': f"hardeneks/{rule.pillar}/{rule.section}",
-                        'AwsAccountId': account_id,
-                        'Types': [
-                            'Software and Configuration Checks/AWS Security Best Practices'
+                        "SchemaVersion": "2018-10-08",
+                        "Id": f"hardeneks/{rule.pillar}/{rule.section}/{hashlib.md5(resource.encode()).hexdigest()}",
+                        "ProductArn": f"arn:aws:securityhub:{region}:{account_id}:product/{account_id}/default",
+                        "GeneratorId": f"hardeneks/{rule.pillar}/{rule.section}",
+                        "AwsAccountId": account_id,
+                        "Types": [
+                            "Software and Configuration Checks/AWS Security Best Practices"
                         ],
-                        'CreatedAt': current_time,
-                        'UpdatedAt': current_time,
-                        'Severity': {
-                            'Label': 'HIGH'
+                        "CreatedAt": current_time,
+                        "UpdatedAt": current_time,
+                        "Severity": {"Label": "HIGH"},
+                        "Title": rule.message,
+                        "Description": f"HardenEKS check failed: {rule.message}",
+                        "Resources": [
+                            {
+                                "Type": f"EKS {rule.result.resource_type}",
+                                "Id": context,
+                                "Partition": "aws",
+                                "Region": region,
+                            }
+                        ],
+                        "Compliance": {"Status": "FAILED"},
+                        "RecordState": "ACTIVE",
+                        "Workflow": {"Status": "NEW"},
+                        "ProductFields": {
+                            "Provider": "HardenEKS",
+                            "Pillar": rule.pillar,
+                            "Section": rule.section,
                         },
-                        'Title': rule.message,
-                        'Description': f"HardenEKS check failed: {rule.message}",
-                        'Resources': [{
-                            'Type': f'EKS {rule.result.resource_type}',
-                            'Id': context,
-                            'Partition': 'aws',
-                            'Region': region
-                        }],
-                        'Compliance': {
-                            'Status': 'FAILED'
-                        },
-                        'RecordState': 'ACTIVE',
-                        'Workflow': {
-                            'Status': 'NEW'
-                        },
-                        'ProductFields': {
-                            'Provider': 'HardenEKS',
-                            'Pillar': rule.pillar,
-                            'Section': rule.section
-                        }
                     }
-                    
+
                     # Add namespace information if available
                     if rule.result.namespace:
-                        finding['ProductFields']['Namespace'] = rule.result.namespace
-                        
+                        finding["ProductFields"][
+                            "Namespace"
+                        ] = rule.result.namespace
+
                     # Add remediation URL if available
                     if rule.url:
-                        finding['Remediation'] = {
-                            'Recommendation': {
-                                'Text': 'For remediation steps, see the Amazon EKS Best Practices documentation',
-                                'Url': rule.url
+                        finding["Remediation"] = {
+                            "Recommendation": {
+                                "Text": "For remediation steps, see the Amazon EKS Best Practices documentation",
+                                "Url": rule.url,
                             }
                         }
-                        
+
                     findings.append(finding)
-                    
+
                     # Security Hub has a batch limit of 100 findings
                     if len(findings) >= 100:
                         try:
-                            response = security_hub.batch_import_findings(Findings=findings)
+                            response = security_hub.batch_import_findings(
+                                Findings=findings
+                            )
                             _process_security_hub_response(response)
                             findings = []
                         except Exception as e:
-                            console.print(f"[red]Error sending batch to Security Hub: {str(e)}[/red]")
-        
+                            console.print(
+                                f"[red]Error sending batch to Security Hub: {str(e)}[/red]"
+                            )
+
         # Send any remaining findings
         if findings:
             try:
-                response = security_hub.batch_import_findings(Findings=findings)
+                response = security_hub.batch_import_findings(
+                    Findings=findings
+                )
                 _process_security_hub_response(response)
             except Exception as e:
-                console.print(f"[red]Error sending final batch to Security Hub: {str(e)}[/red]")
-                
-        console.print("[green]Successfully exported failed checks to Security Hub[/green]")
-        
+                console.print(
+                    f"[red]Error sending final batch to Security Hub: {str(e)}[/red]"
+                )
+
+        console.print(
+            "[green]Successfully exported failed checks to Security Hub[/green]"
+        )
+
     except Exception as e:
         console.print(f"[red]Error connecting to Security Hub: {str(e)}[/red]")
+
 
 def _process_security_hub_response(response):
     """
     Process the response from Security Hub batch import
     """
-    if response['FailedCount'] > 0:
-        for failure in response['FailedFindings']:
+    if response["FailedCount"] > 0:
+        for failure in response["FailedFindings"]:
             console.print(
                 f"[yellow]Warning: Failed to import finding: {failure['Id']}, "
                 f"Error: {failure['ErrorCode']} - {failure['ErrorMessage']}[/yellow]"
@@ -363,7 +383,9 @@ def run_hardeneks(
         region = _get_region()
 
     console.rule("[b]HARDENEKS", characters="*  ")
-    console.print(f"Run started at {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC")
+    console.print(
+        f"Run started at {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC"
+    )
     console.print(f"You are operating at {region}")
     console.print(f"You context is {context}")
     console.print(f"Your cluster name is {cluster}")
@@ -380,8 +402,11 @@ def run_hardeneks(
 
     rules = config["rules"]
 
+    masker = build_masker(config)
+
     resources = Resources(region, context, cluster, namespaces)
     resources.set_resources()
+    resources.apply_masking(masker)
 
     results = []
 
@@ -391,9 +416,12 @@ def run_hardeneks(
 
     if "namespace_based" in rules:
         for ns in namespaces:
-            resources = NamespacedResources(region, context, cluster, ns)
-            resources.set_resources()
-            namespace_based_results = harden(resources, rules, "namespace_based")
+            ns_resources = NamespacedResources(region, context, cluster, ns)
+            ns_resources.set_resources()
+            ns_resources.apply_masking(masker)
+            namespace_based_results = harden(
+                ns_resources, rules, "namespace_based"
+            )
             results = results + namespace_based_results
 
     print_consolidated_results(results)
@@ -407,4 +435,4 @@ def run_hardeneks(
     if export_json:
         _export_json(results, export_json)
     if export_security_hub:
-        _export_security_hub(results,region,context)
+        _export_security_hub(results, region, context)
