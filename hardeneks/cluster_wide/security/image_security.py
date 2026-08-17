@@ -15,9 +15,9 @@ class use_immutable_tags_with_ecr(Rule):
         offenders = []
 
         client = boto3.client("ecr", region_name=resources.region)
-        paginator = client.get_paginator('describe_repositories')
-        
-        for page in paginator.paginate(PaginationConfig={'PageSize': 1000}):
+        paginator = client.get_paginator("describe_repositories")
+
+        for page in paginator.paginate(PaginationConfig={"PageSize": 1000}):
             for repository in page["repositories"]:
                 if repository["imageTagMutability"] != "IMMUTABLE":
                     offenders.append(repository)

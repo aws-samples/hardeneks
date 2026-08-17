@@ -1,5 +1,4 @@
 import boto3
-from kubernetes import client
 
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
@@ -65,7 +64,11 @@ class check_default_deny_policy_exists(Rule):
         for policy in resources.network_policies:
             spec = policy.spec
             pod_selector = spec.pod_selector
-            if (not pod_selector.match_expressions and not pod_selector.match_labels and spec.policy_types):
+            if (
+                not pod_selector.match_expressions
+                and not pod_selector.match_labels
+                and spec.policy_types
+            ):
                 if not spec.ingress and "Ingress" in spec.policy_types:
                     namespaces_with_ingress_deny.add(policy.metadata.namespace)
                 if not spec.egress and "Egress" in spec.policy_types:
@@ -78,5 +81,7 @@ class check_default_deny_policy_exists(Rule):
         self.result = Result(status=True, resource_type="Namespace")
         if offenders:
             self.result = Result(
-                status=False, resource_type="Namespace", resources=list(offenders)
+                status=False,
+                resource_type="Namespace",
+                resources=list(offenders),
             )

@@ -1,5 +1,3 @@
-import kubernetes
-
 from ...resources import Resources
 from hardeneks.rules import Rule, Result
 

@@ -43,7 +43,9 @@ class disable_service_account_token_mounts(Rule):
     _type = "namespace_based"
     pillar = "security"
     section = "iam"
-    message = "Disable automountServiceAccountToken on the default service account."
+    message = (
+        "Disable automountServiceAccountToken on the default service account."
+    )
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#disable-auto-mounting-of-service-account-tokens"
 
     def check(self, namespaced_resources: NamespacedResources):
@@ -56,7 +58,7 @@ class disable_service_account_token_mounts(Rule):
             resource_type="ServiceAccount",
             namespace=namespaced_resources.namespace,
         )
-        if sa.automount_service_account_token != False:
+        if sa.automount_service_account_token is not False:
             self.result = Result(
                 status=False,
                 resource_type="ServiceAccount",
@@ -79,24 +81,27 @@ class disable_run_as_root_user(Rule):
             container_root_user = False
             # Check container-level security context first since it takes precedence.
             for container in pod.spec.containers:
-                if not container.security_context or \
-                    container.security_context.run_as_user in (None, 0) or \
-                    container.security_context.run_as_group in (None, 0):
+                if (
+                    not container.security_context
+                    or container.security_context.run_as_user in (None, 0)
+                    or container.security_context.run_as_group in (None, 0)
+                ):
                     container_root_user = True
                     break
             # Check if pod-level security context is also not configured.
-            if container_root_user and (not pod.spec.security_context or \
-               pod.spec.security_context.run_as_user in (None, 0) or \
-               pod.spec.security_context.run_as_group in (None, 0)):
-                    offenders.append(pod.metadata.name)
-
+            if container_root_user and (
+                not pod.spec.security_context
+                or pod.spec.security_context.run_as_user in (None, 0)
+                or pod.spec.security_context.run_as_group in (None, 0)
+            ):
+                offenders.append(pod.metadata.name)
 
         self.result = Result(
-            status=True, 
+            status=True,
             resource_type="Pod",
             namespace=namespaced_resources.namespace,
         )
-        
+
         if offenders:
             self.result = Result(
                 status=False,
@@ -131,7 +136,7 @@ class disable_anonymous_access_for_roles(Rule):
             status=True,
             resource_type="RoleBinding",
             namespace=namespaced_resources.namespace,
-            )
+        )
         if offenders:
             self.result = Result(
                 status=False,
@@ -211,7 +216,7 @@ class use_dedicated_service_accounts_for_each_stateful_set(Rule):
             status=True,
             resource_type="StatefulSet",
             namespace=namespaced_resources.namespace,
-            )
+        )
         if offenders:
             self.result = Result(
                 status=False,
@@ -248,10 +253,10 @@ class use_dedicated_service_accounts_for_each_daemon_set(Rule):
                     offenders.append(daemon_set.metadata.name)
 
         self.result = Result(
-            status=True, 
+            status=True,
             resource_type="DaemonSet",
             namespace=namespaced_resources.namespace,
-            )
+        )
         if offenders:
             self.result = Result(
                 status=False,

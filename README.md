@@ -80,7 +80,16 @@ ignore-namespaces:
   - aws-for-fluent-bit
   - amazon-cloudwatch
   - vpa
-rules: 
+masking:
+  constraints:
+    mask_namespace_names: false
+    mask_resource_names: false
+    replace_with: hash
+  exclude:
+    namespaces:
+      - example
+    regex:  # e.g. "^system:.*"
+rules:
   cluster_wide:
     security:
       iam:
@@ -155,6 +164,36 @@ rules:
         - check_readiness_probes
         - check_liveness_probes
 ```
+
+**Masking**:
+
+Sensitive namespace and resource names can be masked in all output and exports
+using a deterministic one-way hash (truncated SHA-256). Masking is configured
+inside `rules:` so it travels with the rest of the rule config:
+
+```yaml
+masking:
+  constraints:
+    mask_namespace_names: false   # replace namespace names
+    mask_resource_names: false    # replace resource names
+    replace_with: hash            # "hash" (default) or a single character e.g. "*"
+  exclude:
+    namespaces:                   # these namespaces (and their resources) are never masked
+      - example
+    regex:                        # PCRE pattern; matching names are never masked
+```
+
+- Both constraints default to `false`; omitting the `masking` block entirely disables masking.
+- `replace_with: hash` — replaces the entire name with an 8-character truncated SHA-256 hex digest. The same name always produces the same digest within a run.
+- `replace_with: <char>` — partially redacts each hyphen-delimited word while preserving its shape:
+  - Words of 1–2 characters are left untouched.
+  - Words shorter than 6 characters: keep first and last character, mask the middle.
+  - Words of 6+ characters: keep the first 3 and last character, mask the middle.
+  - Generated suffixes (e.g. `7d9f4b` or `xkq2p` in Pod names) are kept as-is.
+- `exclude.namespaces` is an explicit allow-list — names listed here are always shown as-is.
+- `exclude.regex` is matched against both namespace names and resource names; matches are never masked.
+- When `mask_namespace_names` is enabled the namespace shown in the result table and all exports is replaced.
+- When `mask_resource_names` is enabled every offending resource name reported by a check is replaced. Resources that belong to an excluded namespace are not masked.
 
 ## Permissions
  

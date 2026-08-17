@@ -13,20 +13,24 @@ class use_encryption_with_aws_load_balancers(Rule):
         offenders = []
         for service in namespaced_resources.services:
             annotations = service.metadata.annotations
-            if service.spec.type == 'LoadBalancer':
+            if service.spec.type == "LoadBalancer":
                 if annotations:
-                    ssl_cert = annotations.get("service.beta.kubernetes.io/aws-load-balancer-ssl-cert")
-                    ssl_cert_port = annotations.get("service.beta.kubernetes.io/aws-load-balancer-ssl-ports")
+                    ssl_cert = annotations.get(
+                        "service.beta.kubernetes.io/aws-load-balancer-ssl-cert"
+                    )
+                    ssl_cert_port = annotations.get(
+                        "service.beta.kubernetes.io/aws-load-balancer-ssl-ports"
+                    )
                     if not (ssl_cert and ssl_cert_port):
                         offenders.append(service.metadata.name)
                 else:
                     offenders.append(service.metadata.name)
 
         self.result = Result(
-            status=True, 
+            status=True,
             resource_type="Service",
             namespace=namespaced_resources.namespace,
-            )
+        )
         if offenders:
             self.result = Result(
                 status=False,

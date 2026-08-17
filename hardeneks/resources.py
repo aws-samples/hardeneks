@@ -1,3 +1,4 @@
+from typing import Optional
 from kubernetes import client
 
 
@@ -35,6 +36,36 @@ class Resources:
             client.AppsV1Api().list_deployment_for_all_namespaces().items
         )
         self.nodes = client.CoreV1Api().list_node().items
+
+    def apply_masking(self, masker) -> None:
+        """Apply name masking in-place using *masker*.
+
+        Masks:
+        * ``self.namespaces`` list (strings)
+        * ``metadata.name`` of every item in all resource collections
+          that carry a ``metadata`` attribute
+        * ``metadata.namespace`` of every namespaced resource item
+        """
+        if masker is None:
+            return
+
+        self.namespaces = masker.mask_namespaces(self.namespaces)
+
+        resource_collections = [
+            self.cluster_roles,
+            self.cluster_role_bindings,
+            self.resource_quotas,
+            self.network_policies,
+            self.storage_classes,
+            self.persistent_volumes,
+            self.services,
+            self.namespace_list,
+            self.deployments,
+            self.nodes,
+        ]
+
+        for collection in resource_collections:
+            _mask_collection(collection, masker)
 
 
 class NamespacedResources:
@@ -77,3 +108,60 @@ class NamespacedResources:
             .list_namespaced_horizontal_pod_autoscaler(self.namespace)
             .items
         )
+
+    def apply_masking(self, masker) -> None:
+        """Apply name masking in-place using *masker*.
+
+        Masks:
+        * ``self.namespace`` (the namespace this object represents)
+        * ``metadata.name`` of every item in all resource collections,
+          unless the resource's namespace is excluded
+        * ``metadata.namespace`` of every resource item
+        """
+        if masker is None:
+            return
+
+        original_namespace = self.namespace
+        self.namespace = masker.mask_namespace(original_namespace)
+
+        resource_collections = [
+            self.roles,
+            self.pods,
+            self.role_bindings,
+            self.deployments,
+            self.daemon_sets,
+            self.stateful_sets,
+            self.services,
+            self.hpas,
+        ]
+
+        for collection in resource_collections:
+            _mask_collection(collection, masker, namespace=original_namespace)
+
+
+# ---------------------------------------------------------------------------
+# Internal helpers
+# ---------------------------------------------------------------------------
+
+
+def _mask_collection(
+    collection: list,
+    masker,
+    namespace: Optional[str] = None,
+) -> None:
+    """Mask ``metadata.name`` and ``metadata.namespace`` on each item
+    in *collection* in-place.
+
+    *namespace* is the logical namespace of the resource, used to honour
+    namespace-level exclusion rules for resource names.
+    """
+    for item in collection:
+        meta = getattr(item, "metadata", None)
+        if meta is None:
+            continue
+        if hasattr(meta, "name") and meta.name is not None:
+            meta.name = masker.mask_resource_name(
+                meta.name, namespace=namespace
+            )
+        if hasattr(meta, "namespace") and meta.namespace is not None:
+            meta.namespace = masker.mask_namespace(meta.namespace)

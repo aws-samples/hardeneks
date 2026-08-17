@@ -1,5 +1,3 @@
-import re
-import kubernetes
 import boto3
 from hardeneks import helpers
 from hardeneks.rules import Rule, Result
@@ -16,11 +14,13 @@ class check_eks_version(Rule):
     def check(self, resources: Resources):
         eks_client = boto3.client("eks", region_name=resources.region)
 
-        cluster_version = eks_client.describe_cluster(name=resources.cluster)["cluster"]["version"]
+        cluster_version = eks_client.describe_cluster(name=resources.cluster)[
+            "cluster"
+        ]["version"]
         # Get versions in standard support
         cluster_versions_response = eks_client.describe_cluster_versions()
         standard_support_versions = [
-            v["clusterVersion"] 
+            v["clusterVersion"]
             for v in cluster_versions_response.get("clusterVersions", [])
             if v.get("versionStatus") == "STANDARD_SUPPORT"
         ]
@@ -51,12 +51,18 @@ class check_kubectl_compression(Rule):
         for cluster in kubeconfig.get("clusters", []):
             clusterName = cluster.get("name", "")
             if resources.cluster in clusterName:
-                if not (cluster.get("cluster", {}).get("disable-compression", False)):
+                if not (
+                    cluster.get("cluster", {}).get(
+                        "disable-compression", False
+                    )
+                ):
                     self.result = Result(
-                        status=False, 
-                        resources=[resources.cluster],  
-                        resource_type="Compression Setting"
+                        status=False,
+                        resources=[resources.cluster],
+                        resource_type="Compression Setting",
                     )
                 else:
-                    self.result = Result(status=True, resource_type="Compression Setting")
+                    self.result = Result(
+                        status=True, resource_type="Compression Setting"
+                    )
                 break

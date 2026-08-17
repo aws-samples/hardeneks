@@ -1,8 +1,5 @@
-from pathlib import Path
-
 import pytest
 
-from hardeneks.resources import Resources
 from hardeneks.namespace_based.reliability.applications import (
     avoid_running_singleton_pods,
     run_multiple_replicas,
@@ -16,7 +13,6 @@ from hardeneks.cluster_wide.reliability.applications import (
     check_metrics_server_is_running,
     check_vertical_pod_autoscaler_exists,
 )
-from .conftest import get_response
 
 
 @pytest.mark.parametrize(
