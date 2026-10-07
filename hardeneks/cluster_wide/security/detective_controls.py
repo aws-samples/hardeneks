@@ -14,8 +14,10 @@ class check_logs_are_enabled(Rule):
     def check(self, resources: Resources):
         client = boto3.client("eks", region_name=resources.region)
         cluster_metadata = client.describe_cluster(name=resources.cluster)
-        logs = filter(lambda x: x.get('enabled') and 'audit' in x.get('types'),
-                      cluster_metadata["cluster"]["logging"]["clusterLogging"])
+        logs = filter(
+            lambda x: x.get("enabled") and "audit" in x.get("types"),
+            cluster_metadata["cluster"]["logging"]["clusterLogging"],
+        )
         self.result = Result(status=True, resource_type="Log Configuration")
         if not list(logs):
             self.result = Result(

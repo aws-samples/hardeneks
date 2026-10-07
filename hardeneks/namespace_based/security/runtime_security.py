@@ -42,10 +42,10 @@ class disallow_linux_capabilities(Rule):
                         break
 
         self.result = Result(
-            status=True, 
+            status=True,
             resource_type="Pod",
             namespace=namespaced_resources.namespace,
-            )
+        )
         if offenders:
             self.result = Result(
                 status=False,

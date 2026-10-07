@@ -1,5 +1,4 @@
 import json
-import kubernetes
 from pathlib import Path
 from unittest.mock import patch
 
@@ -14,7 +13,6 @@ from hardeneks.cluster_wide.security.network_security import (
     check_default_deny_policy_exists,
 )
 from hardeneks.resources import Resources
-from .conftest import get_response
 
 
 def read_json(file_path):
@@ -81,4 +79,3 @@ def test_check_awspca_exists(resources):
     rule.check(resources)
 
     assert not rule.result.status
-

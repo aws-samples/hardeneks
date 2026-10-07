@@ -14,7 +14,9 @@ def harden(resources, config, _type):
                 try:
                     cls = getattr(module, rule)
                 except AttributeError as exc:
-                    console.print(f"[bold red]Error loading rule '{rule}': {exc}")
+                    console.print(
+                        f"[bold red]Error loading rule '{rule}': {exc}"
+                    )
                     continue
                 try:
                     rule_instance = cls()

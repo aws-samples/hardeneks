@@ -20,14 +20,12 @@ def test_check_eks_version(mocked_boto_client):
         "some_region", "some_context", "some_cluster", []
     )
     rule = check_eks_version()
-    
+
     # Mock EKS client
     mocked_eks = mocked_boto_client.return_value
-    
+
     # Test: Cluster in extended support (should fail)
-    mocked_eks.describe_cluster.return_value = {
-        "cluster": {"version": "1.29"}
-    }
+    mocked_eks.describe_cluster.return_value = {"cluster": {"version": "1.29"}}
     mocked_eks.describe_cluster_versions.return_value = {
         "clusterVersions": [
             {"clusterVersion": "1.32", "versionStatus": "STANDARD_SUPPORT"},
@@ -38,11 +36,9 @@ def test_check_eks_version(mocked_boto_client):
     }
     rule.check(namespaced_resources)
     assert not rule.result.status
-    
+
     # Test: Cluster in standard support (should pass)
-    mocked_eks.describe_cluster.return_value = {
-        "cluster": {"version": "1.32"}
-    }
+    mocked_eks.describe_cluster.return_value = {"cluster": {"version": "1.32"}}
     rule.check(namespaced_resources)
     assert rule.result.status
 

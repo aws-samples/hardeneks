@@ -11,12 +11,14 @@ class ensure_namespace_quotas_exist(Rule):
 
     def check(self, resources: Resources):
         offenders = set(resources.namespaces)
-        
+
         for quota in resources.resource_quotas:
             offenders.discard(quota.metadata.namespace)
 
         self.result = Result(status=True, resource_type="Namespace")
         if offenders:
             self.result = Result(
-                status=False, resources=list(offenders), resource_type="Namespace"
+                status=False,
+                resources=list(offenders),
+                resource_type="Namespace",
             )

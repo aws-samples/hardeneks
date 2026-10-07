@@ -22,12 +22,14 @@ class restrict_wildcard_for_cluster_roles(Rule):
             "cluster-admin",
             "eks:addon-manager",
             "eks:cloud-controller-manager",
-            "eks:service-operations"
+            "eks:service-operations",
         ]
 
         for role in resources.cluster_roles:
             role_name = role.metadata.name
-            if not (role_name.startswith("system:") or role_name in allow_list):
+            if not (
+                role_name.startswith("system:") or role_name in allow_list
+            ):
                 if role.rules:
                     for rule in role.rules:
                         if rule.verbs and "*" in rule.verbs:
@@ -62,7 +64,9 @@ class check_endpoint_public_access(Rule):
 
         if endpoint_access:
             self.result = Result(
-                status=False, resources=[resources.cluster], resource_type="Cluster Endpoint"
+                status=False,
+                resources=[resources.cluster],
+                resource_type="Cluster Endpoint",
             )
 
 
@@ -79,27 +83,38 @@ class check_aws_node_daemonset_service_account(Rule):
             name="aws-node", namespace="kube-system"
         )
 
-        service_account_name = daemonset.spec.template.spec.service_account_name
+        service_account_name = (
+            daemonset.spec.template.spec.service_account_name
+        )
         service_account = client.CoreV1Api().read_namespaced_service_account(
             name=service_account_name,
             namespace="kube-system",
         )
 
-        self.result = Result(status=False, resources=["aws-node"], resource_type="Daemonset")
+        self.result = Result(
+            status=False, resources=["aws-node"], resource_type="Daemonset"
+        )
 
         # Check for Pod Identity
         try:
             eks_client = boto3.client("eks", region_name=resources.region)
-            pod_identity_associations = eks_client.list_pod_identity_associations(
-                clusterName=resources.cluster
+            pod_identity_associations = (
+                eks_client.list_pod_identity_associations(
+                    clusterName=resources.cluster
+                )
             )
-            
-            for association in pod_identity_associations.get("associations", []):
+
+            for association in pod_identity_associations.get(
+                "associations", []
+            ):
                 if (
                     association.get("namespace") == "kube-system"
-                    and association.get("serviceAccount") == service_account_name
+                    and association.get("serviceAccount")
+                    == service_account_name
                 ):
-                    self.result = Result(status=True, resource_type="Daemonset")
+                    self.result = Result(
+                        status=True, resource_type="Daemonset"
+                    )
                     return
         except Exception:
             # If Pod Identity API fails, fall back to IRSA-only check
@@ -107,7 +122,10 @@ class check_aws_node_daemonset_service_account(Rule):
 
         # Check for IRSA
         if service_account.metadata.annotations:
-            if "eks.amazonaws.com/role-arn" in service_account.metadata.annotations:
+            if (
+                "eks.amazonaws.com/role-arn"
+                in service_account.metadata.annotations
+            ):
                 self.result = Result(status=True, resource_type="Daemonset")
 
 
@@ -115,15 +133,18 @@ class check_access_to_instance_profile(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "Restrict access to the instance profile assigned to worker nodes."
+    message = (
+        "Restrict access to the instance profile assigned to worker nodes."
+    )
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#restrict-access-to-the-instance-profile-assigned-to-the-worker-node"
 
     def check(self, resources: Resources):
         client = boto3.client("ec2", region_name=resources.region)
         offenders = []
 
-        paginator = client.get_paginator('describe_instances')
-        page_iterator = paginator.paginate(PaginationConfig={'PageSize': 1000},
+        paginator = client.get_paginator("describe_instances")
+        page_iterator = paginator.paginate(
+            PaginationConfig={"PageSize": 1000},
             Filters=[
                 {
                     "Name": "tag:aws:eks:cluster-name",
@@ -131,15 +152,17 @@ class check_access_to_instance_profile(Rule):
                         resources.cluster,
                     ],
                 },
-            ]
+            ],
         )
 
         for page in page_iterator:
             for reservation in page["Reservations"]:
-                metadata_options = reservation["Instances"][0]["MetadataOptions"]
+                metadata_options = reservation["Instances"][0][
+                    "MetadataOptions"
+                ]
                 hop_limit = metadata_options["HttpPutResponseHopLimit"]
                 http_tokens = metadata_options.get("HttpTokens", "optional")
-                
+
                 if hop_limit != 1 or http_tokens != "required":
                     offenders.append(reservation["Instances"][0]["InstanceId"])
 
@@ -157,7 +180,9 @@ class disable_anonymous_access_for_cluster_roles(Rule):
     _type = "cluster_wide"
     pillar = "security"
     section = "iam"
-    message = "Restrict ClusterRole bindings of anonymous or unauthenticated groups."
+    message = (
+        "Restrict ClusterRole bindings of anonymous or unauthenticated groups."
+    )
     url = "https://aws.github.io/aws-eks-best-practices/security/docs/iam/#review-and-revoke-unnecessary-anonymous-access"
 
     def check(self, resources: Resources):

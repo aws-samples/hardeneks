@@ -11,7 +11,16 @@ ignore-namespaces:
   - aws-for-fluent-bit
   - amazon-cloudwatch
   - vpa
-rules: 
+masking:
+  constraints:
+    mask_namespace_names: false
+    mask_resource_names: false
+    replace_with: hash
+  exclude:
+    namespaces:
+      - example
+    regex:  # e.g. "^system:.*"
+rules:
   cluster_wide:
     security:
       iam:
@@ -56,7 +65,7 @@ rules:
         - check_eks_version
         - check_kubectl_compression
   namespace_based:
-    security: 
+    security:
       iam:
         - disable_anonymous_access_for_roles
         - restrict_wildcard_for_roles
@@ -74,7 +83,7 @@ rules:
       network_security:
         - use_encryption_with_aws_load_balancers
       encryption_secrets:
-        - disallow_secrets_from_env_vars    
+        - disallow_secrets_from_env_vars
       runtime_security:
         - disallow_linux_capabilities
     reliability:

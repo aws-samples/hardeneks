@@ -5,23 +5,30 @@ from hardeneks.rules import Rule, Result
 from ...resources import Resources
 
 
-def _get_role_arn_for_service_account(cluster, region, namespace, service_account_name):
+def _get_role_arn_for_service_account(
+    cluster, region, namespace, service_account_name
+):
     try:
         eks_client = boto3.client("eks", region_name=region)
-        pod_identity_associations = eks_client.list_pod_identity_associations(clusterName=cluster)
+        pod_identity_associations = eks_client.list_pod_identity_associations(
+            clusterName=cluster
+        )
         for association in pod_identity_associations.get("associations", []):
             if (
                 association.get("namespace") == namespace
                 and association.get("serviceAccount") == service_account_name
             ):
                 described = eks_client.describe_pod_identity_association(
-                    clusterName=cluster, associationId=association.get("associationId")
+                    clusterName=cluster,
+                    associationId=association.get("associationId"),
                 )
                 return described.get("association", {}).get("roleArn")
     except Exception:
         pass
 
-    sa = client.CoreV1Api().read_namespaced_service_account(name=service_account_name, namespace=namespace)
+    sa = client.CoreV1Api().read_namespaced_service_account(
+        name=service_account_name, namespace=namespace
+    )
     if sa.metadata.annotations:
         return sa.metadata.annotations.get("eks.amazonaws.com/role-arn")
 
@@ -74,8 +81,16 @@ class check_any_cluster_autoscaler_exists(Rule):
     def check(self, resources: Resources):
         deployments = [i.metadata.name for i in resources.deployments]
 
-        if not any(keyword in d for d in deployments for keyword in ["cluster-autoscaler", "karpenter"]):
-            self.result = Result(status=False, resources=["cluster-autoscaler,karpenter"], resource_type="Deployment")
+        if not any(
+            keyword in d
+            for d in deployments
+            for keyword in ["cluster-autoscaler", "karpenter"]
+        ):
+            self.result = Result(
+                status=False,
+                resources=["cluster-autoscaler,karpenter"],
+                resource_type="Deployment",
+            )
         else:
             self.result = Result(status=True, resource_type="Deployment")
 
@@ -101,7 +116,11 @@ class ensure_cluster_autoscaler_and_cluster_versions_match(Rule):
                 ca_image = ca_containers[0].image
                 ca_image_version = ca_image.split(":")[-1]
                 if cluster_version not in ca_image_version:
-                    self.result = Result(status=False, resources=[deployment.metadata.name], resource_type="Deployment")
+                    self.result = Result(
+                        status=False,
+                        resources=[deployment.metadata.name],
+                        resource_type="Deployment",
+                    )
                 return
 
 
@@ -119,8 +138,14 @@ class ensure_cluster_autoscaler_has_autodiscovery_mode(Rule):
             if "cluster-autoscaler" in deployment.metadata.name:
                 ca_containers = deployment.spec.template.spec.containers
                 ca_command = ca_containers[0].command
-                if not any("node-group-auto-discovery" in item for item in ca_command):
-                    self.result = Result(status=False, resources=[deployment.metadata.name], resource_type="Deployment")
+                if not any(
+                    "node-group-auto-discovery" in item for item in ca_command
+                ):
+                    self.result = Result(
+                        status=False,
+                        resources=[deployment.metadata.name],
+                        resource_type="Deployment",
+                    )
                 return
 
 
@@ -136,14 +161,27 @@ class use_separate_iam_role_for_cluster_autoscaler(Rule):
 
         for deployment in resources.deployments:
             if "cluster-autoscaler" in deployment.metadata.name:
-                service_account_name = deployment.spec.template.spec.service_account_name
+                service_account_name = (
+                    deployment.spec.template.spec.service_account_name
+                )
                 sa_namespace = deployment.metadata.namespace
 
-                self.result = Result(status=False, resources=[deployment.metadata.name], resource_type="Deployment")
+                self.result = Result(
+                    status=False,
+                    resources=[deployment.metadata.name],
+                    resource_type="Deployment",
+                )
 
-                role_arn = _get_role_arn_for_service_account(resources.cluster, resources.region, sa_namespace, service_account_name)
+                role_arn = _get_role_arn_for_service_account(
+                    resources.cluster,
+                    resources.region,
+                    sa_namespace,
+                    service_account_name,
+                )
                 if role_arn:
-                    self.result = Result(status=True, resource_type="Deployment")
+                    self.result = Result(
+                        status=True, resource_type="Deployment"
+                    )
                 return
 
 
@@ -175,10 +213,17 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
         role_arn = None
         for deployment in resources.deployments:
             if "cluster-autoscaler" in deployment.metadata.name:
-                service_account_name = deployment.spec.template.spec.service_account_name
+                service_account_name = (
+                    deployment.spec.template.spec.service_account_name
+                )
                 sa_namespace = deployment.metadata.namespace
 
-                role_arn = _get_role_arn_for_service_account(resources.cluster, resources.region, sa_namespace, service_account_name)
+                role_arn = _get_role_arn_for_service_account(
+                    resources.cluster,
+                    resources.region,
+                    sa_namespace,
+                    service_account_name,
+                )
                 break
 
         # If we found a role (either Pod Identity or IRSA), check permissions
@@ -193,7 +238,11 @@ class employ_least_privileged_access_cluster_autoscaler_role(Rule):
                     resources=list(set(actions) - ACTIONS),
                 )
         else:
-            self.result = Result(status=False, resources=["cluster-autoscaler"], resource_type="IAM Role Action")
+            self.result = Result(
+                status=False,
+                resources=["cluster-autoscaler"],
+                resource_type="IAM Role Action",
+            )
 
 
 class use_managed_nodegroups(Rule):
